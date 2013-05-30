@@ -40,7 +40,7 @@ event_services($event, 'squid' => 'reload');
 
 my $event = "nethserver-squidguard-save";
 
-event_actions($event, 'initialize-default-databases' => '00');
+event_actions($event, 'nethserver-squidguard-update-custom-list' => 20);
 templates2events("/etc/squid/squid.conf",  $event);
 templates2events("/etc/squid/squidGuard.conf",  $event);
 event_services($event, 'squid' => 'reload');
