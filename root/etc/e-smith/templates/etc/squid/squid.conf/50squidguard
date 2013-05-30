@@ -1,0 +1,11 @@
+{
+    my $status = $squidguard{'status'} || 'disabled';
+    my $schildren = $squidguard{'StartupChildren'} || '5';
+    my $ichildren = $squidguard{'IdleChildren'} || '5';
+    my $mchildren = $squidguard{'MaxChildren'} || '20';
+    if ($status eq 'enabled') {
+        $OUT.="\n# Enable squidGuard \n";
+        $OUT.="url_rewrite_program /usr/bin/squidGuard\n";
+        $OUT.="url_rewrite_program_children $mchildren startup=$schildren idle=$ichildren\n";
+    }
+}
