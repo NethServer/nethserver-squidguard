@@ -1,0 +1,17 @@
+#!/bin/bash
+
+file=$1
+
+if [ $# -lt 1 ]; then
+    echo "Error: no file specified";
+    exit 1
+fi
+
+if [ -f /etc/e-smith/templates/$file ]; then
+    /sbin/e-smith/expand-template $file
+fi
+
+if [ -f $file ]; then
+    /usr/bin/squidGuard -C $file
+    /bin/chown squid:squid $file*
+fi

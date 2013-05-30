@@ -1,4 +1,4 @@
 dest files \{
-    expressionlist custom/blacklist/files
+    expressionlist custom/files
     logfile urlfilter.log
 \}
