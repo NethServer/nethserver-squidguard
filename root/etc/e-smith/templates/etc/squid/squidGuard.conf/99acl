@@ -1,0 +1,43 @@
+acl \{
+    unfiltered \{
+        pass all
+    \}
+
+    ban \{
+        pass none
+    \}
+
+    default \{
+{
+    my $safesearch = $squidguard{'SafeSearch'} || 'disabled';
+    if ($safesearch eq 'enabled') {
+        $OUT.="    # force search engine to be in 'safe mode'\n";
+        $OUT.="    rewrite safesearch\n";
+    }
+
+    $OUT.="        pass ";
+    my $allowed =  $squidguard{'AllowedCategories'} || '';
+    foreach my $a (split(',',$allowed)) {
+        $OUT.=" $a ";
+    }
+    my $blocked =  $squidguard{'BlockedCategories'} || '';
+    foreach my $b (split(',',$blocked)) {
+        $OUT.=" !$b ";
+    }
+    my $blockipaccess = $squidguard{'BlockIpAccess'} || 'disabled';
+    if ($blockipaccess eq 'enabled') { 
+        $OUT.=" !in-addr ";
+    }
+    $OUT.=" whitelist !blacklist !files ";
+    my $blockall = $squidguard{'BlockAll'} || 'disabled';
+    if ($blockall eq 'enabled') {
+        $OUT.=" none\n";
+    } else {
+        $OUT.=" all\n";
+    }
+
+    my $redirect = $squidguard{'RedirectUrl'} || "302:http://$SystemName.$DomainName/cgi-bin/squidGuard.cgi?clientaddr=%a&clientname=%n&clientident=%i&srcclass=%s&targetgroup=%t&url=%u"; 
+    $OUT.="        redirect     $redirect\n";
+}
+    \}
+\}

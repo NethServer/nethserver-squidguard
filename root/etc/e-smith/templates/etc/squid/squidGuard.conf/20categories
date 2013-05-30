@@ -1,0 +1,23 @@
+{
+    use File::Basename;
+    my $exprstatus = $squidguard{'Expressions'} || 'disabled';
+    @files = </var/squidGuard/blacklists/*>;
+    foreach $file (@files) {
+        my $urls = "$file/urls";
+        my $domains = "$file/domains";
+        my $expressions = "$file/expressions";
+        my $cat = basename($file);
+        $OUT.="dest $cat {\n";
+        if (-e $domains) {
+            $OUT.="      domainlist $cat/domains\n";
+        }
+        if (-e $urls) {
+            $OUT.="      urllist $cat/urls\n";
+        }
+        if ($exprstatus eq 'enabled' && -f $expressions) {
+            $OUT.="      expressionlist $cat/expressions\n";
+        }
+        $OUT.="      logfile urlfilter.log\n";
+        $OUT.="}\n";
+    } 
+}

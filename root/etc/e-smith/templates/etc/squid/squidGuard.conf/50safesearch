@@ -1,0 +1,7 @@
+rewrite safesearch \{
+    s@(google.com/search.*q=.*)@\1\&safe=active@i
+    s@(google.com/images.*q=.*)@\1\&safe=active@i
+    s@(google.com/groups.*q=.*)@\1\&safe=active@i
+    s@(google.com/news.*q=.*)@\1\&safe=active@i
+    # log google
+\}

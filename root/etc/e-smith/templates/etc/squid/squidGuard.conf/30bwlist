@@ -1,0 +1,8 @@
+dest blacklist \{
+    domainlist custom/blacklist/domains
+    urllist    custom/blacklist/urls
+\}
+dest whitelist \{
+    domainlist custom/whitelist/domains
+    urllist    custom/whitelist/urls
+\}

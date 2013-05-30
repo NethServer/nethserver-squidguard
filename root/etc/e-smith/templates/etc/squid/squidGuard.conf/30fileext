@@ -1,0 +1,4 @@
+dest files \{
+    expressionlist custom/blacklist/files
+    logfile urlfilter.log
+\}
