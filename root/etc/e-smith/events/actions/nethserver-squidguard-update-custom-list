@@ -1,17 +1,14 @@
 #!/bin/bash
 
-file=$1
-
-if [ $# -lt 1 ]; then
-    echo "Error: no file specified";
-    exit 1
-fi
-
-if [ -f /etc/e-smith/templates/$file ]; then
-    /sbin/e-smith/expand-template $file
-fi
-
-if [ -f $file ]; then
-    /usr/bin/squidGuard -C $file
-    /bin/chown squid:squid $file*
-fi
+for d in `find /var/squidGuard/blacklists/custom -type d`
+do
+    for f in domains urls expressions
+    do
+        echo /sbin/e-smith/expand-template $d/$f
+        /sbin/e-smith/expand-template $d/$f 2>/dev/null
+        if [ -f $d/$f ]; then
+            echo /usr/bin/squidGuard -P -d -C $d/$f
+            /bin/chown squid:squid $d/$f.db
+        fi
+    done
+done

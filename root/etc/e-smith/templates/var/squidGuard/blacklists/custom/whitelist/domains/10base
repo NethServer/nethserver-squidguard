@@ -1,5 +1,5 @@
 {
-    my $domains = $squidguard{'DomainWhitelist'} || "";
-    $domains =~ s/,/\n/;
-    $OUT.=$domains;
+    my $list = $squidguard{'DomainWhitelist'} || "";
+    $list =~ s/,/\n/;
+    $OUT.=$list;
 }

@@ -1,0 +1,5 @@
+{
+    my $list = $squidguard{'UrlBlacklist'} || "";
+    $list =~ s/,/\n/;
+    $OUT.=$list;
+}
