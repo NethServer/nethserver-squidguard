@@ -6,6 +6,6 @@
     if ($status eq 'enabled') {
         $OUT.="\n# Enable squidGuard \n";
         $OUT.="url_rewrite_program /usr/bin/squidGuard\n";
-        $OUT.="url_rewrite_program_children $mchildren startup=$schildren idle=$ichildren\n";
+        $OUT.="url_rewrite_children $mchildren startup=$schildren idle=$ichildren\n";
     }
 }
