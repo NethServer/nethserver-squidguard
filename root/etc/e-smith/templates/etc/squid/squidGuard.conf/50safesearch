@@ -1,7 +1,0 @@
-rewrite safesearch \{
-    s@(.*\Wgoogle\.\w+/(webhp|search|imghp|images|grphp|groups|frghp|froogle)\?)(.*)(\bsafe=\w+)(.*)@\1\3safe=active\5@i
-    s@(.*\Wgoogle\.\w+/(webhp|search|imghp|images|grphp|groups|frghp|froogle)\?)(.*)@\1safe=active\&\3@i
-    s@(.*\Wsearch\.yahoo\.\w+/search\W)(.*)(\bvm=\w+)(.*)@\1\2vm=r\4@i
-    s@(.*\Wsearch\.yahoo\.\w+/search\W.*)@\1\&vm=r@i
-    s@(.*\Walltheweb\.com/customize\?)(.*)(\bcopt_offensive=\w+)(.*)@\1\2copt_offensive=on\4@i
-\}

@@ -9,12 +9,6 @@ acl \{
 
     default \{
 {
-    my $safesearch = $squidguard{'SafeSearch'} || 'disabled';
-    if ($safesearch eq 'enabled') {
-        $OUT.="    # force search engine to be in 'safe mode'\n";
-        $OUT.="    rewrite safesearch\n";
-    }
-
     $OUT.="        pass ";
     my $allowed =  $squidguard{'AllowedCategories'} || '';
     foreach my $a (split(',',$allowed)) {
