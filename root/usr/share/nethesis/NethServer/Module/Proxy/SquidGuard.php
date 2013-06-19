@@ -181,6 +181,10 @@ class SquidGuard extends \Nethgui\Controller\AbstractController
         );
     }
 
+    private static function cmpcat($a, $b)
+    {
+        return strnatcasecmp($a[1],$b[1]); 
+    }
 
     public function prepareView(\Nethgui\View\ViewInterface $view)
     {
@@ -205,8 +209,9 @@ class SquidGuard extends \Nethgui\Controller\AbstractController
             } else if (isset($this->index[$cat]["NAME"])) {
                 $t = $this->index[$cat]["NAME"];
             }
-            $tmp[] = array($cat, $t);
+            $tmp[] = array($cat, ucfirst($t));
         }
+        usort($tmp,array($this,'cmpcat'));
         $view['AllowedCategoriesDatasource'] = $tmp;
         $view['BlockedCategoriesDatasource'] = $tmp;
     }
