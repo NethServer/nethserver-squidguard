@@ -9,14 +9,24 @@ acl \{
 
     default \{
 {
+    my $safesearch = $squidguard{'SafeSearch'} || 'disabled';
+    if ($safesearch eq 'enabled') {
+        $OUT.="    # force search engine to be in 'safe mode'\n";
+        $OUT.="    rewrite safesearch\n";
+    }
+
     $OUT.="        pass ";
     my $allowed =  $squidguard{'AllowedCategories'} || '';
     foreach my $a (split(',',$allowed)) {
-        $OUT.=" $a ";
+        if (exists($categories{$a})) { #do not add non-existing categories
+            $OUT.=" $a ";
+        }
     }
     my $blocked =  $squidguard{'BlockedCategories'} || '';
     foreach my $b (split(',',$blocked)) {
-        $OUT.=" !$b ";
+        if (exists($categories{$b})) { #do not add non-existing categories
+            $OUT.=" !$b ";
+        }
     }
     my $blockipaccess = $squidguard{'BlockIpAccess'} || 'disabled';
     if ($blockipaccess eq 'enabled') { 

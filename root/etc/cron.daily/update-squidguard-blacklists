@@ -1,0 +1,136 @@
+#!/bin/bash
+# SquidGuard blacklist builder .
+
+BLPATH=/var/squidGuard/blacklists
+BLFILE=$BLPATH/blacklists.tar.gz
+URLFILE=/etc/squid/blacklists
+
+DEBUG=0
+tot=`date +%s`
+if [ "$1" == "-d" ]; then
+    DEBUG=1
+fi
+
+curdir=`pwd`
+ 
+if [ -d $BLPATH ] ;then
+    if [ -d $BLPATH.old ]; then
+        rm -rf $BLPATH.old
+    fi
+    mv $BLPATH $BLPATH.old 
+fi
+mkdir $BLPATH
+
+
+function merge {
+    src=$1
+    dst=$BLPATH
+    cd $src
+    # create all categories dir
+    for d in `find . -type d`
+    do
+        if [ $DEBUG -eq 1 ]; then echo "Creeating dir $BLPATH/$d"; fi
+        mkdir -p "$BLPATH/$d"
+    done
+    for f in `find . -type f`
+    do
+        if [ -f "$BLPATH/$f" ]; then # merge
+            if [ $DEBUG -eq 1 ]; then echo "merge $f -> $BLPATH/$f"; fi
+            cat $f >> "$BLPATH/$f"
+        else # copy
+            if [ $DEBUG -eq 1 ]; then echo "copy $f -> $BLPATH/$f"; fi
+            cp $f "$BLPATH/$f"
+        fi
+    done
+    rm -rf $src
+}
+
+function download_extract {
+    if [ $DEBUG -eq 1 ]; then
+        verbose=""
+    else
+        verbose="--quiet"
+    fi
+    wget $verbose -O $BLFILE $1
+    if [ -f $BLFILE ]; then
+        if [ $DEBUG -eq 1 ]; then
+            /bin/tar xvzf $BLFILE -C $BLPATH --exclude=*.diff --exclude=README
+        else
+            /bin/tar xzf $BLFILE -C $BLPATH --exclude=*.diff --exclude=README
+        fi
+        if [ -d "$BLPATH/blacklists" ]; then
+            merge "$BLPATH/blacklists"
+        elif [ -d "$BLPATH/BL" ]; then
+            merge "$BLPATH/BL"
+        else
+            echo "ERROR: unknown directory format for $1"
+        fi
+
+        rm -f $BLFILE 2> /dev/null
+    fi
+}
+
+if [ $DEBUG -eq 1 ]; then 
+    echo "Downloading..."
+    t1=`date +%s`
+fi
+for url in `/bin/grep -v -e '^#' -e "^$" /etc/squid/blacklists`;
+do
+    download_extract $url
+done
+if [ $DEBUG -eq 1 ]; then 
+    delta=$((`date +%s` - $t1))
+    echo "End downloading. Elapsed seconds: $delta"
+fi
+
+cd $curdir
+
+if [ $DEBUG -eq 1 ]; then 
+    echo -n "Removing duplicates..."
+    t1=`date +%s`
+fi
+# remove duplicates
+for f in `find $BLPATH -type f -not -iname global_usage`
+do
+    /bin/sort $f | /usr/bin/uniq > $f.1
+    mv $f.1 $f
+done
+if [ $DEBUG -eq 1 ]; then 
+    delta=$((`date +%s` - $t1))
+    echo "done. Elapsed seconds: $delta"
+fi
+
+ 
+if [ $DEBUG -eq 1 ]; then 
+    echo -n "Rebuild db..."
+    t1=`date +%s`
+fi
+# build squidsuard db
+/sbin/e-smith/expand-template /etc/squid/squidGuard.conf
+for d in blacklist whitelist files
+do
+    mkdir -p /var/squidGuard/blacklists/custom/$d
+    for f in domains urls expressions
+    do
+        /sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/$d/$f 2>/dev/null
+    done
+done
+
+
+if [ $DEBUG -eq 1 ]; then
+    verbose="-bd"
+else
+    verbose=""
+fi
+/usr/bin/squidGuard $verbose -c /etc/squid/squidGuard.conf -C all -P
+chown -R squid:squid $BLPATH/
+if [ $DEBUG -eq 1 ]; then 
+    delta=$((`date +%s` - $t1))
+    echo "done. Elapsed seconds: $delta"
+fi
+
+if [ $DEBUG -eq 1 ]; then
+    delta=$((`date +%s` - $tot))
+    echo "Total elapsed seconds: $delta"
+fi 
+

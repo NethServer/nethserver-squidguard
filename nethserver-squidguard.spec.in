@@ -27,6 +27,7 @@ rm -rf $RPM_BUILD_ROOT
 (cd root; find . -depth -print | cpio -dump $RPM_BUILD_ROOT)
 %{genfilelist} $RPM_BUILD_ROOT > %{name}-%{version}-filelist
 echo "%doc COPYING" >> %{name}-%{version}-filelist
+echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 
 %post
 
