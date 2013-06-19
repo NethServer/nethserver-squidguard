@@ -35,12 +35,42 @@ class SquidGuard extends \Nethgui\Controller\AbstractController
     /* list of blacklists */
     private $categories = array();
 
+    private $index = array();
+
+    private function parseIndex() 
+    {
+        $c = "/var/squidGuard/blacklists/global_usage";
+        $last = "";
+        if (file_exists($c)) {
+            $handle = @fopen("$c", "r");
+            if ($handle) {
+                while (($buffer = fgets($handle, 4096)) !== false) {
+                    $buffer = trim($buffer);
+                    if (!$buffer || $buffer[0] == "#") {
+                        continue;
+                    }
+                    $fields = explode(":",$buffer);
+                    if ($fields) {
+                        if ($fields[0] == "NAME") {
+                            $last = trim($fields[1]);
+                            $this->index[$last] = array();
+                        } else {
+                            $this->index[$last][trim($fields[0])] = trim($fields[1]);
+                        }
+                    }
+                }
+                fclose($handle);
+            }
+        }
+    }
+
     private function readCategories()
     {
+        $this->parseIndex();
         $blDir = "/var/squidGuard/blacklists";
         $d = dir($blDir);
         while (false !== ($entry = $d->read())) {
-            if ($entry == "." || $entry == "..") {
+            if ($entry == "." || $entry == ".." || $entry == "custom") {
                 continue;
             }
             $this->categories[] = $entry;
@@ -166,13 +196,19 @@ class SquidGuard extends \Nethgui\Controller\AbstractController
         if (!$this->categories) {
             $this->readCategories();
         }
-        $view['AllowedCategoriesDatasource'] = array_map(function($fmt) use ($view) {
-                                return array($fmt, $view->translate($fmt . '_label'));
-        }, $this->categories);
-        $view['BlockedCategoriesDatasource'] = array_map(function($fmt) use ($view) {
-                                return array($fmt, $view->translate($fmt . '_label'));
-        }, $this->categories);
-
+        $tmp = array();
+        $lang = strtoupper($view->getTranslator()->getLanguageCode());
+        foreach ($this->categories as $cat) {
+            $t = $cat;
+            if (isset($this->index[$cat]["NAME $lang"])) {
+                $t = $this->index[$cat]["NAME $lang"];
+            } else if (isset($this->index[$cat]["NAME"])) {
+                $t = $this->index[$cat]["NAME"];
+            }
+            $tmp[] = array($cat, $t);
+        }
+        $view['AllowedCategoriesDatasource'] = $tmp;
+        $view['BlockedCategoriesDatasource'] = $tmp;
     }
 
     protected function onParametersSaved($changes)
