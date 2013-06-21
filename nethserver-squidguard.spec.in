@@ -37,5 +37,8 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Fri Jun 21 2013 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.0-1.ns6
+- First release. Feature #1960 #1959
+
 
 
