@@ -55,6 +55,7 @@ echo $view->selector('BlockAll','disabled');
 echo $columns;
 echo $bip;
 echo $expr;
+echo $view->textInput('BlockedFileTypes')->setAttribute('placeholder','exe,zip');
 echo $bacl;
 echo $aacl;
 

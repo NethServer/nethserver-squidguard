@@ -18,6 +18,7 @@ $L['audio-video'] = 'Audio e video';
 $L['BlockAll_label'] = 'Modalità';
 $L['Block domain'] = 'Blocca dominio';
 $L['BlockedCategories_label'] = 'Categorie bloccate';
+$L['BlockedFileTypes_label'] = 'Lista di estensioni file bloccate';
 $L['BlockIpAccess_label'] = 'Blocca accesso con IP ai siti web';
 $L['Block_label'] = 'Siti e IP bloccati';
 $L['Block source IP'] = 'Bloca IP sorgente';

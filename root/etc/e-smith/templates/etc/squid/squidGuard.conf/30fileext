@@ -1,4 +1,4 @@
 dest files \{
-    expressionlist custom/files
+    expressionlist custom/files/expressions
     logfile urlfilter.log
 \}
