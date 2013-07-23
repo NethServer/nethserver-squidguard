@@ -4,5 +4,7 @@
     if ($extensions ne '') {
         $extensions =~ s/,/|/;
         $OUT.='(\.)('.$extensions.')$';
+    } else {
+        $OUT.='^$';
     }
 }
