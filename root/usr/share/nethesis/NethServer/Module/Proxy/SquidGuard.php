@@ -87,11 +87,12 @@ class SquidGuard extends \Nethgui\Controller\AbstractController
             $this->readCategories();
         }
 
+        $ftvalidator = $this->createValidator()->orValidator($this->createValidator()->regexp('/(\w+)(,\s*\w+)*/'),$this->createValidator()->isEmpty());
         $this->declareParameter('status', Validate::SERVICESTATUS, array('configuration', 'squidguard', 'status'));
         $this->declareParameter('BlockAll', Validate::SERVICESTATUS, array('configuration', 'squidguard', 'BlockAll'));
         $this->declareParameter('BlockIpAccess', Validate::SERVICESTATUS, array('configuration', 'squidguard', 'BlockIpAccess'));
         $this->declareParameter('Expressions', Validate::SERVICESTATUS, array('configuration', 'squidguard', 'Expressions'));
-        $this->declareParameter('BlockedFileTypes', $this->createValidator()->regexp('/(\w+)(,\s*\w+)*/'), array('configuration', 'squidguard', 'BlockedFileTypes'));
+        $this->declareParameter('BlockedFileTypes', $ftvalidator, array('configuration', 'squidguard', 'BlockedFileTypes'));
     
         $this->declareParameter('BlockAcl', Validate::ANYTHING, array(
             array('configuration', 'squidguard', 'Ban'),
