@@ -7,7 +7,7 @@ URL: %{url_prefix}/%{name}
 Source0: %{name}-%{version}.tar.gz
 BuildArch: noarch
 
-Requires: nethserver-httpd
+Requires: nethserver-httpd, nethserver-squid
 Requires: squidGuard
 
 BuildRequires: perl
