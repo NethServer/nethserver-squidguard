@@ -6,7 +6,7 @@ do
     do
         /sbin/e-smith/expand-template $d/$f 2>/dev/null
         if [ -f $d/$f ]; then
-            /usr/bin/squidGuard -P -d -C $d/$f
+            /usr/bin/squidGuard -P -d -C $d/$f 2>/dev/null
             /bin/chown squid:squid $d/$f.db 2>/dev/null
         fi
     done
