@@ -70,7 +70,7 @@ class SquidGuard extends \Nethgui\Controller\AbstractController
         $blDir = "/var/squidGuard/blacklists";
         $d = dir($blDir);
         while (false !== ($entry = $d->read())) {
-            if ($entry == "." || $entry == ".." || $entry == "custom") {
+            if ($entry == "." || $entry == ".." || $entry == "custom" || !is_dir("$blDir/$entry")) {
                 continue;
             }
             $this->categories[] = $entry;
