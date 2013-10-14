@@ -1,5 +1,5 @@
 {
     my $list = $squidguard{'DomainBlacklist'} || "";
-    $list =~ s/,/\n/;
+    $list =~ s/,/\n/g;
     $OUT.=$list;
 }

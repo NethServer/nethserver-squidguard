@@ -2,7 +2,7 @@
     my $extensions = $squidguard{'BlockedFileTypes'} || '';
 
     if ($extensions ne '') {
-        $extensions =~ s/,/|/;
+        $extensions =~ s/,/|/g;
         $OUT.='(\.)('.$extensions.')$';
     } else {
         $OUT.='^$';

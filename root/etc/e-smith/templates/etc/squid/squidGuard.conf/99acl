@@ -10,6 +10,7 @@ acl \{
     default \{
 {
     $OUT.="        pass ";
+    $OUT.=" whitelist !blacklist !files ";
     my $allowed =  $squidguard{'AllowedCategories'} || '';
     foreach my $a (split(',',$allowed)) {
         if (exists($categories{$a})) { #do not add non-existing categories
@@ -26,7 +27,6 @@ acl \{
     if ($blockipaccess eq 'enabled') { 
         $OUT.=" !in-addr ";
     }
-    $OUT.=" whitelist !blacklist !files ";
     my $blockall = $squidguard{'BlockAll'} || 'disabled';
     if ($blockall eq 'enabled') {
         $OUT.=" none\n";
