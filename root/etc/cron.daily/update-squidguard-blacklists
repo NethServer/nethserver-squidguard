@@ -124,6 +124,9 @@ else
 fi
 /usr/bin/squidGuard $verbose -c /etc/squid/squidGuard.conf -C all -P
 chown -R squid:squid $BLPATH/
+if [ -f $BLPATH/global_usage ]; then
+    chmod a+r $BLPATH/global_usage
+fi
 if [ $DEBUG -eq 1 ]; then 
     delta=$((`date +%s` - $t1))
     echo "done. Elapsed seconds: $delta"

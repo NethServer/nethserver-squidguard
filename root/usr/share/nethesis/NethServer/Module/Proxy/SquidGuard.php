@@ -41,7 +41,7 @@ class SquidGuard extends \Nethgui\Controller\AbstractController
     {
         $c = "/var/squidGuard/blacklists/global_usage";
         $last = "";
-        if (file_exists($c)) {
+        if (is_readable($c)) {
             $handle = @fopen("$c", "r");
             if ($handle) {
                 while (($buffer = fgets($handle, 4096)) !== false) {
