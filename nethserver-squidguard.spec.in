@@ -37,6 +37,9 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Fri Jun 06 2014 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.4-1.ns6
+- Fix "Permission denied" error on web interface - Bug #2756
+
 * Wed Oct 16 2013 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.3-1.ns6
 - Fix whitelist behavior #2287
 
