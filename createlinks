@@ -32,6 +32,7 @@ my $event = "nethserver-squidguard-update";
 event_actions($event, 'initialize-default-databases' => '00');
 templates2events("/etc/squid/squid.conf",  $event);
 templates2events("/etc/squid/squidGuard.conf",  $event);
+templates2events("/etc/logrotate.d/squidGuard",  $event);
 event_services($event, 'squid' => 'reload');
 
 #--------------------------------------------------

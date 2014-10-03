@@ -1,0 +1,6 @@
+/var/log/squidGuard/squidGuard.log \{
+    weekly
+    compress
+    notifempty
+    missingok
+\}
