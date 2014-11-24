@@ -1,0 +1,21 @@
+{
+    my $l = $squidguard{'Lists'} || '';
+    return "" if ($l eq '');
+    my @lists = split(/,/,$l);
+
+    if( 'shalla' ~~ @lists ) {
+        $OUT .= "http://www.shallalist.de/Downloads/shallalist.tar.gz\n";
+    }
+    if( 'toulouse' ~~ @lists ) {
+        $OUT .= "ftp://ftp.ut-capitole.fr/pub/reseau/cache/squidguard_contrib/blacklists.tar.gz\n";
+    }
+    if( 'urlblacklist' ~~ @lists ) {
+        $OUT .= "http://urlblacklist.com/cgi-bin/commercialdownload.pl?type=download&file=bigblacklist\n";
+    }
+    if( 'custom' ~~ @lists ) {
+        my $custom = $squidguard{'CustomListURL'} || '';
+        if ($custom ne '') {
+            $OUT .= "$custom\n";
+        }
+    }
+}

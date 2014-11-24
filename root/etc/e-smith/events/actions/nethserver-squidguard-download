@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/etc/cron.daily/update-squidguard-blacklists
