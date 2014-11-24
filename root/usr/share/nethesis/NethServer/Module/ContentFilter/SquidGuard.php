@@ -1,5 +1,5 @@
 <?php
-namespace NethServer\Module\Proxy;
+namespace NethServer\Module\ContentFilter;
 
 /*
  * Copyright (C) 2013 Nethesis S.r.l.
