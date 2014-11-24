@@ -32,61 +32,11 @@ class SquidGuard extends \Nethgui\Controller\AbstractController
 
     public $sortId = 20;
 
-    /* list of blacklists */
-    private $categories = array();
-
-    private $index = array();
-
-    private function parseIndex() 
-    {
-        $c = "/var/squidGuard/blacklists/global_usage";
-        $last = "";
-        if (is_readable($c)) {
-            $handle = @fopen("$c", "r");
-            if ($handle) {
-                while (($buffer = fgets($handle, 4096)) !== false) {
-                    $buffer = trim($buffer);
-                    if (!$buffer || $buffer[0] == "#") {
-                        continue;
-                    }
-                    $fields = explode(":",$buffer);
-                    if ($fields) {
-                        if ($fields[0] == "NAME") {
-                            $last = trim($fields[1]);
-                            $this->index[$last] = array();
-                        } else {
-                            $this->index[$last][trim($fields[0])] = trim($fields[1]);
-                        }
-                    }
-                }
-                fclose($handle);
-            }
-        }
-    }
-
-    private function readCategories()
-    {
-        $this->parseIndex();
-        $blDir = "/var/squidGuard/blacklists";
-        $d = dir($blDir);
-        while (false !== ($entry = $d->read())) {
-            if ($entry == "." || $entry == ".." || $entry == "custom" || !is_dir("$blDir/$entry")) {
-                continue;
-            }
-            $this->categories[] = $entry;
-        }
-        $d->close();
-    }
-    
     // Declare all parameters
     public function initialize()
     {
         parent::initialize();
   
-        if (!$this->categories) {
-            $this->readCategories();
-        }
-
         $ftvalidator = $this->createValidator()->orValidator($this->createValidator()->regexp('/(\w+)(,\s*\w+)*/'),$this->createValidator()->isEmpty());
         $this->declareParameter('status', Validate::SERVICESTATUS, array('configuration', 'squidguard', 'status'));
         $this->declareParameter('BlockAll', Validate::SERVICESTATUS, array('configuration', 'squidguard', 'BlockAll'));
@@ -104,10 +54,6 @@ class SquidGuard extends \Nethgui\Controller\AbstractController
             array('configuration', 'squidguard', 'DomainWhitelist'),
             array('configuration', 'squidguard', 'UrlWhitelist'),
         ));
-
-        $cvalidator = $this->createValidator(Validate::ANYTHING_COLLECTION)->collectionValidator($this->createValidator()->memberOf($this->categories));
-        $this->declareParameter('AllowedCategories', $cvalidator, array('configuration', 'squidguard', 'AllowedCategories',','));
-        $this->declareParameter('BlockedCategories', $cvalidator, array('configuration', 'squidguard', 'BlockedCategories',','));
 
     }
 
@@ -199,23 +145,6 @@ class SquidGuard extends \Nethgui\Controller\AbstractController
                                 return array($fmt, $view->translate($fmt . '_label'));
         }, array('enabled','disabled'));
 
-        if (!$this->categories) {
-            $this->readCategories();
-        }
-        $tmp = array();
-        $lang = strtoupper($view->getTranslator()->getLanguageCode());
-        foreach ($this->categories as $cat) {
-            $t = $cat;
-            if (isset($this->index[$cat]["NAME $lang"])) {
-                $t = $this->index[$cat]["NAME $lang"];
-            } else if (isset($this->index[$cat]["NAME"])) {
-                $t = $this->index[$cat]["NAME"];
-            }
-            $tmp[] = array($cat, ucfirst($t));
-        }
-        usort($tmp,array($this,'cmpcat'));
-        $view['AllowedCategoriesDatasource'] = $tmp;
-        $view['BlockedCategoriesDatasource'] = $tmp;
     }
 
     protected function onParametersSaved($changes)

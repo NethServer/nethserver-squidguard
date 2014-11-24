@@ -35,6 +35,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
     private $hostGroups = array();
     private $mode = NULL;
     private $profiles = array();
+    private $times = array();
 
     private function prepareVars()
     {
@@ -57,6 +58,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
             }
         }
         $this->profiles = $this->getPlatform()->getDatabase('contentfilter')->getAll('profile'); 
+        $this->times = $this->getPlatform()->getDatabase('contentfilter')->getAll('time'); 
     }
  
     // Declare all parameters
@@ -79,16 +81,17 @@ class Modify extends \Nethgui\Controller\Table\Modify
         );
 
         $this->setSchema($parameterSchema);
+        $this->setDefaultValue('Time','');
 
         parent::initialize();
     }
 
 
-    private function arrayToDatasource($array)
+    private function arrayToDatasource($array, $prefix)
     {
         $ret = array();
         foreach($array as $key => $props) {
-            $ret[] = array($key, $key);
+            $ret[] = array($prefix.';'.$key, $key);
         }
         return $ret;
     }
@@ -100,17 +103,24 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $this->prepareVars();
 
         $view['mode'] = $this->mode;
-        $view['ProfileDatasource'] = $this->arrayToDatasource($this->profiles);
+        $view['ProfileDatasource'] = $this->arrayToDatasource($this->profiles,'profile');
+        $tmp = $this->arrayToDatasource($this->times,'time');
+        array_unshift($tmp,array('',$view->translate('always_label')));
+        $view['TimeDatasource'] = $tmp;
 
 
         if ($this->mode == 'authenticated') {
             $u = $view->translate('Users_label');
-            $ug = $view->translate('Groups_label');
-            $view['SrcDatasource'] = array(array($this->arrayToDatasource($this->users),$u), array($this->arrayToDatasource($this->userGroups),$ug));
+            $ug = $view->translate('UserGroups_label');
+            $users = $this->arrayToDatasource($this->users,'user');
+            $groups = $this->arrayToDatasource($this->userGroups,'group');
+            $view['SrcDatasource'] = array(array($users,$u), array($groups,$ug));
         } else {
             $h = $view->translate('Hosts_label');
-            $hg = $view->translate('Groups_label');
-            $view['SrcDatasource'] = array(array($this->arrayToDatasource($this->hosts),$h),array($this->arrayToDatasource($this->hostGroups),$hg));
+            $hg = $view->translate('HostGroups_label');
+            $hosts = $this->arrayToDatasource($this->hosts,'host');
+            $groups = $this->arrayToDatasource($this->hostGroups,'host-group');
+            $view['SrcDatasource'] = array(array($hosts,$h),array($groups,$hg));
         }
 
     }

@@ -79,12 +79,6 @@ class Modify extends \Nethgui\Controller\Table\Modify
     // Declare all parameters
     public function initialize()
     {
-        $columns = array(
-            'Key',
-            'Description',
-            'Actions',
-        );
-
         if (!$this->categories) {
             $this->readCategories();
         }

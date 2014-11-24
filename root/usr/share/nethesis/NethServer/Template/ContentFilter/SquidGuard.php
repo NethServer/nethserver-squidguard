@@ -20,10 +20,6 @@ $view->includeFile('NethServer/Js/nethserver.collectioneditor.squidguard-allow.j
 $view->includeFile('NethServer/Js/nethserver.collectioneditor.squidguard-deny.js');
 $view->includeFile('NethServer/Css/nethserver.collectioneditor.squidguard.css');
 
-$columns = $view->columns()
-->insert($view->selector('AllowedCategories', $view::SELECTOR_MULTIPLE))
-->insert($view->selector('BlockedCategories', $view::SELECTOR_MULTIPLE));
-
 $bip = $view->fieldsetSwitch('BlockIpAccess', 'enabled',  $view::FIELDSETSWITCH_CHECKBOX)
         ->setAttribute('template', $T('BlockIpAccess'))
         ->setAttribute('uncheckedValue', 'disabled');
@@ -51,8 +47,6 @@ echo $view->fieldsetSwitch('status', 'enabled',  $view::FIELDSETSWITCH_CHECKBOX)
         ->setAttribute('template', $T('SquidGuard_status'))
         ->setAttribute('uncheckedValue', 'disabled');
 
-echo $view->selector('BlockAll','disabled');
-echo $columns;
 echo $bip;
 echo $expr;
 echo $view->textInput('BlockedFileTypes')->setAttribute('placeholder','exe,zip');
@@ -65,26 +59,3 @@ $acat = $view->getClientEventTarget('AllowedCategories');
 $bcat = $view->getClientEventTarget('BlockedCategories');
 
 echo $view->buttonList($view::BUTTON_SUBMIT | $view::BUTTON_HELP);
-
-$view->includeJavascript("
-(function ( $ ) {
-    function toggleCategories() {
-        if ($('input.".$ball.":checked').val() == 'enabled') {
-             $('.Selector.$bcat').Selector('disable');
-             $('.Selector.$acat').Selector('enable');
-        } else {
-             $('.Selector.$bcat').Selector('enable');
-             $('.Selector.$acat').Selector('disable');
-        }
-    }
-
-    $(document).ready(function() {
-        $('.Selector.$bcat').on('nethguiupdateview nethguicreate', function(e, url, action, labels) {
-            toggleCategories();
-        });
-        $('.$ball').change(function() {
-            toggleCategories();
-        });
-    });
-} ( jQuery ));
-");  

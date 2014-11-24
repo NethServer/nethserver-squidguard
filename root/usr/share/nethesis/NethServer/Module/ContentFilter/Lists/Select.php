@@ -43,6 +43,6 @@ class Select extends \Nethgui\Controller\AbstractController
 
     protected function onParametersSaved($changes)
     {
-        $this->getPlatform()->signalEvent('nethserver-squidguard-downloadlists &');
+#        $this->getPlatform()->signalEvent('nethserver-squidguard-downloadlists &');
     }
 }

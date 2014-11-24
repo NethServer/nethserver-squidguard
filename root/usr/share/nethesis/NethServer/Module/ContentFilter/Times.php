@@ -23,19 +23,17 @@ namespace NethServer\Module\ContentFilter;
 use Nethgui\System\PlatformInterface as Validate;
 
 /**
- * SquidGuard role management
+ * SquidGuard times management
  */
-class Roles extends \Nethgui\Controller\TableController
+class Times extends \Nethgui\Controller\TableController
 {
-    public $sortId = 30;
+    public $sortId = 40;
 
     public function initialize()
     {
         $columns = array(
             'Key',
-            'Src',
-            'Profile',
-            'Time',
+            'Description',
             'Actions',
         );
 
@@ -45,11 +43,11 @@ class Roles extends \Nethgui\Controller\TableController
         );
 
         $this
-            ->setTableAdapter($this->getPlatform()->getTableAdapter('contentfilter', 'role'))
+            ->setTableAdapter($this->getPlatform()->getTableAdapter('contentfilter', 'time'))
             ->setColumns($columns)            
-            ->addRowAction(new \NethServer\Module\ContentFilter\Roles\Modify('update')) 
+            ->addRowAction(new \NethServer\Module\ContentFilter\Times\Modify('update')) 
             ->addRowAction(new \Nethgui\Controller\Table\Modify('delete', $parameterSchema, 'Nethgui\Template\Table\Delete'))
-            ->addTableAction(new \NethServer\Module\ContentFilter\Roles\Modify('create')) 
+            ->addTableAction(new \NethServer\Module\ContentFilter\Times\Modify('create')) 
             ->addTableAction(new \Nethgui\Controller\Table\Help('Help'))
         ;
 

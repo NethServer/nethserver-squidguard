@@ -10,3 +10,5 @@ $L['Users_label'] = 'Users';
 $L['UserGroups_label'] = 'User groups';
 $L['Hosts_label'] = 'Hosts';
 $L['HostGroups_label'] = 'Host groups';
+$L['Time_label'] = 'When';
+$L['always_label'] = 'Always';
