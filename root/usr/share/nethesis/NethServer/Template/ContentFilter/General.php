@@ -1,17 +1,13 @@
 <?php
 // send some translated strings to the javascript context:
 $view->includeTranslations(array(
-    'Block source IP',
     'Block domain',
     'Block URL',
-    'Add blocked IP',
     'Add blocked domain',
     'Add blocked URL',
-    'Do not filter source IP',
     'Allow domain',
     'Allow URL',
     'Delete',
-    'Add unfiltered IP',
     'Add allowed domain',
     'Add allowed URL'
 ));
@@ -47,10 +43,5 @@ echo $expr;
 echo $view->textInput('BlockedFileTypes')->setAttribute('placeholder','exe,zip');
 echo $bacl;
 echo $aacl;
-
-$status = $view->getClientEventTarget('status');
-$ball = $view->getClientEventTarget('BlockAll');
-$acat = $view->getClientEventTarget('AllowedCategories');
-$bcat = $view->getClientEventTarget('BlockedCategories');
 
 echo $view->buttonList($view::BUTTON_SUBMIT | $view::BUTTON_HELP);

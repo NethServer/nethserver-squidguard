@@ -14,9 +14,7 @@
 
     var drawPolicy = function(element, ctx) {
         var dir, policyAdd, policyRemove;
-        if(ctx.object.type === 'BAN') {
-            text = 'Block source IP';
-        } else if (ctx.object.type == 'DB') {
+        if (ctx.object.type == 'DB') {
             text = 'Block domain';
         } else {
             text = "Block URL";
@@ -77,13 +75,6 @@
             },
             ],
             collectionActions: [            
-            {
-                name: 'create.BAN',
-                label: T('Add blocked IP'),
-                click: function(e) {
-                    editor.CollectionEditor('addElement', ':BAN', true, 'update');
-                }
-            },
             {
                 name: 'create.DB',
                 label: T('Add blocked domain'),

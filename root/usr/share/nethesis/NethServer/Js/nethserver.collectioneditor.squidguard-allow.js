@@ -14,9 +14,7 @@
 
     var drawPolicy = function(element, ctx) {
         var dir, policyAdd, policyRemove;
-        if(ctx.object.type === 'UN') {
-            text = 'Do not filter source IP';
-        } else if (ctx.object.type == 'DW') {
+        if (ctx.object.type == 'DW') {
             text = 'Allow domain';
         } else {
             text = "Allow URL";
@@ -77,13 +75,6 @@
             },
             ],
             collectionActions: [            
-            {
-                name: 'create.UN',
-                label: T('Add unfiltered IP'),
-                click: function(e) {
-                    editor.CollectionEditor('addElement', ':UN', true, 'update');
-                }
-            },
             {
                 name: 'create.DW',
                 label: T('Add allowed domain'),
