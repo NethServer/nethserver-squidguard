@@ -23,9 +23,9 @@ namespace NethServer\Module\ContentFilter;
 use Nethgui\System\PlatformInterface as Validate;
 
 /**
- * SquidGuard role management
+ * SquidGuard profile management
  */
-class Roles extends \Nethgui\Controller\TableController
+class Filters extends \Nethgui\Controller\TableController
 {
     public $sortId = 30;
 
@@ -33,9 +33,7 @@ class Roles extends \Nethgui\Controller\TableController
     {
         $columns = array(
             'Key',
-            'Src',
-            'Profile',
-            'Time',
+            'Description',
             'Actions',
         );
 
@@ -45,11 +43,11 @@ class Roles extends \Nethgui\Controller\TableController
         );
 
         $this
-            ->setTableAdapter($this->getPlatform()->getTableAdapter('contentfilter', 'role'))
+            ->setTableAdapter($this->getPlatform()->getTableAdapter('contentfilter', 'filter'))
             ->setColumns($columns)            
-            ->addRowAction(new \NethServer\Module\ContentFilter\Roles\Modify('update')) 
+            ->addRowAction(new \NethServer\Module\ContentFilter\Filters\Modify('update')) 
             ->addRowAction(new \Nethgui\Controller\Table\Modify('delete', $parameterSchema, 'Nethgui\Template\Table\Delete'))
-            ->addTableAction(new \NethServer\Module\ContentFilter\Roles\Modify('create')) 
+            ->addTableAction(new \NethServer\Module\ContentFilter\Filters\Modify('create')) 
             ->addTableAction(new \Nethgui\Controller\Table\Help('Help'))
         ;
 
@@ -58,7 +56,7 @@ class Roles extends \Nethgui\Controller\TableController
 
     public function onParametersSaved(\Nethgui\Module\ModuleInterface $currentAction, $changes, $parameters)
     {
-        #$this->getPlatform()->signalEvent(sprintf('host-%s &', $actionName));
+        $this->getPlatform()->signalEvent("nethserver-squidguard-save");
     }
 
 }

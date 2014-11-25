@@ -23,109 +23,106 @@ namespace NethServer\Module\ContentFilter\Profiles;
 use Nethgui\System\PlatformInterface as Validate;
 
 /**
- * Configure squidGuard behaviour
+ * Configure squidGuard profiles
  *
  * @author Giacomo Sanchietti
  */
 class Modify extends \Nethgui\Controller\Table\Modify
 {
+    private $users = array();
+    private $userGroups = array();
+    private $hosts = array();
+    private $hostGroups = array();
+    private $mode = NULL;
+    private $filters = array();
+    private $times = array();
 
-    /* list of blacklists */
-    private $categories = array();
-
-    private $index = array();
-
-    private function parseIndex() 
+    private function prepareVars()
     {
-        $c = "/var/squidGuard/blacklists/global_usage";
-        $last = "";
-        if (is_readable($c)) {
-            $handle = @fopen("$c", "r");
-            if ($handle) {
-                while (($buffer = fgets($handle, 4096)) !== false) {
-                    $buffer = trim($buffer);
-                    if (!$buffer || $buffer[0] == "#") {
-                        continue;
-                    }
-                    $fields = explode(":",$buffer);
-                    if ($fields) {
-                        if ($fields[0] == "NAME") {
-                            $last = trim($fields[1]);
-                            $this->index[$last] = array();
-                        } else {
-                            $this->index[$last][trim($fields[0])] = trim($fields[1]);
-                        }
-                    }
-                }
-                fclose($handle);
+        if (!$this->mode) {
+            $this->mode = $this->getPlatform()->getDatabase('configuration')->getProp('squid', 'Mode');
+        }
+        if ($this->mode == 'authenticated') {
+            if (!$this->users) {
+                $this->users = $this->getPlatform()->getDatabase('accounts')->getAll('user');
+            }
+            if (!$this->userGroups) {
+                $this->userGroups = $this->getPlatform()->getDatabase('accounts')->getAll('group');
+            }
+        } else {
+            if (!$this->hosts) {
+                $this->hosts = $this->getPlatform()->getDatabase('hosts')->getAll('host');
+            }
+            if (!$this->hostGroups) {
+                $this->hostGroups = $this->getPlatform()->getDatabase('hosts')->getAll('host-group');
             }
         }
+        $this->filters = $this->getPlatform()->getDatabase('contentfilter')->getAll('filter'); 
+        $this->times = $this->getPlatform()->getDatabase('contentfilter')->getAll('time'); 
     }
-
-    private function readCategories()
-    {
-        $this->parseIndex();
-        $blDir = "/var/squidGuard/blacklists";
-        $d = dir($blDir);
-        while (false !== ($entry = $d->read())) {
-            if ($entry == "." || $entry == ".." || $entry == "custom" || !is_dir("$blDir/$entry")) {
-                continue;
-            }
-            $this->categories[] = $entry;
-        }
-        $d->close();
-    }
-    
+ 
     // Declare all parameters
     public function initialize()
     {
-        if (!$this->categories) {
-            $this->readCategories();
-        }
+        $columns = array(
+            'Key',
+            'Description',
+            'Actions',
+        );
 
-        $cvalidator = $this->createValidator(Validate::ANYTHING_COLLECTION)->collectionValidator($this->createValidator()->memberOf($this->categories));
+        $this->prepareVars();
+
         $parameterSchema = array(
             array('name', Validate::USERNAME, \Nethgui\Controller\Table\Modify::KEY),
-            array('BlockAll', Validate::SERVICESTATUS,  \Nethgui\Controller\Table\Modify::FIELD),
-            array('Categories', $cvalidator, \Nethgui\Controller\Table\Modify::FIELD),
+            array('Src', Validate::ANYTHING,  \Nethgui\Controller\Table\Modify::FIELD),
+            array('Profile', Validate::ANYTHING,  \Nethgui\Controller\Table\Modify::FIELD),
+            array('Time', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
             array('Description', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
         );
 
         $this->setSchema($parameterSchema);
-        $this->setDefaultValue('BlockAll', 'disabled');
+        $this->setDefaultValue('Time','');
 
         parent::initialize();
     }
 
-    private static function cmpcat($a, $b)
+
+    private function arrayToDatasource($array, $prefix)
     {
-        return strnatcasecmp($a[1],$b[1]);
+        $ret = array();
+        foreach($array as $key => $props) {
+            $ret[] = array($prefix.';'.$key, $key);
+        }
+        return $ret;
     }
 
     public function prepareView(\Nethgui\View\ViewInterface $view)
     {
         parent::prepareView($view);
 
-        $view['BlockAllDatasource'] = array_map(function($fmt) use ($view) {
-                                return array($fmt, $view->translate($fmt . '_label'));
-        }, array('enabled','disabled'));
+        $this->prepareVars();
 
-        if (!$this->categories) {
-            $this->readCategories();
+        $view['mode'] = $this->mode;
+        $view['FilterDatasource'] = $this->arrayToDatasource($this->filters,'filter');
+        $tmp = $this->arrayToDatasource($this->times,'time');
+        array_unshift($tmp,array('',$view->translate('always_label')));
+        $view['TimeDatasource'] = $tmp;
+
+
+        if ($this->mode == 'authenticated') {
+            $u = $view->translate('Users_label');
+            $ug = $view->translate('UserGroups_label');
+            $users = $this->arrayToDatasource($this->users,'user');
+            $groups = $this->arrayToDatasource($this->userGroups,'group');
+            $view['SrcDatasource'] = array(array($users,$u), array($groups,$ug));
+        } else {
+            $h = $view->translate('Hosts_label');
+            $hg = $view->translate('HostGroups_label');
+            $hosts = $this->arrayToDatasource($this->hosts,'host');
+            $groups = $this->arrayToDatasource($this->hostGroups,'host-group');
+            $view['SrcDatasource'] = array(array($hosts,$h),array($groups,$hg));
         }
-        $tmp = array();
-        $lang = strtoupper($view->getTranslator()->getLanguageCode());
-        foreach ($this->categories as $cat) {
-            $t = $cat;
-            if (isset($this->index[$cat]["NAME $lang"])) {
-                $t = $this->index[$cat]["NAME $lang"];
-            } else if (isset($this->index[$cat]["NAME"])) {
-                $t = $this->index[$cat]["NAME"];
-            }
-            $tmp[] = array($cat, ucfirst($t));
-        }
-        usort($tmp,array($this,'cmpcat'));
-        $view['CategoriesDatasource'] = $tmp;
+
     }
 
     protected function onParametersSaved($changes)

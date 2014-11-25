@@ -23,14 +23,14 @@ namespace NethServer\Module\ContentFilter;
 use Nethgui\System\PlatformInterface as Validate;
 
 /**
- * Configure squidGuard behaviour
+ * Configure general squidGuard behaviour
  *
  * @author Giacomo Sanchietti
  */
-class SquidGuard extends \Nethgui\Controller\AbstractController
+class General extends \Nethgui\Controller\AbstractController
 {
 
-    public $sortId = 20;
+    public $sortId = 10;
 
     // Declare all parameters
     public function initialize()

@@ -26,7 +26,7 @@ namespace NethServer\Module\ContentFilter;
 class Lists extends \Nethgui\Controller\CompositeController
 {
   
-    public $sortId = 20;
+    public $sortId = 70;
 
     public function initialize()
     {

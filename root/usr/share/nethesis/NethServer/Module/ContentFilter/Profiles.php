@@ -23,7 +23,7 @@ namespace NethServer\Module\ContentFilter;
 use Nethgui\System\PlatformInterface as Validate;
 
 /**
- * SquidGuard profile management
+ * SquidGuard profiles management
  */
 class Profiles extends \Nethgui\Controller\TableController
 {
@@ -33,7 +33,9 @@ class Profiles extends \Nethgui\Controller\TableController
     {
         $columns = array(
             'Key',
-            'Description',
+            'Src',
+            'Profile',
+            'Time',
             'Actions',
         );
 
@@ -56,7 +58,7 @@ class Profiles extends \Nethgui\Controller\TableController
 
     public function onParametersSaved(\Nethgui\Module\ModuleInterface $currentAction, $changes, $parameters)
     {
-        #$this->getPlatform()->signalEvent(sprintf('host-%s &', $actionName));
+        $this->getPlatform()->signalEvent("nethserver-squidguard-save");
     }
 
 }
