@@ -20,10 +20,6 @@ $view->includeFile('NethServer/Js/nethserver.collectioneditor.squidguard-allow.j
 $view->includeFile('NethServer/Js/nethserver.collectioneditor.squidguard-deny.js');
 $view->includeFile('NethServer/Css/nethserver.collectioneditor.squidguard.css');
 
-$bip = $view->fieldsetSwitch('BlockIpAccess', 'enabled',  $view::FIELDSETSWITCH_CHECKBOX)
-        ->setAttribute('template', $T('BlockIpAccess'))
-        ->setAttribute('uncheckedValue', 'disabled');
-
 $expr = $view->fieldsetSwitch('Expressions', 'enabled',  $view::FIELDSETSWITCH_CHECKBOX)
         ->setAttribute('template', $T('Expressions'))
         ->setAttribute('uncheckedValue', 'disabled');
@@ -47,7 +43,6 @@ echo $view->fieldsetSwitch('status', 'enabled',  $view::FIELDSETSWITCH_CHECKBOX)
         ->setAttribute('template', $T('SquidGuard_status'))
         ->setAttribute('uncheckedValue', 'disabled');
 
-echo $bip;
 echo $expr;
 echo $view->textInput('BlockedFileTypes')->setAttribute('placeholder','exe,zip');
 echo $bacl;

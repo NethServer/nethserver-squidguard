@@ -8,3 +8,4 @@ $L['BlockAll_label'] = 'Mode';
 $L['enabled_label'] = 'Block all, allow selected content';
 $L['disabled_label'] = 'Allow all, block selected content';
 $L['Categories_label'] = 'Categories';
+$L['BlockIpAccess_label'] = 'Block access to web sites using ip address';
