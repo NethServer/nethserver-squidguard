@@ -12,3 +12,4 @@ $L['BlockIpAccess_label'] = 'Block access to web sites using ip address';
 $L['BlackList_label'] = 'Enable blacklist';
 $L['WhiteList_label'] = 'Enable whitelist';
 $L['BlockFileTypes_label'] = 'Block file extensions';
+$L['key_exists_message'] = 'A filter, profile or time with the same name already exists';

@@ -101,6 +101,18 @@ class Modify extends \Nethgui\Controller\Table\Modify
         parent::initialize();
     }
 
+    public function validate(\Nethgui\Controller\ValidationReportInterface $report)
+    {
+        $keyExists = $this->getPlatform()->getDatabase('contentfilter')->getType($this->parameters['name']) != '';
+        if ($this->getIdentifier() === 'create' && $keyExists) {
+            $report->addValidationErrorMessage($this, 'name', 'key_exists_message');
+        }
+        if ($this->getIdentifier() !== 'create' && ! $keyExists) {
+            throw new \Nethgui\Exception\HttpException('Not found', 404, 1416876015);
+        }
+        parent::validate($report);
+    }
+
     private static function cmpcat($a, $b)
     {
         return strnatcasecmp($a[1],$b[1]);

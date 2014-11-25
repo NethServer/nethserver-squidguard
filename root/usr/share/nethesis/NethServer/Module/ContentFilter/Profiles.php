@@ -61,7 +61,10 @@ class Profiles extends \Nethgui\Controller\TableController
         $this->getPlatform()->signalEvent("nethserver-squidguard-save");
     }
 
-    private function formatObject(\Nethgui\View\ViewInterface $view, $val) {
+    private function formatObject(\Nethgui\View\ViewInterface $view, $val, $default='') {
+        if (!$val) {
+            return $view->translate($default);
+        }
         $tmp = explode(';',$val);
         return $view->translate($tmp[0].'_label').": ".$tmp[1];
     }
@@ -78,6 +81,6 @@ class Profiles extends \Nethgui\Controller\TableController
 
     public function prepareViewForColumnTime(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
     {
-        return $this->formatObject($view, $values['Time']);
+        return $this->formatObject($view, $values['Time'],'always_label');
     }
 }

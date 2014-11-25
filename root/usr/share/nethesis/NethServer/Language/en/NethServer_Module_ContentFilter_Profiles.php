@@ -18,3 +18,5 @@ $L['user_label'] = 'User';
 $L['group_label'] = 'User group';
 $L['filter_label'] = 'Filter';
 $L['time_label'] = 'Time';
+$L['key_exists_message'] = 'A filter, profile or time with the same name already exists';
+$L['key_doesnt_exists_message'] = 'This object doesn\'t exists';

@@ -50,6 +50,24 @@ class Modify extends \Nethgui\Controller\Table\Modify
         parent::initialize();
     }
 
+    public function validate(\Nethgui\Controller\ValidationReportInterface $report)
+    {
+        $keyExists = $this->getPlatform()->getDatabase('contentfilter')->getType($this->parameters['name']) != '';
+        if ($this->getIdentifier() === 'create' && $keyExists) {
+            $report->addValidationErrorMessage($this, 'name', 'key_exists_message');
+        }
+        if ($this->getIdentifier() !== 'create' && ! $keyExists) {
+            throw new \Nethgui\Exception\HttpException('Not found', 404, 1416876002);
+        } else {
+            $startTime = strtotime($this->parameters['StartTime']);
+            $endTime = strtotime($this->parameters['EndTime']);
+            if ($startTime > $endTime) {
+                $report->addValidationErrorMessage($this, 'EndTime', 'endtime_grater_than_starttime');
+            }
+        }
+        parent::validate($report);
+    }
+
     public function prepareView(\Nethgui\View\ViewInterface $view)
     {
         parent::prepareView($view);

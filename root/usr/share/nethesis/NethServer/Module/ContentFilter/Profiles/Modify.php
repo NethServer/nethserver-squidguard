@@ -86,6 +86,42 @@ class Modify extends \Nethgui\Controller\Table\Modify
         parent::initialize();
     }
 
+    private function keyExists($key)
+    {
+        $db = '';
+        $tmp = explode(';', $key);
+        if ($tmp[0] == 'user' || $tmp[0] == 'group') {
+            $db = 'accounts';
+        } else if ($tmp[0] == 'host' || $tmp[0] == 'host-group') {
+            $db = 'hosts';
+        } else if ($tmp[0] == 'time' || $tmp[0] == 'filter') {
+            $db = 'contentfilter';
+        } else {
+            return false;
+        }
+        return ($this->getPlatform()->getDatabase($db)->getType($tmp[1]) != '');
+    }
+
+    public function validate(\Nethgui\Controller\ValidationReportInterface $report)
+    {
+        $keyExists = $this->keyExists($this->parameters['name']);
+        if ($this->getIdentifier() === 'create' && $keyExists) {
+            $report->addValidationErrorMessage($this, 'name', 'key_exists_message');
+        }
+        if ($this->getIdentifier() !== 'create' && ! $keyExists) {
+            throw new \Nethgui\Exception\HttpException('Not found', 404, 1416875835);
+        }
+        if ($this->getIdentifier() && $this->parameters['Src'] && !$this->keyExists($this->parameters['Src'])) {
+            $report->addValidationErrorMessage($this, 'Src', 'key_doesnt_exists_message');
+        }
+        if ($this->getIdentifier() && $this->parameters['Filter'] && !$this->keyExists($this->parameters['Filter'])) {
+            $report->addValidationErrorMessage($this, 'Filter', 'key_doesnt_exists_message');
+        }
+        if ($this->parameters['Time'] && !$this->keyExists($this->parameters['Time'])) {
+            $report->addValidationErrorMessage($this, 'Time', 'key_doesnt_exists_message');
+        }
+        parent::validate($report);
+    }
 
     private function arrayToDatasource($array, $prefix)
     {
