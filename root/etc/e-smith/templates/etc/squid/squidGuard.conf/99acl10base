@@ -1,4 +1,3 @@
-acl \{
     unfiltered \{
         pass all
     \}
@@ -38,4 +37,3 @@ acl \{
     $OUT.="        redirect     $redirect\n";
 }
     \}
-\}
