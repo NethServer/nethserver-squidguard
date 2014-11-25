@@ -30,7 +30,7 @@ use Nethgui\System\PlatformInterface as Validate;
 class Modify extends \Nethgui\Controller\Table\Modify
 {
 
-    private $days = array('s','m','t','w','h','f','a');
+    private $days = array('m','t','w','h','f','a','s');
 
     // Declare all parameters
     public function initialize()

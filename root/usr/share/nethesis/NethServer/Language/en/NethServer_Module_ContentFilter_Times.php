@@ -11,6 +11,6 @@ $L['t_label'] = 'Tuesday';
 $L['w_label'] = 'Wednesday';
 $L['h_label'] = 'Thursday';
 $L['f_label'] = 'Friday';
-$L['a_label'] = 'Saturady';
+$L['a_label'] = 'Saturday';
 $L['StartTime_label'] = 'Start time';
 $L['EndTime_label'] = 'End time';
