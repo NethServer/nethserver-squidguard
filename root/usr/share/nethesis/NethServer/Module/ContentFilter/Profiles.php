@@ -34,7 +34,7 @@ class Profiles extends \Nethgui\Controller\TableController
         $columns = array(
             'Key',
             'Src',
-            'Profile',
+            'Filter',
             'Time',
             'Actions',
         );
@@ -61,4 +61,23 @@ class Profiles extends \Nethgui\Controller\TableController
         $this->getPlatform()->signalEvent("nethserver-squidguard-save");
     }
 
+    private function formatObject(\Nethgui\View\ViewInterface $view, $val) {
+        $tmp = explode(';',$val);
+        return $view->translate($tmp[0].'_label').": ".$tmp[1];
+    }
+
+    public function prepareViewForColumnSrc(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
+    {
+        return $this->formatObject($view, $values['Src']);
+    }
+    
+    public function prepareViewForColumnFilter(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
+    {
+        return $this->formatObject($view, $values['Filter']);
+    }
+
+    public function prepareViewForColumnTime(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
+    {
+        return $this->formatObject($view, $values['Time']);
+    }
 }
