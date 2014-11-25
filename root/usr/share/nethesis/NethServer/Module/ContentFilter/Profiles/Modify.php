@@ -75,7 +75,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $parameterSchema = array(
             array('name', Validate::USERNAME, \Nethgui\Controller\Table\Modify::KEY),
             array('Src', Validate::ANYTHING,  \Nethgui\Controller\Table\Modify::FIELD),
-            array('Profile', Validate::ANYTHING,  \Nethgui\Controller\Table\Modify::FIELD),
+            array('Filter', Validate::ANYTHING,  \Nethgui\Controller\Table\Modify::FIELD),
             array('Time', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
             array('Description', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
         );

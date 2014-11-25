@@ -30,7 +30,6 @@ use Nethgui\System\PlatformInterface as Validate;
 class Modify extends \Nethgui\Controller\Table\Modify
 {
 
-    private $times = array('01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24');
     private $days = array('s','m','t','w','h','f','a');
 
     // Declare all parameters
@@ -41,8 +40,8 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $parameterSchema = array(
             array('name', Validate::USERNAME, \Nethgui\Controller\Table\Modify::KEY),
             array('Days', $dvalidator, \Nethgui\Controller\Table\Modify::FIELD, 'Days', ','),
-            array('StartTime', $this->createValidator()->memberOf($this->times), \Nethgui\Controller\Table\Modify::FIELD),
-            array('EndTime', $this->createValidator()->memberOf($this->times), \Nethgui\Controller\Table\Modify::FIELD),
+            array('StartTime', Validate::TIME, \Nethgui\Controller\Table\Modify::FIELD),
+            array('EndTime', Validate::TIME, \Nethgui\Controller\Table\Modify::FIELD),
             array('Description', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
         );
 
@@ -55,13 +54,6 @@ class Modify extends \Nethgui\Controller\Table\Modify
     {
         parent::prepareView($view);
 
-        $times = array_map(function($fmt) use ($view) {
-                                return array($fmt, $fmt);
-        }, $this->times);
-
-
-        $view['StartTimeDatasource'] = $times;
-        $view['EndTimeDatasource'] = $times;
         $view['DaysDatasource'] = array_map(function($fmt) use ($view) {
                                 return array($fmt, $view->translate($fmt.'_label'));
         }, $this->days);
@@ -70,6 +62,6 @@ class Modify extends \Nethgui\Controller\Table\Modify
 
     protected function onParametersSaved($changes)
     {
-        #$this->getPlatform()->signalEvent('nethserver-squidguard-save@post-process');
+        $this->getPlatform()->signalEvent('nethserver-squidguard-save');
     }
 }

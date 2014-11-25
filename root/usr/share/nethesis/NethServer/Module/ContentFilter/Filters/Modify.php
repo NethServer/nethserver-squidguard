@@ -88,7 +88,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
             array('name', Validate::USERNAME, \Nethgui\Controller\Table\Modify::KEY),
             array('BlockAll', Validate::SERVICESTATUS,  \Nethgui\Controller\Table\Modify::FIELD),
             array('BlockIpAccess', Validate::SERVICESTATUS, \Nethgui\Controller\Table\Modify::FIELD),
-            array('Categories', $cvalidator, \Nethgui\Controller\Table\Modify::FIELD),
+            array('Categories', $cvalidator, \Nethgui\Controller\Table\Modify::FIELD, 'Categories', ','),
             array('Description', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
         );
 
