@@ -1,0 +1,7 @@
+    default \{
+        pass none
+{
+    my $redirect = $squidguard{'RedirectUrl'} || "302:http://$SystemName.$DomainName/cgi-bin/squidGuard.cgi?clientaddr=%a&clientname=%n&clientident=%i&srcclass=%s&targetgroup=%t&url=%u"; 
+    $OUT.="        redirect     $redirect\n";
+}
+    \}

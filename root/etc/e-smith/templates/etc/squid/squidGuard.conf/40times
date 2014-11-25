@@ -1,0 +1,14 @@
+{
+    use esmith::ConfigDB;
+    my $db = esmith::ConfigDB->open_ro('contentfilter');
+    foreach ($db->get_all_by_prop(type => 'time')) {
+        my $days = $_->prop('Days') || '';
+        my $start = $_->prop('StartTime') || '*';
+        my $end = $_->prop('EndTime') || '*';
+        $days =~ s/,//g;
+        $OUT .= "time ".$_->key." {\n";
+        $OUT .= "    weekly $days $start-$end\n";
+        $OUT .= "}\n";
+        
+    }
+}

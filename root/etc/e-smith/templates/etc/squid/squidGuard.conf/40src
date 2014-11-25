@@ -1,0 +1,41 @@
+{
+    use esmith::ConfigDB;
+    use esmith::AccountsDB;
+    use NethServer::Firewall;
+    my $fw = new NethServer::Firewall();
+    my $db = esmith::ConfigDB->open_ro('contentfilter');
+
+    foreach ($db->get_all_by_prop(type => 'profile')) {
+        my $src = $_->prop('Src') || next;
+
+        if ($src =~ /,/) { # comma-separed list of users
+               $src =~ s/,/ /g;
+               $src = "user $src";
+        } else {
+           my ($type, $key) = split(/;/,$src);
+           if ($type eq 'user') {
+               $src = $key;
+           } elsif ($type eq 'group') {
+               my $adb = esmith::AccountsDB->open_ro();
+               my $g = $adb->get($key) || '';
+               if ($g ne '') {
+                  my $members = $g->prop('Members') || '';
+                  if ($members ne '') {
+                      $members = s/,/ /g;
+                      $src = "user $members";
+                  } else {
+                      $src = '';
+                  }
+               } else {
+                   $src = '';
+               }
+               
+           } else {
+               $src = $fw->getAddress($src);
+           }
+        }
+    
+        $OUT .= "src src_".$_->key." {\n    $src\n}\n";
+    }
+
+}

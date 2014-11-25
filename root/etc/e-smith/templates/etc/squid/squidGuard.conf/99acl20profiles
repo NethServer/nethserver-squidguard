@@ -1,0 +1,52 @@
+{
+    use esmith::ConfigDB;
+    my $db = esmith::ConfigDB->open_ro('contentfilter');
+    foreach ($db->get_all_by_prop(type => 'profile')) {
+        my $src = $_->prop('Src') || next;
+        my $filter_key = $_->prop('Filter') || next;
+        $filter_key =~ s/filter;//g;
+        my $time = $_->prop('Time') || '';
+        if ($time ne '') {
+            $time =~ s/time;//g;
+            $time = "within $time";
+        }
+        my $filter = $db->get($filter_key);
+        my $blockall = $filter->prop('BlockAll') || 'disabled';
+        my $op = '!';
+        if ($blockall eq 'enabled') {
+            $op = '';
+        }
+        my $blockipaccess = $filter->prop('BlockIpAccess') || 'disabled';
+        my $whitelist = $filter->prop('WhiteList') || 'disabled';
+        my $blacklist = $filter->prop('BlackList') || 'disabled';
+        my $blockfile = $filter->prop('BlockFileTypes') || 'disabled';
+
+        $OUT .= "    # Profile: ".$_->key."\n";
+        $OUT .= "    src_".$_->key." $time {\n";
+        $OUT .= "        pass";
+        foreach my $c (split(/,/,$filter->prop('Categories'))) {
+            if (exists($categories{$c})) { #do not add non-existing categories
+                $OUT .= " $op$c ";
+            }
+        }
+        if ($blockipaccess eq 'enabled') { 
+            $OUT .= " !in-addr ";
+        }
+        if ($whitelist eq 'enabled') {
+            $OUT .= " whitelist ";
+        }
+        if ($blacklist eq 'enabled') {
+            $OUT .= " blacklist ";
+        }
+        if ($blockfile eq 'enabled') {
+            $OUT .= " !file ";
+        }
+        if ($blockall eq 'enabled') {
+           $OUT .= " none\n";
+        } else {
+           $OUT .= " all\n";
+        }
+        $OUT .= "    }\n";
+    }
+ 
+}
