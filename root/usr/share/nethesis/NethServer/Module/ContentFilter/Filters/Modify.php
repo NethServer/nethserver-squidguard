@@ -148,8 +148,4 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $view['CategoriesDatasource'] = $tmp;
     }
 
-    protected function onParametersSaved($changes)
-    {
-        $this->getPlatform()->signalEvent('nethserver-squidguard-save');
-    }
 }

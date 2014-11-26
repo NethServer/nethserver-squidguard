@@ -59,10 +59,4 @@ class Modify extends \Nethgui\Controller\Table\Modify
         return array(trim(preg_replace('/\s+/', ',', $domains)));
     }
 
-
-    public function validate(\Nethgui\Controller\ValidationReportInterface $report)
-    {
-        parent::validate($report);
-    }
-
 }

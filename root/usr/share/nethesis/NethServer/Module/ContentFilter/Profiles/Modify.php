@@ -108,9 +108,6 @@ class Modify extends \Nethgui\Controller\Table\Modify
         if ($this->getIdentifier() === 'create' && $keyExists) {
             $report->addValidationErrorMessage($this, 'name', 'key_exists_message');
         }
-        if ($this->getIdentifier() !== 'create' && ! $keyExists) {
-            throw new \Nethgui\Exception\HttpException('Not found', 404, 1416875835);
-        }
         if ($this->getIdentifier() && $this->parameters['Src'] && !$this->keyExists($this->parameters['Src'])) {
             $report->addValidationErrorMessage($this, 'Src', 'key_doesnt_exists_message');
         }
@@ -163,6 +160,6 @@ class Modify extends \Nethgui\Controller\Table\Modify
 
     protected function onParametersSaved($changes)
     {
-        #$this->getPlatform()->signalEvent('nethserver-squidguard-save@post-process');
+        $this->getPlatform()->signalEvent('nethserver-squidguard-save &');
     }
 }
