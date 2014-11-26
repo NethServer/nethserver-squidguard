@@ -1,15 +1,75 @@
-#!/bin/bash
+#!/usr/bin/perl
+#
+# Copyright (C) 2014 Nethesis S.r.l.
+# http://www.nethesis.it - support@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see .
+#
 
-for d in `find /var/squidGuard/blacklists/custom -type d`
-do
-    for f in domains urls expressions
-    do
-        /sbin/e-smith/expand-template $d/$f 2>/dev/null
-        if [ -f $d/$f ]; then
-            /usr/bin/squidGuard -P -d -C $d/$f 2>/dev/null
-            /bin/chown squid:squid $d/$f.db 2>/dev/null
-        fi
-    done
-done
+use File::Path;
+use esmith::ConfigDB;
+my $db = esmith::ConfigDB->open_ro('contentfilter');
+my $dir = '/var/squidGuard/blacklists/custom/';
+my $event = shift;
+
+# clean up directory
+rmtree($dir);
+mkdir $dir;
+
+foreach ($db->get_all_by_prop(type => 'category')) {
+    my $urls = $_->prop('URLs') || '';
+    my $domains = $_->prop('Domains') || '';
+    my $name = $_->key;
+    $urls =~ s/,/\n/g;
+    $domains =~ s/,/\n/g;
+    mkdir "$dir/$name";
+    open (FILE, ">$dir/$name/urls");
+    print FILE $urls;
+    close (FILE);
+    open (FILE, ">$dir/$name/domains");
+    print FILE $domains;
+    close (FILE);
+}
+
+# If executed from cron, do not apply configuration
+exit 0 if ($event eq 'cron');
+
+mkdir "/var/squidGuard/blacklists/custom/whitelist";
+mkdir "/var/squidGuard/blacklists/custom/files";
+mkdir "/var/squidGuard/blacklists/custom/blacklist";
+
+system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/whitelist/urls");
+system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/whitelist/domains");
+system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/files/expressions");
+system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/blacklist/domains");
+system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/blacklist/urls");
+
+opendir(my $dh, $dir) || die;
+while ($d = readdir $dh) {
+    next if ( $d eq '.' || $d eq '..'); 
+    if (-d "$dir$d") {
+        foreach my $f (qw(domains urls expressions)) {
+            system("/sbin/e-smith/expand-template $dir$d/$f 2>/dev/null");
+            if (-f "$dir/$d/$f") {
+                system("/usr/bin/squidGuard -P -d -C $dir$d/$f 2>/dev/null");
+                system("/bin/chown squid:squid $dir/$d$f.db 2>/dev/null");
+            }
+        }
+    }
+}
+closedir($dh);
 
 exit 0

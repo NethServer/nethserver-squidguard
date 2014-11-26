@@ -9,6 +9,7 @@ DEBUG=0
 tot=`date +%s`
 if [ "$1" == "-d" ]; then
     DEBUG=1
+    set -x
 fi
 
 curdir=`pwd`
@@ -105,7 +106,8 @@ if [ $DEBUG -eq 1 ]; then
     echo -n "Rebuild db..."
     t1=`date +%s`
 fi
-# build squidsuard db
+
+/etc/e-smith/events/actions/nethserver-squidguard-update-custom-list cron
 /sbin/e-smith/expand-template /etc/squid/squidGuard.conf
 for d in blacklist whitelist files
 do
