@@ -53,7 +53,11 @@ class Modify extends \Nethgui\Controller\Table\Modify
                             $last = trim($fields[1]);
                             $this->index[$last] = array();
                         } else {
-                            $this->index[$last][trim($fields[0])] = trim($fields[1]);
+                            if (trim($fields[1])) {
+                                $this->index[$last][trim($fields[0])] = trim($fields[1]);
+                            } else {
+                                $this->index[$last][trim($fields[0])] = $last;
+                            }
                         }
                     }
                 }
