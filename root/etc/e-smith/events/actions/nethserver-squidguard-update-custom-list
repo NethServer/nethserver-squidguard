@@ -44,9 +44,6 @@ foreach ($db->get_all_by_prop(type => 'category')) {
     close (FILE);
 }
 
-# If executed from cron, do not apply configuration
-exit 0 if ($event eq 'cron');
-
 mkdir "/var/squidGuard/blacklists/custom/whitelist";
 mkdir "/var/squidGuard/blacklists/custom/files";
 mkdir "/var/squidGuard/blacklists/custom/blacklist";
@@ -56,6 +53,9 @@ system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/whitelis
 system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/files/expressions");
 system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/blacklist/domains");
 system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/blacklist/urls");
+
+# If executed from cron, do not apply configuration
+exit 0 if ($event eq 'cron');
 
 opendir(my $dh, $dir) || die;
 while ($d = readdir $dh) {

@@ -108,16 +108,6 @@ if [ $DEBUG -eq 1 ]; then
 fi
 
 /etc/e-smith/events/actions/nethserver-squidguard-update-custom-list cron
-/sbin/e-smith/expand-template /etc/squid/squidGuard.conf
-for d in blacklist whitelist files
-do
-    mkdir -p /var/squidGuard/blacklists/custom/$d
-    for f in domains urls expressions
-    do
-        /sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/$d/$f 2>/dev/null
-    done
-done
-
 
 if [ $DEBUG -eq 1 ]; then
     verbose="-bd"
