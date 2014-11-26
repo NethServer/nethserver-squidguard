@@ -44,12 +44,10 @@ class General extends \Nethgui\Controller\AbstractController
         $this->declareParameter('BlockedFileTypes', $ftvalidator, array('configuration', 'squidguard', 'BlockedFileTypes'));
     
         $this->declareParameter('BlockAcl', Validate::ANYTHING, array(
-            array('configuration', 'squidguard', 'Ban'),
             array('configuration', 'squidguard', 'DomainBlacklist'),
             array('configuration', 'squidguard', 'UrlBlacklist'),
         ));
         $this->declareParameter('AllowAcl', Validate::ANYTHING, array(
-            array('configuration', 'squidguard', 'Unfiltered'),
             array('configuration', 'squidguard', 'DomainWhitelist'),
             array('configuration', 'squidguard', 'UrlWhitelist'),
         ));
@@ -57,12 +55,12 @@ class General extends \Nethgui\Controller\AbstractController
     }
 
 
-    public function readBlockAcl($Ban, $DomainBlacklist, $UrlBlacklist)
+    public function readBlockAcl($DomainBlacklist, $UrlBlacklist)
     {
         $BlockAcl = '';
         
         // Append ACL suffix to each list:
-        foreach (array('BAN' => $Ban, 'DB' => $DomainBlacklist, 'UB' => $UrlBlacklist) as $acl => $list) {
+        foreach (array('DB' => $DomainBlacklist, 'UB' => $UrlBlacklist) as $acl => $list) {
             foreach (explode(',', $list) as $item) {
                 $BlockAcl .= $item ? ($item . ":" . $acl . "\r\n") : '';
             }
@@ -72,12 +70,12 @@ class General extends \Nethgui\Controller\AbstractController
     }
 
 
-    public function readAllowAcl($Unfiltered, $DomainWhitelist, $UrlWhitelist)
+    public function readAllowAcl($DomainWhitelist, $UrlWhitelist)
     {
         $AllowAcl = '';
 
         // Append ACL suffix to each list:
-        foreach (array('UN' => $Unfiltered, 'DW' => $DomainWhitelist, 'UW' => $UrlWhitelist) as $acl => $list) {
+        foreach (array('DW' => $DomainWhitelist, 'UW' => $UrlWhitelist) as $acl => $list) {
             foreach (explode(',', $list) as $item) {
                 $AllowAcl .= $item ? ($item . ":" . $acl . "\r\n") : '';
             }
@@ -99,7 +97,6 @@ class General extends \Nethgui\Controller\AbstractController
 
         return array(
             // $Ban:
-            isset($acls['BAN']) ? implode(',', array_unique($acls['BAN'])) : '',
             // $DomainBlacklist:
             isset($acls['DB']) ? implode(',', array_unique($acls['DB'])) : '',
             // $UrlBlacklist:

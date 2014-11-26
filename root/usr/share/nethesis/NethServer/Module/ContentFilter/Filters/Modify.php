@@ -74,6 +74,10 @@ class Modify extends \Nethgui\Controller\Table\Modify
             $this->categories[] = $entry;
         }
         $d->close();
+        $custom_categories = $this->getPlatform()->getDatabase('contentfilter')->getAll('category');
+        foreach ( $custom_categories as $k => $c ) {
+            $this->categories[] = $k;
+        }
     }
     
     // Declare all parameters

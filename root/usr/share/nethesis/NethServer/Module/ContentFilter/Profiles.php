@@ -56,11 +56,6 @@ class Profiles extends \Nethgui\Controller\TableController
         parent::initialize();
     }
 
-    public function onParametersSaved(\Nethgui\Module\ModuleInterface $currentAction, $changes, $parameters)
-    {
-        $this->getPlatform()->signalEvent("nethserver-squidguard-save");
-    }
-
     private function formatObject(\Nethgui\View\ViewInterface $view, $val, $default='') {
         if (!$val) {
             return $view->translate($default);

@@ -54,9 +54,4 @@ class Filters extends \Nethgui\Controller\TableController
         parent::initialize();
     }
 
-    public function onParametersSaved(\Nethgui\Module\ModuleInterface $currentAction, $changes, $parameters)
-    {
-        $this->getPlatform()->signalEvent("nethserver-squidguard-save");
-    }
-
 }
