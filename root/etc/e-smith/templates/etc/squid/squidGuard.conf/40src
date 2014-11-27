@@ -1,6 +1,5 @@
 {
     use esmith::ConfigDB;
-    use esmith::AccountsDB;
     use NethServer::Firewall;
     my $fw = new NethServer::Firewall();
     my $db = esmith::ConfigDB->open_ro('contentfilter');
@@ -16,20 +15,9 @@
            if ($type eq 'user') {
                $src = $key;
            } elsif ($type eq 'group') {
-               my $adb = esmith::AccountsDB->open_ro();
-               my $g = $adb->get($key) || '';
-               if ($g ne '') {
-                  my $members = $g->prop('Members') || '';
-                  if ($members ne '') {
-                      $members = s/,/ /g;
-                      $src = "user $members";
-                  } else {
-                      $src = '';
-                  }
-               } else {
-                   $src = '';
-               }
-               
+               my ($name,$passwd,$gid,$members) = getgrnam($key);
+               next if (!$members);
+               $src = "user $members";
            } else {
                $src = "ip ".$fw->getAddress($src);
            }
