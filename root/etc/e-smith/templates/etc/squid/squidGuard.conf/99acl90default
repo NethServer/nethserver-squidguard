@@ -1,7 +1,10 @@
     default \{
-        pass none
+        pass all
 {
-    my $redirect = $squidguard{'RedirectUrl'} || "302:http://$SystemName.$DomainName/cgi-bin/squidGuard.cgi?clientaddr=%a&clientname=%n&clientident=%i&srcclass=%s&targetgroup=%t&url=%u"; 
+    use esmith::NetworksDB;
+    my $ndb = esmith::NetworksDB->open_ro();
+    my $green = $networksDb->green();
+    my $redirect = $squidguard{'RedirectUrl'} || "http://".$green->prop('ipaddr')."/cgi-bin/squidGuard.cgi?clientaddr=%a&clientname=%n&clientident=%i&srcclass=%s&targetgroup=%t&url=%u"; 
     $OUT.="        redirect     $redirect\n";
 }
     \}
