@@ -74,4 +74,6 @@ while ($d = readdir $dh) {
 }
 closedir($dh);
 
+system("chown -R squid:squid /var/squidGuard/blacklists/custom/");
+
 exit 0
