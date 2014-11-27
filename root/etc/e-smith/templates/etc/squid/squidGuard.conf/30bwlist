@@ -1,6 +1,7 @@
 dest blacklist \{
     domainlist custom/blacklist/domains
     urllist    custom/blacklist/urls
+    logfile urlfilter.log
 \}
 dest whitelist \{
     domainlist custom/whitelist/domains

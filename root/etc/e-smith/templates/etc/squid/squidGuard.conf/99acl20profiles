@@ -36,7 +36,7 @@
             $OUT .= " whitelist ";
         }
         if ($blacklist eq 'enabled') {
-            $OUT .= " blacklist ";
+            $OUT .= " !blacklist ";
         }
         if ($blockfile eq 'enabled') {
             $OUT .= " !files ";
