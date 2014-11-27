@@ -54,6 +54,8 @@ system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/files/ex
 system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/blacklist/domains");
 system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/blacklist/urls");
 
+system("chown -R squid:squid /var/squidGuard/blacklists/custom/");
+
 # If executed from cron, do not apply configuration
 exit 0 if ($event eq 'cron');
 
