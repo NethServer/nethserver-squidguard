@@ -25,7 +25,12 @@ perl createlinks
 %install
 rm -rf $RPM_BUILD_ROOT
 (cd root; find . -depth -print | cpio -dump $RPM_BUILD_ROOT)
-%{genfilelist} $RPM_BUILD_ROOT > %{name}-%{version}-filelist
+%{genfilelist} $RPM_BUILD_ROOT > %{name}-%{version}-filelist  \
+--dir /var/squidGuard/blacklists/custom/blacklist 'attr(0755,squid,squid)'\
+--dir /var/squidGuard/blacklists/custom/whitelist 'attr(0755,squid,squid)'\
+--dir /var/squidGuard/blacklists/custom/files 'attr(0755,squid,squid)'\
+--dir /var/squidGuard/blacklists/custom 'attr(0755,squid,squid)'
+
 echo "%doc COPYING" >> %{name}-%{version}-filelist
 echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 

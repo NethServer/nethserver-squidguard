@@ -29,7 +29,9 @@ use esmith::Build::CreateLinks  qw(:all);
 
 my $event = "nethserver-squidguard-update";
 
-event_actions($event, 'initialize-default-databases' => '00');
+event_actions($event, 'initialize-default-databases' => '00',
+                      'nethserver-squidguard-conf' => '20'
+);
 templates2events("/etc/squid/squid.conf",  $event);
 templates2events("/etc/squid/squidGuard.conf",  $event);
 templates2events("/etc/squid/blacklists",  $event);
