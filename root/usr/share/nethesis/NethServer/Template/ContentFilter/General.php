@@ -20,14 +20,14 @@ $expr = $view->fieldsetSwitch('Expressions', 'enabled',  $view::FIELDSETSWITCH_C
         ->setAttribute('template', $T('Expressions'))
         ->setAttribute('uncheckedValue', 'disabled');
 
-$bacl = $view->fieldset('', $view::FIELDSET_EXPANDABLE)->setAttribute('template', $T('Block_label'))
+$bacl = $view->fieldset('')->setAttribute('template', $T('Block_label'))
 ->insert(
          $view->collectionEditor('BlockAcl', $view::LABEL_NONE)
                  ->setAttribute('class', 'DenyAclList')
                  ->setAttribute('dimensions', '20x30')
         );
 
-$aacl = $view->fieldset('', $view::FIELDSET_EXPANDABLE)->setAttribute('template', $T('Allow_label'))
+$aacl = $view->fieldset('')->setAttribute('template', $T('Allow_label'))
 ->insert(
          $view->collectionEditor('AllowAcl', $view::LABEL_NONE)
                  ->setAttribute('class', 'AllowAclList')
