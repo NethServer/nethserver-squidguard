@@ -66,16 +66,38 @@ class Profiles extends \Nethgui\Controller\TableController
 
     public function prepareViewForColumnSrc(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
     {
+        if (!isset($values['Src'])) {
+            return $view->translate('any_label');
+        }
         return $this->formatObject($view, $values['Src']);
     }
     
     public function prepareViewForColumnFilter(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
     {
+        if (!isset($values['Filter'])) {
+            return $view->translate('any_label');
+        }
         return $this->formatObject($view, $values['Filter']);
     }
 
     public function prepareViewForColumnTime(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
     {
+        if (!isset($values['Time'])) {
+            return $view->translate('always_label');
+        }
         return $this->formatObject($view, $values['Time'],'always_label');
     }
+
+    public function prepareViewForColumnActions(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
+    {
+        $cellView = $action->prepareViewForColumnActions($view, $key, $values, $rowMetadata);
+
+        if (isset($values['Removable']) && $values['Removable'] === 'no') {
+            unset($cellView['delete']);
+            unset($cellView['edit']);
+        }
+
+        return $cellView;
+    }
+
 }

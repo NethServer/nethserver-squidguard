@@ -54,4 +54,15 @@ class Filters extends \Nethgui\Controller\TableController
         parent::initialize();
     }
 
+    public function prepareViewForColumnActions(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
+    {
+        $cellView = $action->prepareViewForColumnActions($view, $key, $values, $rowMetadata);
+
+        if (isset($values['Removable']) && $values['Removable'] === 'no') {
+            unset($cellView['delete']);
+        }
+
+        return $cellView;
+    }
+
 }

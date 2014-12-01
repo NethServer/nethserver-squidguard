@@ -78,4 +78,11 @@ class Modify extends \Nethgui\Controller\Table\Modify
 
     }
 
+    protected function onParametersSaved($changes)
+    {
+        if ($this->getIdentifier() !== 'create') {
+            $this->getPlatform()->signalEvent('nethserver-squidguard-save &');
+        }
+    }
+
 }

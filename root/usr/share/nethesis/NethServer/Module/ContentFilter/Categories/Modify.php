@@ -59,4 +59,11 @@ class Modify extends \Nethgui\Controller\Table\Modify
         return array(trim(preg_replace('/\s+/', ',', $domains)));
     }
 
+    protected function onParametersSaved($changes)
+    {
+        if ($this->getIdentifier() !== 'create') {
+            $this->getPlatform()->signalEvent('nethserver-squidguard-save &');
+        }
+    }
+
 }
