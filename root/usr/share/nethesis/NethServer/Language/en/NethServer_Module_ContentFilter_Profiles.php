@@ -12,6 +12,7 @@ $L['Hosts_label'] = 'Hosts';
 $L['HostGroups_label'] = 'Host groups';
 $L['Time_label'] = 'When';
 $L['always_label'] = 'Always';
+$L['any_label'] = 'Any host';
 $L['host_label'] = 'Host';
 $L['host-group_label'] = 'Host group';
 $L['user_label'] = 'User';
