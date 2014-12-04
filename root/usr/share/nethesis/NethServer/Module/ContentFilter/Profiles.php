@@ -94,7 +94,7 @@ class Profiles extends \Nethgui\Controller\TableController
 
         if (isset($values['Removable']) && $values['Removable'] === 'no') {
             unset($cellView['delete']);
-            unset($cellView['edit']);
+            unset($cellView['update']);
         }
 
         return $cellView;
