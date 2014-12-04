@@ -60,3 +60,11 @@ event_actions($event, 'nethserver-squidguard-update-custom-list' => 30);
 templates2events("/etc/squid/blacklists",  $event);
 templates2events("/etc/squid/squidGuard.conf",  $event);
 event_services($event, 'squid' => 'reload');
+
+#--------------------------------------------------
+# actions for group-modify event
+#--------------------------------------------------
+
+$event = "group-modify";
+templates2events("/etc/squid/squidGuard.conf",  $event);
+event_services($event, 'squid' => 'reload');
