@@ -145,6 +145,6 @@ class General extends \Nethgui\Controller\AbstractController
 
     protected function onParametersSaved($changes)
     {
-        $this->getPlatform()->signalEvent('nethserver-squidguard-save@post-process');
+        $this->getPlatform()->signalEvent('nethserver-squidguard-save &');
     }
 }
