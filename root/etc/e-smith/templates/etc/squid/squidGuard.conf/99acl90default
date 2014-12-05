@@ -1,10 +1,46 @@
-    default \{
-        pass all
 {
+    use esmith::ConfigDB;
     use esmith::NetworksDB;
+
+    my $db = esmith::ConfigDB->open_ro('contentfilter');
     my $ndb = esmith::NetworksDB->open_ro();
+    my $filter = $db->get('default');
+    my $blockall = $filter->prop('BlockAll') || 'disabled';
+    my $op = '!';
+    if ($blockall eq 'enabled') {
+        $op = '';
+    }
+    my $blockipaccess = $filter->prop('BlockIpAccess') || 'disabled';
+    my $whitelist = $filter->prop('WhiteList') || 'disabled';
+    my $blacklist = $filter->prop('BlackList') || 'disabled';
+    my $blockfile = $filter->prop('BlockFileTypes') || 'disabled';
+
+    $OUT .= "    default {\n        pass";
+    foreach my $c (split(/,/,$filter->prop('Categories') || '')) {
+        if (exists($categories{$c})) { #do not add non-existing categories
+            $OUT .= " $op$c ";
+        }
+    }
+        
+    if ($blockipaccess eq 'enabled') { 
+        $OUT .= " !in-addr ";
+    }
+    if ($whitelist eq 'enabled') {
+        $OUT .= " whitelist ";
+    }
+    if ($blacklist eq 'enabled') {
+        $OUT .= " !blacklist ";
+    }
+    if ($blockfile eq 'enabled') {
+        $OUT .= " !files ";
+    }
+    if ($blockall eq 'enabled') {
+        $OUT .= " none\n";
+    } else {
+        $OUT .= " all\n";
+    }
     my $green = $ndb->green();
     my $redirect = $squidguard{'RedirectUrl'} || "http://".$green->prop('ipaddr')."/cgi-bin/squidGuard.cgi?clientaddr=%a&clientname=%n&clientident=%i&srcclass=%s&targetgroup=%t&url=%u"; 
-    $OUT.="        redirect     $redirect\n";
+    $OUT .= "        redirect     $redirect\n";
+    $OUT .= "    }";
 }
-    \}
