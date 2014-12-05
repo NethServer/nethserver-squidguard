@@ -134,6 +134,9 @@ class Modify extends \Nethgui\Controller\Table\Modify
         parent::prepareView($view);
 
         $this->prepareVars();
+        if ($this->getIdentifier() == 'delete') {
+            $view->setTemplate('Nethgui\Template\Table\Delete');
+        }
 
         $view['mode'] = $this->mode;
         $view['FilterDatasource'] = $this->arrayToDatasource($this->filters,'filter');

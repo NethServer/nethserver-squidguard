@@ -72,6 +72,10 @@ class Modify extends \Nethgui\Controller\Table\Modify
     {
         parent::prepareView($view);
 
+        if ($this->getIdentifier() == 'delete') {
+            $view->setTemplate('Nethgui\Template\Table\Delete');
+        }
+
         $view['DaysDatasource'] = array_map(function($fmt) use ($view) {
                                 return array($fmt, $view->translate($fmt.'_label'));
         }, $this->days);

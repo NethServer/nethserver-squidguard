@@ -46,7 +46,7 @@ class Filters extends \Nethgui\Controller\TableController
             ->setTableAdapter($this->getPlatform()->getTableAdapter('contentfilter', 'filter'))
             ->setColumns($columns)            
             ->addRowAction(new \NethServer\Module\ContentFilter\Filters\Modify('update')) 
-            ->addRowAction(new \Nethgui\Controller\Table\Modify('delete', $parameterSchema, 'Nethgui\Template\Table\Delete'))
+            ->addRowAction(new \NethServer\Module\ContentFilter\Filters\Modify('delete'))
             ->addTableAction(new \NethServer\Module\ContentFilter\Filters\Modify('create')) 
             ->addTableAction(new \Nethgui\Controller\Table\Help('Help'))
         ;

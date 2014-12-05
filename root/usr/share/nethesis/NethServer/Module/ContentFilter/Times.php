@@ -46,7 +46,7 @@ class Times extends \Nethgui\Controller\TableController
             ->setTableAdapter($this->getPlatform()->getTableAdapter('contentfilter', 'time'))
             ->setColumns($columns)            
             ->addRowAction(new \NethServer\Module\ContentFilter\Times\Modify('update')) 
-            ->addRowAction(new \Nethgui\Controller\Table\Modify('delete', $parameterSchema, 'Nethgui\Template\Table\Delete'))
+            ->addRowAction(new \NethServer\Module\ContentFilter\Times\Modify('delete'))
             ->addTableAction(new \NethServer\Module\ContentFilter\Times\Modify('create')) 
             ->addTableAction(new \Nethgui\Controller\Table\Help('Help'))
         ;

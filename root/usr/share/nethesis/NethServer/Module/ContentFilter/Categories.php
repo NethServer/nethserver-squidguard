@@ -46,7 +46,7 @@ class Categories extends \Nethgui\Controller\TableController
             ->setTableAdapter($this->getPlatform()->getTableAdapter('contentfilter', 'category'))
             ->setColumns($columns)            
             ->addRowAction(new \NethServer\Module\ContentFilter\Categories\Modify('update')) 
-            ->addRowAction(new \Nethgui\Controller\Table\Modify('delete', $parameterSchema, 'Nethgui\Template\Table\Delete'))
+            ->addRowAction(new \NethServer\Module\ContentFilter\Categories\Modify('delete'))
             ->addTableAction(new \NethServer\Module\ContentFilter\Categories\Modify('create')) 
             ->addTableAction(new \Nethgui\Controller\Table\Help('Help'))
         ;

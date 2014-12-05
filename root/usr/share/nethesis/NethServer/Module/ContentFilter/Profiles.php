@@ -48,7 +48,7 @@ class Profiles extends \Nethgui\Controller\TableController
             ->setTableAdapter($this->getPlatform()->getTableAdapter('contentfilter', 'profile'))
             ->setColumns($columns)            
             ->addRowAction(new \NethServer\Module\ContentFilter\Profiles\Modify('update')) 
-            ->addRowAction(new \Nethgui\Controller\Table\Modify('delete', $parameterSchema, 'Nethgui\Template\Table\Delete'))
+            ->addRowAction(new \NethServer\Module\ContentFilter\Profiles\Modify('delete'))
             ->addTableAction(new \NethServer\Module\ContentFilter\Profiles\Modify('create')) 
             ->addTableAction(new \Nethgui\Controller\Table\Help('Help'))
         ;
