@@ -69,15 +69,15 @@ class Modify extends \Nethgui\Controller\Table\Modify
     private function readCategories()
     {
         $this->parseIndex();
-        $blDir = "/var/squidGuard/blacklists";
-        $d = dir($blDir);
-        while (false !== ($entry = $d->read())) {
-            if ($entry == "." || $entry == ".." || $entry == "custom" || !is_dir("$blDir/$entry")) {
+        $dir_iterator = new \RecursiveDirectoryIterator("/var/squidGuard/blacklists");
+        $iterator = new \RecursiveIteratorIterator($dir_iterator, \RecursiveIteratorIterator::SELF_FIRST);
+
+        foreach ( $iterator as $key => $entry ) {
+            if (!is_dir($entry) || basename($entry) == '..' || basename($entry) == '.' || strpos($entry, '/var/squidGuard/blacklists/custom') !== false) {
                 continue;
             }
-            $this->categories[] = $entry;
+            $this->categories[] = basename($entry);
         }
-        $d->close();
         $custom_categories = $this->getPlatform()->getDatabase('contentfilter')->getAll('category');
         foreach ( $custom_categories as $k => $c ) {
             $this->categories[] = $k;
