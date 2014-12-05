@@ -64,7 +64,6 @@ while ($d = readdir $dh) {
     next if ( $d eq '.' || $d eq '..'); 
     if (-d "$dir$d") {
         foreach my $f (qw(domains urls expressions)) {
-            system("/sbin/e-smith/expand-template $dir$d/$f 2>/dev/null");
             if (-f "$dir/$d/$f") {
                 system("/usr/bin/squidGuard -P -d -C $dir$d/$f 2>/dev/null");
                 system("/bin/chown squid:squid $dir/$d$f.db 2>/dev/null");
