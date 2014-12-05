@@ -44,7 +44,7 @@ event_services($event, 'squid' => 'reload');
 
 $event = "nethserver-squidguard-save";
 
-event_actions($event, 'nethserver-squidguard-update-custom-list' => 20);
+event_actions($event, 'nethserver-squidguard-update-custom-list' => 02);
 templates2events("/etc/squid/squid.conf",  $event);
 templates2events("/etc/squid/squidGuard.conf",  $event);
 event_services($event, 'squid' => 'reload');
@@ -55,8 +55,8 @@ event_services($event, 'squid' => 'reload');
 #--------------------------------------------------
 
 $event = "nethserver-squidguard-downloadlists";
-event_actions($event, 'nethserver-squidguard-download' => 20);
-event_actions($event, 'nethserver-squidguard-update-custom-list' => 30);
+event_actions($event, 'nethserver-squidguard-update-custom-list' => 02);
+event_actions($event, 'nethserver-squidguard-download' => 30);
 templates2events("/etc/squid/blacklists",  $event);
 templates2events("/etc/squid/squidGuard.conf",  $event);
 event_services($event, 'squid' => 'reload');
