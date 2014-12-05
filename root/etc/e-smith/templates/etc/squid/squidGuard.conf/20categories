@@ -1,25 +1,46 @@
 {
+    use File::Find;
     use File::Basename;
     my $exprstatus = $squidguard{'Expressions'} || 'disabled';
     our %categories;
-    @files = </var/squidGuard/blacklists/*>;
-    foreach $file (@files) {
-        my $urls = "$file/urls";
-        my $domains = "$file/domains";
-        my $expressions = "$file/expressions";
-        my $cat = basename($file);
-        $categories{$cat} = 1;
-        $OUT.="dest $cat {\n";
-        if (-e $domains) {
-            $OUT.="      domainlist $cat/domains\n";
+    our @files;
+    
+    sub wanted() {
+        my %tmp;
+        if ( -d $File::Find::name ) {
+            my $domains = $File::Find::name."/domains";
+            my $urls = $File::Find::name."/urls";
+            my $expressions = $File::Find::name."/expressions";
+
+            if ( -e $domains ) {
+               $tmp{'domains'} = $domains; 
+            }
+            if ( -e $urls ) {
+               $tmp{'urls'} = $urls; 
+            }
+            if ( -e $expressions ) {
+               $tmp{'expressions'} = $expressions; 
+            }
+            if ( -e $domains || -e $urls || -e $expressions ) {
+                $categories{$_} = \%tmp;
+            }
         }
-        if (-e $urls) {
-            $OUT.="      urllist $cat/urls\n";
+    }
+
+    find (\&wanted, "/var/squidGuard/blacklists/");
+
+    while (($key, $value) = each(%categories)) {
+        $OUT.="dest $key {\n";
+        if (defined($value->{'domains'})) {
+            $OUT .= "      domainlist ".$value->{'domains'}."\n";
         }
-        if ($exprstatus eq 'enabled' && -f $expressions) {
-            $OUT.="      expressionlist $cat/expressions\n";
+        if (defined($value->{'urls'})) {
+            $OUT .="      urllist ".$value->{'urls'}."\n";
+        }
+        if (defined($value->{'expressions'}) && ( $exprstatus eq 'enabled' || $key eq 'files')) {
+            $OUT .= "      expressionlist ".$value->{'expressions'}."\n";
         }
         $OUT.="      logfile urlfilter.log\n";
         $OUT.="}\n";
-    } 
+    }
 }
