@@ -116,8 +116,6 @@ class General extends \Nethgui\Controller\AbstractController
         }
 
         return array(
-            // $Unfiltered:
-            isset($acls['UN']) ? implode(',', array_unique($acls['UN'])) : '',
             // $DomainWhitelist:
             isset($acls['DW']) ? implode(',', array_unique($acls['DW'])) : '',
             // $UrlWhitelist:
