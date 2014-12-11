@@ -33,16 +33,45 @@ use CGI;
 #
 # GLOBAL VALUES:
 #
-my $cgi = new CGI;
-my ($clientaddr,$clientname,$clientuser,$clientgroup,$targetgroup,$url,$virus,$source,$user);
-my (@supported,$image,$redirect,$autoinaddr,$proxy,$proxymaster);
+my ($clientaddr,$clientgroup,$targetgroup,$url,$virus,$source,$user);
+my (@supported,$redirect);
 my $lang="en"; 
-my (%msgconf,%title,%logo,%msg,%tab,%word);
-my ($protocol,$address,$port,$path,$refererhost,$referer);
+my (%msgconf,%msg);
+my ($protocol,$address,$port,$path);
 my %Babel = ();
 my $rechts="";
 my $links="";
-my $dummy="";
+my $style_css = '<style type="text/css">
+                  .visu {
+                    border:1px solid #C0C0C0;
+                    color:#FFFFFF;
+                    position: relative;
+                    min-width: 13em;
+                    max-width: 52em;
+                    margin: 4em auto;
+                    border-radius: 10px;
+                    padding: 3em;
+                    -moz-padding-start: 30px;
+                    background-color: #8b0000;
+                  }
+                  .visu h2, .visu h3, .visu h4 .visu body {
+                    font-size:130%;
+                    font-family: sans-serif;
+                    font-style:normal;
+                    font-weight:bolder;
+                  }
+                  body {
+                    background-color: #353535;
+                    font-family: sans-serif;
+                  }
+                  a:link {
+                    color: #ffffff;
+                  }
+                  a:visited {
+                    color: #ffff00;
+                  }
+                </style>';
+
 sub getpreferedlang(@);
 sub parsequery($);
 sub status($);
@@ -52,9 +81,7 @@ sub expires($);
 sub msg($$);
 sub gethostnames($);
 sub spliturl($);
-sub showhtml($);
-sub showimage($$$);
-sub showinaddr($$$$$);
+sub printHTML($$$$);
 
 #
 # CONFIGURABLE OPTIONS:
@@ -64,28 +91,6 @@ sub showinaddr($$$$$);
                 "en (English), ",
                 "it (Italiano)."
                );
-
-#
-# Modifiy the values below to reflect you environment
-# The image you define with "$image" and redirect will be displayed if the unappropriate
-# url is of the type: gif, jpg, jpeg, png, mp3, mpg, mpeg, avi or mov.
-#
-$image       = "/images/blocked.gif";					# RELATIVE TO DOCUMENT_ROOT
-$redirect    = "http://admin.your-domain/images/blocked.gif";		# "" TO AVOID REDIRECTION
-$proxy       = "proxy.your-domain";					# Your proxy server
-$proxymaster = "operator\@your-domain";					# The email of your proxy adminstrator
-$autoinaddr  = 2;			# 0|1|2;
-					# 0 TO NOT REDIRECT
-					# 1 TO AUTORESOLVE & REDIRECT IF UNIQUE
-					# 2 TO AUTORESOLVE & REDIRECT TO FIRST NAME
-
-# You may wish to enter your company link and logo to be displayed on the page
-my $company = " ";
-my $companylogo = " ";
-
-my $squidguard = "http://www.squidguard.org";
-my $squidguardlogo = "http://www.squidguard.org/Logos/squidGuard.gif";
-
 ########################################################################################
 #
 # SUBROUTINES:
@@ -115,35 +120,23 @@ sub getpreferedlang(@) {
 # PARSE THE QUERY_STRING FOR KNOWN KEYS:
 #
 sub parsequery($) {
+
+  my $cgi = new CGI;
   my $query       = shift;
 
-  my $clientaddr  = "$Babel{Unknown}";
-  my $clientname  = "$Babel{Unknown}";
-  my $clientuser  = "$Babel{Unknown}";
-  my $clientgroup = "$Babel{Unknown}";
-  my $targetgroup = "$Babel{Unknown}";
+  # squidguard info
+  my $clientaddr  = CGI::escapeHTML($cgi->param('clientaddr')) || '';
+  my $clientgroup = CGI::escapeHTML($cgi->param('clientgroup')) || '';
+  my $targetgroup = CGI::escapeHTML($cgi->param('targetgroup')) || '';
 
-  my $virus = CGI::escapeHTML($cgi->param('virus')) || CGI::escapeHTML($cgi->param('malware')) || '';
-  my $source = CGI::escapeHTML($cgi->param('source')) || '';
-  my $user = CGI::escapeHTML($cgi->param('user')) || '';
+  # squidclamav info
+  my $virus       = CGI::escapeHTML($cgi->param('virus')) || CGI::escapeHTML($cgi->param('malware')) || '';
+  my $source      = CGI::escapeHTML($cgi->param('source')) || '';
+  my $user        = CGI::escapeHTML($cgi->param('user')) || '';
 
-  my $url         = "$Babel{Unknown}";
-  if (defined($query)) {
-    while ($query =~ /^\&?([^\&=]+)=\"([^\"]*)\"(.*)/ || $query =~ /^\&?([^\&=]+)=([^\&=]*)(.*)/) {
-      my $key = $1;
-      my $value = $2;
-      $value = "$Babel{Unknown}" unless(defined($value) && $value && $value ne "unknown");
-      $query = $3;
-      if ($key =~ /^(clientaddr|clientname|clientuser|clientgroup|targetgroup|url)$/) {
-	     eval "\$$key = \$value";
-      }
-      if ($query =~ /^url=(.*)/) {
-	     $url = $1;
-	     last;
-      }
-    }
-  }
-  return($clientaddr,$clientname,$clientuser,$clientgroup,$targetgroup,$url,$virus,$source,$user);
+  my $url         = CGI::escapeHTML($cgi->param('url')) || '';
+
+  return($clientaddr,$clientgroup,$targetgroup,$url,$virus,$source,$user);
 }
 
 #
@@ -197,8 +190,8 @@ sub gethostnames($) {
     push(@names,$name);
     if (defined($aliases) && $aliases) {
       for(split(/\s+/,$aliases)) {
-	next unless(/\./);
-	push(@names,$_);
+  next unless(/\./);
+  push(@names,$_);
       }
     }
   }
@@ -223,72 +216,45 @@ sub spliturl($) {
 }
 
 #
-# SEND OUT AN IMAGE:
+# PRINT THE HTML TEMPLATE USING DIFFERENT MSGS
 #
-sub showimage($$$) {
-  my ($type,$file,$redirect) = @_;
-  content("image/$type");
-  expires(300);
-  redirect($redirect) if($redirect);
-  print "\n";
-  open(GIF, "$ENV{\"DOCUMENT_ROOT\"}$file");
-  print <GIF>;
-  close(GIF)
-}
+sub printHTML($$$$) {
 
-#
-# SHOW THE INADDR ALERNATIVES WITH OPTIONAL ATOREDIRECT:
-#
-sub showinaddr($$$$$) {
-  my ($targetgroup,$protocol,$address,$port,$path) = @_;
-  my $msgid = $targetgroup;
-  my @names = gethostnames($address);
-  if($autoinaddr == 2 && @names || $autoinaddr && @names==1) {
-    status("301 Moved Permanently");
-    redirect("$protocol://$names[0]$port$path");
-  } elsif (@names>1) {
-    status("300 Multiple Choices");
-  } elsif (@names) {
-    status("301 Moved Permanently");
+  # legenda
+  # @_[0] => Title
+  # @_[1] => Subtitle
+  # @_[2] => ErrorMessage
+  # @_[3] => UrlErrorMessage
+
+
+  print "Content-type: text/html\n\n<!DOCTYPE html PUBLIC \"-//W3C//DTD  HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n<html><head>\n";
+  print "<title>$Babel{Title}</title>\n";
+  print "</head>\n<body> \n";
+  
+  print $style_css;  
+
+  print qq{
+            <div class="visu">
+            <h2 style="text-align: center;">$Babel{@_[0]}</h2>
+            <hr>
+
+            $Babel{ReqURL} <b>$url</b> $Babel{@_[3]}<br>
+            $Babel{@_[1]}: <b>$virus</b></p>
+
+            <p>
+            $Babel{@_[2]}
+            <p>
+          };
+
+  print "$Babel{Origin}: <b>$source</b><br>";
+
+  if($user eq '') {
+    print " ";
   } else {
-    status("404 Not Found");
+    print "$Babel{User}: <b>$user</b>";
   }
-  if (@names) {
-    print "Content-type: text/html\n\n";
-    print "<!DOCTYPE html PUBLIC \"-//W3C//DTD  HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n";
-    print "<html><head>\n";
-    print "<title>$Babel{Title}</title>\n";
-    print "</head>\n";
-    print "<body bgcolor=#E6E6FA> \n";
-    expires(0);
-    $msgid = "in-addr" unless(defined($msgconf{$msgid}));
-    if (defined($msgconf{$msgid})) {
-      print "  <!-- showinaddr(\"$msgid\") -->\n";
-      for (@{$msgconf{$msgid}}) {
-	my @config = split(/:/);
-	my $type = shift(@config);
-	if ($type eq "msg") {
-	  msg($config[0],$config[1]);
-	} elsif ($type eq "tab") {
-	  table(shift(@config),shift(@config),@config);
-	} elsif ($type eq "alternatives") {
-	  print "  <TABLE BORDER=0 ALIGN=CENTER>\n";
-	  for (@names) {
-	    print "   <TR>\n    <TH ALIGN=LEFT>\n     <FONT SIZE=+1>";
-	    href("$protocol://$_$port$path");
-	    print "\n     </FONT>\n    </TH>\n   </TR>\n";
-	  }
-	  print "  </TABLE>\n\n";
-	  if (defined($ENV{"HTTP_REFERER"}) && $ENV{"HTTP_REFERER"} =~ /:\/\/([^\/:]+)/) {
-	    $refererhost = $1;
-	    $referer = $ENV{"HTTP_REFERER"};
-	    msg("H4","referermaster");
-	  }
-	}
-      }
-    } 
-  }
-  return;
+
+  print '<hr><div style="float:right;">Powered by <a href="http://squidclamav.darold.net/">SquidClamAv</a></div></body></html>';
 }
 
 
@@ -310,99 +276,60 @@ flock (BABEL, 2);
 flock (BABEL, 8);
 close (BABEL);
 
-($clientaddr,$clientname,$clientuser,$clientgroup,$targetgroup,$url,$virus,$source,$user) = parsequery($ENV{"QUERY_STRING"});
-
+($clientaddr,$clientgroup,$targetgroup,$url,$virus,$source,$user) = parsequery($ENV{"QUERY_STRING"});
 
 ($protocol,$address,$port,$path) = spliturl($url);
-
-if ($url =~ /\.(gif|jpg|jpeg|png|mp3|mpg|mpeg|avi|mov)$/i) {
-  status("403 Forbidden");
-  showimage("gif",$image,$redirect);
-  exit 0;
-}
-if ($targetgroup eq "in-addr") {
-   showinaddr($targetgroup,$protocol,$address,$port,$path);
-}
 
 # template of SQUIDGUARD
 if($virus eq '' || $source eq '') {
 
   status("403 Forbidden");
   expires(0);
-  print "Content-type: text/html\n\n";
-  print "<!DOCTYPE html PUBLIC \"-//W3C//DTD  HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n";
-  print "<html><head>\n";
-  print "<title>$Babel{Title}</title>\n";
-  print "</head>\n";
-  print "<body> \n";
 
-  print qq{
-  <style type="text/css">
-  .visu {
-    border:1px solid #C0C0C0;
-    color:#FFFFFF;
-    position: relative;
-    min-width: 13em;
-    max-width: 52em;
-    margin: 4em auto;
-    border-radius: 10px;
-    padding: 3em;
-    -moz-padding-start: 30px;
-    background-color: #8b0000;
-  }
-  .visu h2, .visu h3, .visu h4 .visu body {
-    font-size:130%;
-    font-family: sans-serif;
-    font-style:normal;
-    font-weight:bolder;
-  }
-  body {
-    background-color: #353535;
-    font-family: sans-serif;
-  }
-  a:link {
-    color: #ffffff;
-  }
-  a:visited {
-    color: #ffff00;
-  }
-  </style>  
-    <div class="visu">
-    <h2 style="text-align: center;">$Babel{Msg}</h2>
-    <hr>
-    <p>
-  };
+  print "Content-type: text/html\n\n<!DOCTYPE html PUBLIC \"-//W3C//DTD  HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n<html><head>\n";
+  print "<title>$Babel{Title}</title>\n";
+  print "</head>\n<body> \n";
+
+  print $style_css;  
+
+  print qq { 
+            <div class="visu">
+            <h2 style="text-align: center;">$Babel{Msg}</h2>
+            <hr>
+           };
 
   print "\n";
-  print "<a href=$company>\n";
-  print "<img align=left border=0 alt=\"\" src=$companylogo></a>\n";
 
   print "$Babel{Tabclientgroup}&nbsp;<b>$clientgroup $targetgroup</b><br>\n";
   print "$Babel{Taburl}&nbsp;<b>$url</b><br>\n";
 
   if ($targetgroup eq "in-addr") {
-     print "$Babel{msginaddr}<br><br>\n";
-     print "$Babel{msgnoalternatives} <U>",$address,"</U>.<br>\n";
-     print "$Babel{msgwebmaster}\n";
+    print "$Babel{msginaddr}<br><br>\n";
+    
+    # get hosts alternatives
+    my @hostsalternatives = gethostnames($address);
+
+    # check if there are hosts's names alternatives
+    if(defined @hostsalternatives[0]) {
+      print "$Babel{msgalternatives} <U>",@hostsalternatives[0],"</U>.<br>\n";
+    } else {
+      print "$Babel{msgnoalternatives}<U>",$address,"</U>.<br>\n";
+    }
+
+    print "$Babel{msgwebmaster}\n";
   }
+
   print "<br>\n";
 
   print "$Babel{Origin}: <b>$clientaddr</b>";
-  if($clientuser != "") {
-    print "$Babel{User}: <b>$clientuser</b>";
-  }
 
-  print qq{
-    <p>
-    <hr>
-    <div style="float:right;">Powered by <a href="http://www.squidguard.org">SquidGuard</a></div>
-  };
+  print '<hr><div style="float:right;">Powered by <a href="http://www.squidguard.org">SquidGuard</a></div></body></html>';
 
-  print "</body></html>\n";
 }
 
 # template of SQUIDCLAMAV
 else {
+
   # Remove unused infos
   $source =~ s/\/-//;
   $virus =~ s/stream: //;
@@ -410,142 +337,12 @@ else {
 
   # browsing unsafe
   if ($virus =~ /Safebrowsing/) {
-    print $cgi->header();
-    print $cgi->start_html(-title => "Babel{TitleBrowseUnsafe}", -bgcolor => "#353535");
-    print qq{
-    <style type="text/css">
-    .visu {
-      border:1px solid #C0C0C0;
-      color:#FFFFFF;
-      position: relative;
-      min-width: 13em;
-      max-width: 52em;
-      margin: 4em auto;
-      border-radius: 10px;
-      padding: 3em;
-      -moz-padding-start: 30px;
-      background-color: #8b0000;
-    }
-    .visu h2, .visu h3, .visu h4 .visu body {
-      font-size:130%;
-      font-family: sans-serif;
-      font-style:normal;
-      font-weight:bolder;
-    }
-    body {
-      background-color: #353535;
-      font-family: sans-serif;
-    }
-    a:link {
-      color: #ffffff;
-    }
-    a:visited {
-      color: #ffff00;
-    }
-    </style> 
-      <div class="visu">
-      <h2 style="text-align: center;">$Babel{TitleBrowseUnsafe}</h2>
-      <hr>
-      <p>
-    };
-    print qq{
-      $Babel{ReqURL} <b>$url</b> $Babel{urlerrorUnsafe}<br>
-      $Babel{subtitleUnsafe}: <b>$virus</b></p>
-    };
+    # print HTML template with safe browsing params
+    printHTML("TitleBrowseUnsafe","subtitleUnsafe","errorreturnUnsafe","urlerrorUnsafe");
 
-    print qq{
-      <p>
-      $Babel{errorreturnUnsafe}
-      <p>
-      };
-
-    print "$Babel{Origin}: <b>$source</b><br>";
-
-    if($user eq '') {
-      print " ";
-    }
-    else
-    {
-      print "$Babel{User}: <b>$user</b>";
-    }
-
-    print qq{
-      <p>
-      <hr>
-      <div style="float:right;">Powered by <a href="http://squidclamav.darold.net/">SquidClamAv</a></div>
-    };
-  
-  print $cgi->end_html();
-
-  # virus detected
-  } else {
-    print $cgi->header();
-    print $cgi->start_html(-title => "$Babel{TitleVirus}", -bgcolor => "#353535");
-    print qq{
-    <style type="text/css">
-    .visu {
-      border:1px solid #C0C0C0;
-      color:#FFFFFF;
-      position: relative;
-      min-width: 13em;
-      max-width: 52em;
-      margin: 4em auto;
-      border-radius: 10px;
-      padding: 3em;
-      -moz-padding-start: 30px;
-      background-color: #8b0000;
-    }
-    .visu h2, .visu h3, .visu h4 .visu body {
-      font-size:130%;
-      font-family: sans-serif;
-      font-style:normal;
-      font-weight:bolder;
-    }
-    body {
-      background-color: #353535;
-      font-family: sans-serif;
-    }
-    a:link {
-      color: #ffffff;
-    }
-    a:visited {
-      color: #ffff00;
-    }
-    </style> 
-      <div class="visu">
-      <h2 style="text-align: center;">$Babel{TitleVirus}</h2>
-      <hr>
-      <p>
-    };
-
-    print qq{
-      $Babel{ReqURL} <b>$url</b> $Babel{urlerror}<br>
-      $Babel{subtitle}: <b>$virus</b></p>
-    };
-
-    print qq{
-      <p> 
-      $Babel{errorreturnUnsafe}
-      <p>
-    };
-
-    print "$Babel{Origin}: <b>$source</b><br>";
-
-    if($user eq '') {
-      print " ";
-    }
-    else
-    {
-      print "$Babel{User}: <b>$user</b>";
-    }
-
-    print qq{
-      <p>
-      <hr>
-      <div style="float:right;">Powered by <a href="http://squidclamav.darold.net/">SquidClamAv</a></div>
-    };
-
-    print $cgi->end_html();
+  } else { # virus detected
+    # print HTML template with virus or malware params
+    printHTML("TitleVirus","subtitle","errorreturn","urlerror");
   }
 }
 
