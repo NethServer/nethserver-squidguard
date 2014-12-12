@@ -1,0 +1,6 @@
+/var/log/squidGuard/urlfilter.log {
+    weekly
+    compress
+    notifempty
+    missingok
+}
