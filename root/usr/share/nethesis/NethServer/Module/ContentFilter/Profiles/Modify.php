@@ -39,23 +39,19 @@ class Modify extends \Nethgui\Controller\Table\Modify
 
     private function prepareVars()
     {
-        if (!$this->mode) {
-            $this->mode = $this->getPlatform()->getDatabase('configuration')->getProp('squid', 'Mode');
+        if (!$this->users) {
+            $this->users = $this->getPlatform()->getDatabase('accounts')->getAll('user');
         }
-        if ($this->mode == 'authenticated') {
-            if (!$this->users) {
-                $this->users = $this->getPlatform()->getDatabase('accounts')->getAll('user');
-            }
-            if (!$this->userGroups) {
-                $this->userGroups = $this->getPlatform()->getDatabase('accounts')->getAll('group');
-            }
-        } else {
-            if (!$this->hosts) {
-                $this->hosts = $this->getPlatform()->getDatabase('hosts')->getAll('host');
-            }
-            if (!$this->hostGroups) {
-                $this->hostGroups = $this->getPlatform()->getDatabase('hosts')->getAll('host-group');
-            }
+        if (!$this->userGroups) {
+            $this->userGroups = $this->getPlatform()->getDatabase('accounts')->getAll('group');
+        }
+        if (!$this->hosts) {
+            $h = $this->getPlatform()->getDatabase('hosts')->getAll('host');
+            $l = $this->getPlatform()->getDatabase('hosts')->getAll('local');
+            $this->hosts = array_merge($h, $l);
+        }
+        if (!$this->hostGroups) {
+            $this->hostGroups = $this->getPlatform()->getDatabase('hosts')->getAll('host-group');
         }
         $this->filters = $this->getPlatform()->getDatabase('contentfilter')->getAll('filter'); 
         $this->times = $this->getPlatform()->getDatabase('contentfilter')->getAll('time'); 
@@ -138,26 +134,35 @@ class Modify extends \Nethgui\Controller\Table\Modify
             $view->setTemplate('Nethgui\Template\Table\Delete');
         }
 
-        $view['mode'] = $this->mode;
         $view['FilterDatasource'] = $this->arrayToDatasource($this->filters,'filter');
         $tmp = $this->arrayToDatasource($this->times,'time');
         array_unshift($tmp,array('',$view->translate('always_label')));
         $view['TimeDatasource'] = $tmp;
 
 
-        if ($this->mode == 'authenticated') {
-            $u = $view->translate('Users_label');
-            $ug = $view->translate('UserGroups_label');
-            $users = $this->arrayToDatasource($this->users,'user');
-            $groups = $this->arrayToDatasource($this->userGroups,'group');
-            $view['SrcDatasource'] = array(array($users,$u), array($groups,$ug));
-        } else {
-            $h = $view->translate('Hosts_label');
-            $hg = $view->translate('HostGroups_label');
-            $hosts = $this->arrayToDatasource($this->hosts,'host');
-            $groups = $this->arrayToDatasource($this->hostGroups,'host-group');
-            $view['SrcDatasource'] = array(array($hosts,$h),array($groups,$hg));
+        $tmp = array();
+        $u = $view->translate('Users_label');
+        $ug = $view->translate('UserGroups_label');
+        $users = $this->arrayToDatasource($this->users,'user');
+        if ($users) {
+            $tmp[] = array($users,$u);
         }
+        $groups = $this->arrayToDatasource($this->userGroups,'group');
+        if ($groups) {
+            $tmp[] = array($groups,$ug);
+        }
+        $h = $view->translate('Hosts_label');
+        $hg = $view->translate('HostGroups_label');
+        $hosts = $this->arrayToDatasource($this->hosts,'host');
+        if ($hosts) {
+            $tmp[] = array($hosts,$h);
+        }
+        $hgroups = $this->arrayToDatasource($this->hostGroups,'host-group');
+        if ($hgroups) {
+            $tmp[] = array($hgroups,$hg);
+        }
+
+        $view['SrcDatasource'] = $tmp;
 
     }
 
