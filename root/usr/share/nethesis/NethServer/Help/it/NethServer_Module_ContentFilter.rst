@@ -51,13 +51,12 @@ Nome
    Nome descrittivo univoco.
 
 Chi
-   Se il proxy è configurato in modalità autenticata, può essere:
-   * un utente
-   * un gruppo di utenti
-
-   Se il proxy è configurata in altra modalità, può essere:
+   Può essere:
+   * un utente locale
+   * un gruppo di utenti locali
    * un host
    * un gruppo di host
+   * un utente di Active Directory, se il server ha effettuato il join al dominio
 
 Cosa
    Un filtro precedentemente creato nella scheda Filtro o il filtro di default.

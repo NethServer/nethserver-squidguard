@@ -60,6 +60,9 @@ class Profiles extends \Nethgui\Controller\TableController
         if (!$val) {
             return $view->translate($default);
         }
+        if (strpos($val,";") === false) {
+            return $view->translate("aduser_label").": $val";
+        }
         $tmp = explode(';',$val);
         return $view->translate($tmp[0].'_label').": ".$tmp[1];
     }

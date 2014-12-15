@@ -21,3 +21,5 @@ $L['filter_label'] = 'Filter';
 $L['time_label'] = 'Time';
 $L['key_exists_message'] = 'A filter, profile or time with the same name already exists';
 $L['key_doesnt_exists_message'] = 'This object doesn\'t exists';
+$L['aduser_label'] = 'AD user';
+$L['ADUsers_label'] = 'AD users';

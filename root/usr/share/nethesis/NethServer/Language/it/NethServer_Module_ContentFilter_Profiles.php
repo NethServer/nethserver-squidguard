@@ -21,3 +21,5 @@ $L['filter_label'] = 'Filtro';
 $L['time_label'] = 'Cond. temporale';
 $L['key_exists_message'] = 'Esiste già un filtro, un profilo o una condizione temporale con lo stesso nome';
 $L['key_doesnt_exists_message'] = 'Questo oggetto non esiste';
+$L['aduser_label'] = 'Utente AD';
+$L['ADUsers_label'] = 'Utenti AD';

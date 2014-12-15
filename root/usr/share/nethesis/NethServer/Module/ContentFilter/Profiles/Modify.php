@@ -30,6 +30,7 @@ use Nethgui\System\PlatformInterface as Validate;
 class Modify extends \Nethgui\Controller\Table\Modify
 {
     private $users = array();
+    private $ADUsers = array();
     private $userGroups = array();
     private $hosts = array();
     private $hostGroups = array();
@@ -41,6 +42,17 @@ class Modify extends \Nethgui\Controller\Table\Modify
     {
         if (!$this->users) {
             $this->users = $this->getPlatform()->getDatabase('accounts')->getAll('user');
+            $role = $this->getPlatform()->getDatabase('configuration')->getProp('smb','ServerRole');
+            if ($role == 'ADS') { // list  active directory users
+                $lines = $this->getPlatform()->exec('/usr/bin/getent passwd')->getOutputArray();
+                foreach($lines as $line) {
+                    $tmp = explode(':',$line);
+                    if (intval($tmp[2]) >= 50000) {
+                        $this->ADUsers[] = $tmp[0];
+                    }
+                }
+ 
+            }
         }
         if (!$this->userGroups) {
             $this->userGroups = $this->getPlatform()->getDatabase('accounts')->getAll('group');
@@ -78,6 +90,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
 
         $this->setSchema($parameterSchema);
         $this->setDefaultValue('Time','');
+        $this->setDefaultValue('Filter','filter;default');
 
         parent::initialize();
     }
@@ -104,8 +117,14 @@ class Modify extends \Nethgui\Controller\Table\Modify
         if ($this->getIdentifier() === 'create' && $keyExists) {
             $report->addValidationErrorMessage($this, 'name', 'key_exists_message');
         }
-        if ($this->getIdentifier() && $this->parameters['Src'] && !$this->keyExists($this->parameters['Src'])) {
-            $report->addValidationErrorMessage($this, 'Src', 'key_doesnt_exists_message');
+        if ($this->getIdentifier() && $this->parameters['Src']) {
+             if (strpos($this->parameters['Src'],';') === false ) {
+                 // User from active directory, no further check
+             } else {
+                 if (!$this->keyExists($this->parameters['Src'])) {
+                     $report->addValidationErrorMessage($this, 'Src', 'key_doesnt_exists_message');
+                 }
+            }
         }
         if ($this->getIdentifier() && $this->parameters['Filter'] && !$this->keyExists($this->parameters['Filter'])) {
             $report->addValidationErrorMessage($this, 'Filter', 'key_doesnt_exists_message');
@@ -160,6 +179,14 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $hgroups = $this->arrayToDatasource($this->hostGroups,'host-group');
         if ($hgroups) {
             $tmp[] = array($hgroups,$hg);
+        }
+        $adu = $view->translate('ADUsers_label');
+        $adusers = array();
+        foreach($this->ADUsers as $k) {
+            $adusers[] = array($k, $k);
+        }
+        if ($adusers) {
+            $tmp[] = array($adusers,$adu);
         }
 
         $view['SrcDatasource'] = $tmp;

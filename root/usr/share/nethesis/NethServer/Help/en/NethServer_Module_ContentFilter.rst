@@ -52,13 +52,12 @@ Name
    Unique name identifier.
 
 Who
-   If the proxy is configured in authenticated mode, it can be:
-   * a user
-   * a group of user
-
-   If the proxy is configured in any other mode, it can be:
+   It can be:
+   * a local user
+   * a group of local users
    * a host
    * a group of host
+   * a user from Active Directory, if the server has joined the domain
 
 What
    A filter previously created inside the filter tab, or the default filter.
