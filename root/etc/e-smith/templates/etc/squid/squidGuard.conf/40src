@@ -7,13 +7,12 @@
     foreach ($db->get_all_by_prop(type => 'profile')) {
         my $src = $_->prop('Src') || next;
 
-        if ($src =~ /,/) { # comma-separed list of users
-               $src =~ s/,/ /g;
-               $src = "user $src";
+        if ($src !~ /;/) {
+           $src = "user $src";
         } else {
            my ($type, $key) = split(/;/,$src);
            if ($type eq 'user') {
-               $src = $key;
+               $src = "user $key";
            } elsif ($type eq 'group') {
                my ($name,$passwd,$gid,$members) = getgrnam($key);
                next if (!$members);
