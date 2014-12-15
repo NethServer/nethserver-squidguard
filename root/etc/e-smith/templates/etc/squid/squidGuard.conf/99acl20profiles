@@ -24,7 +24,7 @@
         $OUT .= "    # Profile: ".$_->key."\n";
         $OUT .= "    src_".$_->key." $time {\n";
         $OUT .= "        pass";
-        foreach my $c (split(/,/,$filter->prop('Categories'))) {
+        foreach my $c (split(/,/,$filter->prop('Categories') || '')) {
             if (exists($categories{$c})) { #do not add non-existing categories
                 $OUT .= " $op$c ";
             }
