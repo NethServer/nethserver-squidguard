@@ -20,6 +20,7 @@ NethServer squidGuard configuration
 %setup
 
 %build
+%{makedocs}
 perl createlinks
 
 %install
