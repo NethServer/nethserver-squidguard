@@ -100,4 +100,12 @@ class Profiles extends \Nethgui\Controller\TableController
         return $cellView;
     }
 
+    public function prepareViewForColumnKey(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
+    {
+        if ($key == 'default_profile') {
+           return 'Default';
+        }
+        return $key;
+    }
+
 }
