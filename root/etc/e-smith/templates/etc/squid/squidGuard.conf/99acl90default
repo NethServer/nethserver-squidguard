@@ -16,24 +16,26 @@
     my $blockfile = $filter->prop('BlockFileTypes') || 'disabled';
 
     $OUT .= "    default {\n        pass";
-    foreach my $c (split(/,/,$filter->prop('Categories') || '')) {
-        if (exists($categories{$c})) { #do not add non-existing categories
-            $OUT .= " $op$c ";
-        }
-    }
-        
-    if ($blockipaccess eq 'enabled') { 
-        $OUT .= " !in-addr ";
-    }
+
     if ($whitelist eq 'enabled') {
         $OUT .= " whitelist ";
     }
     if ($blacklist eq 'enabled') {
         $OUT .= " !blacklist ";
     }
+    if ($blockipaccess eq 'enabled') { 
+        $OUT .= " !in-addr ";
+    }
     if ($blockfile eq 'enabled') {
         $OUT .= " !files ";
     }
+
+    foreach my $c (split(/,/,$filter->prop('Categories') || '')) {
+        if (exists($categories{$c})) { #do not add non-existing categories
+            $OUT .= " $op$c ";
+        }
+    }
+        
     if ($blockall eq 'enabled') {
         $OUT .= " none\n";
     } else {
