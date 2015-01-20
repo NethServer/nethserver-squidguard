@@ -7,7 +7,7 @@ URL: %{url_prefix}/%{name}
 Source0: %{name}-%{version}.tar.gz
 BuildArch: noarch
 
-Requires: nethserver-httpd, nethserver-squid
+Requires: nethserver-httpd, nethserver-squid >= 1.3.0
 Requires: squidGuard
 
 BuildRequires: perl
@@ -43,6 +43,13 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Tue Jan 20 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.0-1.ns6
+- squidGuard: manage blacklist source - Enhancement #2959 [NethServer]
+- squidGuard: support multiple profiles - Enhancement #2958 [NethServer]
+- Enhance visual appearance of proxy block pages - Feature #2866 [NethServer]
+- squidGuard: break 99acl template - Enhancement #2853 [NethServer]
+- Content filter: add time table support - Feature #1984 [NethServer]
+
 * Wed Oct 15 2014 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.5-1.ns6
 - squidGuard.log not rotated - Bug #2869
 - Fix "Permission denied" error on web interface - Bug #2756
