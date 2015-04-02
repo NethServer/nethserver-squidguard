@@ -34,6 +34,8 @@ class Modify extends \Nethgui\Controller\Table\Modify
     private $userGroups = array();
     private $hosts = array();
     private $hostGroups = array();
+    private $zones = array();
+    private $roles = array();
     private $mode = NULL;
     private $filters = array();
     private $times = array();
@@ -65,6 +67,17 @@ class Modify extends \Nethgui\Controller\Table\Modify
         if (!$this->hostGroups) {
             $this->hostGroups = $this->getPlatform()->getDatabase('hosts')->getAll('host-group');
         }
+        if (!$this->zones) {
+            $this->zones = $this->getPlatform()->getDatabase('networks')->getAll('zone');
+        }
+        if (!$this->roles) {
+            foreach($this->getPlatform()->getDatabase('networks')->getAll() as $k) {
+                if (in_array($k['role'], array('green','blue','orange'))) {
+                    $this->roles[$k['role']] = '';
+                }
+            }
+        }
+
         $this->filters = $this->getPlatform()->getDatabase('contentfilter')->getAll('filter'); 
         $this->times = $this->getPlatform()->getDatabase('contentfilter')->getAll('time'); 
     }
@@ -105,6 +118,10 @@ class Modify extends \Nethgui\Controller\Table\Modify
             $db = 'hosts';
         } else if ($tmp[0] == 'time' || $tmp[0] == 'filter') {
             $db = 'contentfilter';
+        } else if ($tmp[0] == 'zone') {
+            $db = 'networks';
+        } else if ($tmp[0] == 'role') {
+            return in_array($tmp[1],array('green','blue','orange')); 
         } else {
             return false;
         }
@@ -180,6 +197,13 @@ class Modify extends \Nethgui\Controller\Table\Modify
         if ($hgroups) {
             $tmp[] = array($hgroups,$hg);
         }
+        $roles = $this->arrayToDatasource($this->roles,'role');
+        $zones = $this->arrayToDatasource($this->zones,'zone');
+        $z = $view->translate('Zones_label');
+        if ($zones) {
+            $tmp[] = array(array_merge($roles, $zones),$z);
+        }
+
         $adu = $view->translate('ADUsers_label');
         $adusers = array();
         foreach($this->ADUsers as $k) {
