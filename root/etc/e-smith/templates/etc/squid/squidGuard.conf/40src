@@ -1,8 +1,10 @@
 {
     use esmith::ConfigDB;
+    use esmith::NetworksDB;
     use NethServer::Firewall;
     my $fw = new NethServer::Firewall();
     my $db = esmith::ConfigDB->open_ro('contentfilter');
+    my $ndb = esmith::NetworksDB->open_ro();
 
     foreach ($db->get_all_by_prop(type => 'profile')) {
         my $src = $_->prop('Src') || next;
@@ -17,6 +19,16 @@
                my ($name,$passwd,$gid,$members) = getgrnam($key);
                next if (!$members);
                $src = "user $members";
+           } elsif ($type eq 'zone') {
+               $src = "ip ".$fw->getZoneCIDR($key);
+           } elsif ($type eq 'role') {
+               $src = '';
+               foreach ($ndb->get_by_role($key)) {
+                   my $ip = $_->prop('ipaddr') || next;
+                   my $mask = $_->prop('netmask') || next;
+                   my $net = esmith::util::computeLocalNetworkShortSpec($ip,$mask);
+                   $src .= "ip $net\n    ";
+               }
            } else {
                $src = "ip ".$fw->getAddress($src);
            }
