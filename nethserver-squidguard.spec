@@ -1,7 +1,7 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
 Version: 1.1.0
-Release: 1
+Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
 Source0: %{name}-%{version}.tar.gz
