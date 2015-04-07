@@ -200,7 +200,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $roles = $this->arrayToDatasource($this->roles,'role');
         $zones = $this->arrayToDatasource($this->zones,'zone');
         $z = $view->translate('Zones_label');
-        if ($zones) {
+        if ($zones || $roles) {
             $tmp[] = array(array_merge($roles, $zones),$z);
         }
 
