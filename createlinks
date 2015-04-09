@@ -68,3 +68,19 @@ event_services($event, 'squid' => 'reload');
 $event = "group-modify";
 templates2events("/etc/squid/squidGuard.conf",  $event);
 event_services($event, 'squid' => 'reload');
+
+#--------------------------------------------------
+# actions for firewall-adjust event
+#--------------------------------------------------
+
+$event = "firewall-objects-modify";
+templates2events("/etc/squid/squidGuard.conf",  $event);
+event_services($event, 'squid' => 'reload');
+
+#--------------------------------------------------
+# actions for interface-update event
+#--------------------------------------------------
+
+$event = "interface-update";
+templates2events("/etc/squid/squidGuard.conf",  $event);
+event_services($event, 'squid' => 'reload');
