@@ -53,10 +53,14 @@ Name
 
 Who
    It can be:
+
    * a local user
    * a group of local users
    * a host
    * a group of host
+   * a zone
+   * a CIDR subnet
+   * an IP range
    * a user from Active Directory, if the server has joined the domain
 
 What

@@ -26,3 +26,7 @@ $L['key_exists_message'] = 'Esiste già un filtro, un profilo o una condizione t
 $L['key_doesnt_exists_message'] = 'Questo oggetto non esiste';
 $L['aduser_label'] = 'Utente AD';
 $L['ADUsers_label'] = 'Utenti AD';
+$L['cidr_label'] = 'Subnet CIDR';
+$L['Cidrs_label'] = 'Subnet CIDR';
+$L['iprange_label'] = 'Range IP';
+$L['IpRanges_label'] = 'Range IP';

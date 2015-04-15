@@ -36,6 +36,8 @@ class Modify extends \Nethgui\Controller\Table\Modify
     private $hostGroups = array();
     private $zones = array();
     private $roles = array();
+    private $ipranges = array();
+    private $cidrs = array();
     private $mode = NULL;
     private $filters = array();
     private $times = array();
@@ -77,6 +79,12 @@ class Modify extends \Nethgui\Controller\Table\Modify
                 }
             }
         }
+        if (!$this->cidrs) {
+            $this->cidrs = $this->getPlatform()->getDatabase('hosts')->getAll('cidr');
+        }
+        if (!$this->ipranges) {
+            $this->ipranges = $this->getPlatform()->getDatabase('hosts')->getAll('iprange');
+        }
 
         $this->filters = $this->getPlatform()->getDatabase('contentfilter')->getAll('filter'); 
         $this->times = $this->getPlatform()->getDatabase('contentfilter')->getAll('time'); 
@@ -114,7 +122,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $tmp = explode(';', $key);
         if ($tmp[0] == 'user' || $tmp[0] == 'group') {
             $db = 'accounts';
-        } else if ($tmp[0] == 'host' || $tmp[0] == 'host-group') {
+        } else if ($tmp[0] == 'host' || $tmp[0] == 'host-group' || $tmp[0] == 'cidr' || $tmp[0] == 'iprange') {
             $db = 'hosts';
         } else if ($tmp[0] == 'time' || $tmp[0] == 'filter') {
             $db = 'contentfilter';
@@ -197,6 +205,18 @@ class Modify extends \Nethgui\Controller\Table\Modify
         if ($hgroups) {
             $tmp[] = array($hgroups,$hg);
         }
+        $i = $view->translate('IpRanges_label');
+        $ipranges = $this->arrayToDatasource($this->ipranges,'iprange');
+        if ($ipranges) {
+            $tmp[] = array($ipranges,$i);
+        }
+
+        $c = $view->translate('Cidrs_label');
+        $cidrs = $this->arrayToDatasource($this->cidrs,'cidr');
+        if ($cidrs) {
+            $tmp[] = array($cidrs,$c);
+        }
+
         $roles = $this->arrayToDatasource($this->roles,'role');
         $zones = $this->arrayToDatasource($this->zones,'zone');
         $z = $view->translate('Zones_label');

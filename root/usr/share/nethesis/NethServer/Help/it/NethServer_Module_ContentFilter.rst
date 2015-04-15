@@ -52,10 +52,14 @@ Nome
 
 Chi
    Può essere:
+
    * un utente locale
    * un gruppo di utenti locali
    * un host
    * un gruppo di host
+   * una zona
+   * una subnet CIDR
+   * un range IP
    * un utente di Active Directory, se il server ha effettuato il join al dominio
 
 Cosa
