@@ -1,6 +1,6 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
-Version: 1.2.0
+Version: 1.3.0
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -43,6 +43,9 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Thu Apr 23 2015 Davide Principi <davide.principi@nethesis.it> - 1.3.0-1
+- Support  IP ranges and CIDR subnets into Web Content Filter profiles - Enhancement #3119 [NethServer]
+
 * Fri Apr 10 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.2.0-1
 - Permit zone and roles into Web Content Filter profiles - Feature #3084 [NethServer]
 
