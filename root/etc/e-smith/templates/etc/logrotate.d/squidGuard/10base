@@ -1,6 +1,12 @@
-/var/log/squidGuard/squidGuard.log \{
+/var/log/squidGuard/urlfilter.log
+/var/log/squidGuard/squidGuard.log
+\{
     weekly
     compress
     notifempty
     missingok
+    sharedscripts
+    postrotate
+      /usr/sbin/squid -k reconfigure 2>/dev/null
+    endscript
 \}
