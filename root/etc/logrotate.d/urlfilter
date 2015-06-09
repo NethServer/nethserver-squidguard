@@ -3,4 +3,7 @@
     compress
     notifempty
     missingok
+    postrotate
+        /sbin/service squid condrestart &>/dev/null
+    endscript
 }
