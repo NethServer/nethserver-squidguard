@@ -1,6 +1,6 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
-Version: 1.3.1
+Version: 1.3.2
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -43,6 +43,10 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Tue Sep 29 2015 Davide Principi <davide.principi@nethesis.it> - 1.3.2-1
+- Make Italian language pack optional - Enhancement #3265 [NethServer]
+- SquidGuard stops logging after logorate - Bug #3190 [NethServer]
+
 * Mon Jun 22 2015 Davide Principi <davide.principi@nethesis.it> - 1.3.1-1
 - SquidGuard stops logging after logorate - Bug #3190 [NethServer]
 
