@@ -83,4 +83,3 @@ event_services($event, 'squid' => 'reload');
 
 $event = "interface-update";
 templates2events("/etc/squid/squidGuard.conf",  $event);
-event_services($event, 'squid' => 'reload');
