@@ -97,6 +97,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
             array('BlockAll', Validate::SERVICESTATUS,  \Nethgui\Controller\Table\Modify::FIELD),
             array('BlockIpAccess', Validate::SERVICESTATUS, \Nethgui\Controller\Table\Modify::FIELD),
             array('BlockFileTypes', Validate::SERVICESTATUS, \Nethgui\Controller\Table\Modify::FIELD),
+            array('BlockBuiltinRules', Validate::SERVICESTATUS, \Nethgui\Controller\Table\Modify::FIELD),
             array('WhiteList', Validate::SERVICESTATUS, \Nethgui\Controller\Table\Modify::FIELD),
             array('BlackList', Validate::SERVICESTATUS, \Nethgui\Controller\Table\Modify::FIELD),
             array('Categories', $cvalidator, \Nethgui\Controller\Table\Modify::FIELD, 'Categories', ','),
@@ -106,6 +107,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $this->setSchema($parameterSchema);
         $this->setDefaultValue('BlockAll', 'disabled');
         $this->setDefaultValue('BlockIpAccess', 'enabled');
+        $this->setDefaultValue('BlockBuiltinRules', 'enabled');
 
         parent::initialize();
     }

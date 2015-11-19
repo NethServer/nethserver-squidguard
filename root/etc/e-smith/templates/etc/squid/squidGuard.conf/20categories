@@ -37,7 +37,7 @@
         if (defined($value->{'urls'})) {
             $OUT .="      urllist ".$value->{'urls'}."\n";
         }
-        if (defined($value->{'expressions'}) && ( $exprstatus eq 'enabled' || $key eq 'files')) {
+        if (defined($value->{'expressions'}) && ( $exprstatus eq 'enabled' || $key eq 'files' || $key eq 'builtin')) {
             $OUT .= "      expressionlist ".$value->{'expressions'}."\n";
         }
         $OUT.="      logfile urlfilter.log\n";

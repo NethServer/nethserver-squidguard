@@ -13,3 +13,4 @@ $L['BlackList_label'] = 'Enable global blacklist';
 $L['WhiteList_label'] = 'Enable global whitelist';
 $L['BlockFileTypes_label'] = 'Block file extensions';
 $L['key_exists_message'] = 'A filter, profile or time with the same name already exists';
+$L['BlockBuiltinRules_label'] = 'Enable builtin rules';

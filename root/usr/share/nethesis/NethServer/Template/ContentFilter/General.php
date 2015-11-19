@@ -16,8 +16,7 @@ $view->includeFile('NethServer/Js/nethserver.collectioneditor.squidguard-allow.j
 $view->includeFile('NethServer/Js/nethserver.collectioneditor.squidguard-deny.js');
 $view->includeFile('NethServer/Css/nethserver.collectioneditor.squidguard.css');
 
-$expr = $view->fieldsetSwitch('Expressions', 'enabled',  $view::FIELDSETSWITCH_CHECKBOX)
-        ->setAttribute('template', $T('Expressions'))
+$expr = $view->checkbox('Expressions', 'enabled')
         ->setAttribute('uncheckedValue', 'disabled');
 
 $bacl = $view->fieldset('')->setAttribute('template', $T('Block_label'))
@@ -34,9 +33,7 @@ $aacl = $view->fieldset('')->setAttribute('template', $T('Allow_label'))
                  ->setAttribute('dimensions', '20x30')
         );
 
-
-echo $view->fieldsetSwitch('status', 'enabled',  $view::FIELDSETSWITCH_CHECKBOX)
-        ->setAttribute('template', $T('SquidGuard_status'))
+echo $view->checkbox('status', 'enabled')
         ->setAttribute('uncheckedValue', 'disabled');
 
 echo $expr;

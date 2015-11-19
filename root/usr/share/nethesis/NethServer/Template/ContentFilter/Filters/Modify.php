@@ -1,18 +1,23 @@
 <?php
 
+/* @var $view Nethgui\Renderer\Xhtml */
+
 echo $view->textInput('name');
 echo $view->textInput('Description');
-echo $view->fieldsetSwitch('BlockIpAccess', 'enabled',  $view::FIELDSETSWITCH_CHECKBOX)
-        ->setAttribute('template', $T('BlockIpAccess'))
+
+echo $view->checkBox('BlockIpAccess', 'enabled')
         ->setAttribute('uncheckedValue', 'disabled');
-echo $view->fieldsetSwitch('BlackList', 'enabled',  $view::FIELDSETSWITCH_CHECKBOX)
-        ->setAttribute('template', $T('Expressions'))
+
+echo $view->checkBox('BlackList', 'enabled')
         ->setAttribute('uncheckedValue', 'disabled');
-echo $view->fieldsetSwitch('WhiteList', 'enabled',  $view::FIELDSETSWITCH_CHECKBOX)
-        ->setAttribute('template', $T('Expressions'))
+
+echo $view->checkBox('WhiteList', 'enabled')
         ->setAttribute('uncheckedValue', 'disabled');
-echo $view->fieldsetSwitch('BlockFileTypes', 'enabled',  $view::FIELDSETSWITCH_CHECKBOX)
-        ->setAttribute('template', $T('Expressions'))
+
+echo $view->checkBox('BlockFileTypes', 'enabled')
+        ->setAttribute('uncheckedValue', 'disabled');
+
+echo $view->checkBox('BlockBuiltinRules', 'enabled')
         ->setAttribute('uncheckedValue', 'disabled');
 
 echo $view->selector('BlockAll','disabled');
