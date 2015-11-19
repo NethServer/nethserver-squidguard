@@ -17,6 +17,9 @@ echo $view->checkBox('WhiteList', 'enabled')
 echo $view->checkBox('BlockFileTypes', 'enabled')
         ->setAttribute('uncheckedValue', 'disabled');
 
+echo $view->checkBox('BlockBuiltinRules', 'enabled')
+        ->setAttribute('uncheckedValue', 'disabled');
+
 echo $view->selector('BlockAll','disabled');
 echo $view->selector('Categories', $view::SELECTOR_MULTIPLE);
 
