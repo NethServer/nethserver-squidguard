@@ -96,6 +96,9 @@ Enable global whitelist
 Block file extensions
     Block all file extensions defined in the General tab.
 
+Enable builtin rules
+    Set of rules provided by the ``custom/builtin`` database.
+
 Mode
     The web filter can work into two different ways:
 
