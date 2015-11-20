@@ -1,6 +1,6 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
-Version: 1.3.4
+Version: 1.4.0
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -43,6 +43,9 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Fri Nov 20 2015 Davide Principi <davide.principi@nethesis.it> - 1.4.0-1
+- Builtin filter rules for squidguard - Feature #3320 [NethServer]
+
 * Tue Nov 10 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.4-1
 - Avoid squid restart after squidguard log rotation - Enhancement #3293 [NethServer]
 
