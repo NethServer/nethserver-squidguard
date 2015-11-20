@@ -1,6 +1,6 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
-Version: 1.4.0
+Version: 1.4.1
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -43,6 +43,9 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Fri Nov 20 2015 Davide Principi <davide.principi@nethesis.it> - 1.4.1-1
+- Builtin filter rules for squidguard (field renamed) - Feature #3320 [NethServer]
+
 * Fri Nov 20 2015 Davide Principi <davide.principi@nethesis.it> - 1.4.0-1
 - Builtin filter rules for squidguard - Feature #3320 [NethServer]
 
