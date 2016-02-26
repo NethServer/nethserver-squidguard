@@ -83,3 +83,12 @@ event_services($event, 'squid' => 'reload');
 
 $event = "interface-update";
 templates2events("/etc/squid/squidGuard.conf",  $event);
+
+#--------------------------------------------------
+# actions for squidguard-obj-delete validator
+#--------------------------------------------------
+
+validator_actions('squidguard-obj-delete', qw(
+                  squidguard-referenced 20
+                  ));
+
