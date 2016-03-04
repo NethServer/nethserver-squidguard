@@ -1,6 +1,6 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
-Version: 1.4.1
+Version: 1.4.2
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -43,6 +43,9 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Fri Mar 04 2016 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.4.2-1
+- After deleting a filter into "Web content filter" you cannot manage the previously associate profile - Bug #3344 [NethServer]
+
 * Fri Nov 20 2015 Davide Principi <davide.principi@nethesis.it> - 1.4.1-1
 - Builtin filter rules for squidguard (field renamed) - Feature #3320 [NethServer]
 
