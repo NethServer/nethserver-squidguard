@@ -56,6 +56,12 @@ class Modify extends \Nethgui\Controller\Table\Modify
         if ($this->getIdentifier() === 'create' && $keyExists) {
             $report->addValidationErrorMessage($this, 'name', 'key_exists_message');
         }
+        if($this->getIdentifier() === 'delete') {
+            $v = $this->createValidator()->platform('squidguard-obj-delete', 'time');
+            if( ! $v->evaluate($this->parameters['name'])) {
+                $report->addValidationError($this, 'TimeKey', $v);
+            }
+        }
         if ($this->getIdentifier() !== 'create' && ! $keyExists) {
             throw new \Nethgui\Exception\HttpException('Not found', 404, 1416876002);
         } else {

@@ -121,6 +121,13 @@ class Modify extends \Nethgui\Controller\Table\Modify
         if ($this->getIdentifier() !== 'create' && ! $keyExists) {
             throw new \Nethgui\Exception\HttpException('Not found', 404, 1416876015);
         }
+        if($this->getIdentifier() === 'delete') {
+            $v = $this->createValidator()->platform('squidguard-obj-delete', 'filter');
+            if( ! $v->evaluate($this->parameters['name'])) {
+                $report->addValidationError($this, 'FilterKey', $v);
+            }
+        }
+
         parent::validate($report);
     }
 
