@@ -22,7 +22,14 @@
                $tmp{'expressions'} = $expressions; 
             }
             if ( -e $domains || -e $urls || -e $expressions ) {
-                $categories{$_} = \%tmp;
+                my $category = $_;
+                if ( $File::Find::name eq '/var/squidGuard/blacklists/custom/whitelist') {
+                    $category = 'nh_whitelist';
+                }
+                if ( $File::Find::name eq '/var/squidGuard/blacklists/custom/blacklist') {
+                    $category = 'nh_blacklist';
+                }
+                $categories{$category} = \%tmp;
             }
         }
     }
