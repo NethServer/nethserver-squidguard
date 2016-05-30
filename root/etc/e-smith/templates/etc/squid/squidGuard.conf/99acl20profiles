@@ -27,10 +27,10 @@
         $OUT .= "        pass";
 
         if ($whitelist eq 'enabled') {
-            $OUT .= " whitelist ";
+            $OUT .= " nh_whitelist ";
         }
         if ($blacklist eq 'enabled') {
-            $OUT .= " !blacklist ";
+            $OUT .= " !nh_blacklist ";
         }
         if ($blockipaccess eq 'enabled') { 
             $OUT .= " !in-addr ";
