@@ -15,10 +15,18 @@
            my ($type, $key) = split(/;/,$src);
            if ($type eq 'user') {
                $src = "user $key";
+               # expand user also without domain part
+               $key =~ s/(@.*)//;
+               $src .= " $key";
            } elsif ($type eq 'group') {
                my ($name,$passwd,$gid,$members) = getgrnam($key);
                next if (!$members);
                $src = "user $members";
+               # expand user also without domain part
+               foreach (split(/\s/, $members)) {
+                   $_ =~ s/(@.*)//g;
+                   $src .= " $_";
+               }
            } elsif ($type eq 'zone') {
                $src = "ip ".$fw->getZoneCIDR($key);
            } elsif ($type eq 'role') {
