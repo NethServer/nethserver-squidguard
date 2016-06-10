@@ -50,6 +50,7 @@ class Profiles extends \Nethgui\Controller\TableController
             ->addRowAction(new \NethServer\Module\ContentFilter\Profiles\Modify('update')) 
             ->addRowAction(new \NethServer\Module\ContentFilter\Profiles\Modify('delete'))
             ->addTableAction(new \NethServer\Module\ContentFilter\Profiles\Modify('create')) 
+            ->addTableAction(new \NethServer\Module\ContentFilter\Profiles\Update()) 
             ->addTableAction(new \Nethgui\Controller\Table\Help('Help'))
         ;
 

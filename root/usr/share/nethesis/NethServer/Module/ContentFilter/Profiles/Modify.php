@@ -30,7 +30,6 @@ use Nethgui\System\PlatformInterface as Validate;
 class Modify extends \Nethgui\Controller\Table\Modify
 {
     private $users = array();
-    private $ADUsers = array();
     private $userGroups = array();
     private $hosts = array();
     private $hostGroups = array();
@@ -41,25 +40,18 @@ class Modify extends \Nethgui\Controller\Table\Modify
     private $mode = NULL;
     private $filters = array();
     private $times = array();
+    private $provider = null;
+
 
     private function prepareVars()
     {
         if (!$this->users) {
-            $this->users = $this->getPlatform()->getDatabase('accounts')->getAll('user');
-            $role = $this->getPlatform()->getDatabase('configuration')->getProp('smb','ServerRole');
-            if ($role == 'ADS') { // list  active directory users
-                $lines = $this->getPlatform()->exec('/usr/bin/getent passwd')->getOutputArray();
-                foreach($lines as $line) {
-                    $tmp = explode(':',$line);
-                    if (intval($tmp[2]) >= 50000) {
-                        $this->ADUsers[] = $tmp[0];
-                    }
-                }
- 
-            }
+            $user_provider = new \NethServer\Tool\UserProvider($this->getPlatform());
+            $this->users = $user_provider->getUsers();
         }
         if (!$this->userGroups) {
-            $this->userGroups = $this->getPlatform()->getDatabase('accounts')->getAll('group');
+            $group_provider = new \NethServer\Tool\GroupProvider($this->getPlatform());
+            $this->userGroups = $group_provider->getGroups();
         }
         if (!$this->hosts) {
             $h = $this->getPlatform()->getDatabase('hosts')->getAll('host');
@@ -120,8 +112,10 @@ class Modify extends \Nethgui\Controller\Table\Modify
     {
         $db = '';
         $tmp = explode(';', $key);
-        if ($tmp[0] == 'user' || $tmp[0] == 'group') {
-            $db = 'accounts';
+        if ($tmp[0] == 'user') {
+            return in_array($tmp[1], array_keys($this->users));
+        } else if ($tmp[0] == 'group') {
+            return in_array($tmp[1], array_keys($this->userGroups));
         } else if ($tmp[0] == 'host' || $tmp[0] == 'host-group' || $tmp[0] == 'cidr' || $tmp[0] == 'iprange') {
             $db = 'hosts';
         } else if ($tmp[0] == 'time' || $tmp[0] == 'filter') {
@@ -222,15 +216,6 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $z = $view->translate('Zones_label');
         if ($zones || $roles) {
             $tmp[] = array(array_merge($roles, $zones),$z);
-        }
-
-        $adu = $view->translate('ADUsers_label');
-        $adusers = array();
-        foreach($this->ADUsers as $k) {
-            $adusers[] = array($k, $k);
-        }
-        if ($adusers) {
-            $tmp[] = array($adusers,$adu);
         }
 
         $view['SrcDatasource'] = $tmp;
