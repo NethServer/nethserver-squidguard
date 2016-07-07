@@ -1,43 +1,43 @@
 [main]
 host = https://www.transifex.com
 
-[nethserver.ContentFilter_Categories]
+[nethserver-v6.ContentFilter_Categories]
 source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_ContentFilter_Categories.php
 source_lang = en
 type = PHP_ALT_ARRAY
 
 
-[nethserver.ContentFilter_Filters]
+[nethserver-v6.ContentFilter_Filters]
 source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_ContentFilter_Filters.php
 source_lang = en
 type = PHP_ALT_ARRAY
 
 
-[nethserver.ContentFilter_Times]
+[nethserver-v6.ContentFilter_Times]
 source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_ContentFilter_Times.php
 source_lang = en
 type = PHP_ALT_ARRAY
 
 
-[nethserver.ContentFilter]
+[nethserver-v6.ContentFilter]
 source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_ContentFilter.php
 source_lang = en
 type = PHP_ALT_ARRAY
 
 
-[nethserver.ContentFilter_General]
+[nethserver-v6.ContentFilter_General]
 source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_ContentFilter_General.php
 source_lang = en
 type = PHP_ALT_ARRAY
 
 
-[nethserver.ContentFilter_Lists]
+[nethserver-v6.ContentFilter_Lists]
 source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_ContentFilter_Lists.php
 source_lang = en
 type = PHP_ALT_ARRAY
 
 
-[nethserver.ContentFilter_Profiles]
+[nethserver-v6.ContentFilter_Profiles]
 source_file = root/usr/share/nethesis/NethServer/Language/en/NethServer_Module_ContentFilter_Profiles.php
 source_lang = en
 type = PHP_ALT_ARRAY
