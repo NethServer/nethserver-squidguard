@@ -6,27 +6,43 @@
     my $db = esmith::ConfigDB->open_ro('contentfilter');
     my $ndb = esmith::NetworksDB->open_ro();
 
+    # this directory is used to store user acls
+    my $dir = '/etc/squid/squidGuard/';
+    # create the directory if not exists
+    if ( ! -d $dir) {
+        mkdir($dir);
+    }
+    # cleanup old files
+    unlink glob "$dir*";
+
+
+    sub __out_userlist {
+        my $profile = shift;
+        my $users = shift;
+
+        open(my $fh, '>', $dir.$profile) or die("Can't write file $dir$profile");
+        foreach (split(/\s+/, $users)) {
+            print $fh "$_\n";
+        }
+        close $fh;
+    }
+
     foreach ($db->get_all_by_prop(type => 'profile')) {
         my $src = $_->prop('Src') || next;
+        my $pname = "src_".$_->key;
 
         if ($src !~ /;/) {
            $src = "user $src";
         } else {
            my ($type, $key) = split(/;/,$src);
            if ($type eq 'user') {
-               $src = "user $key";
-               # expand user also without domain part
-               $key =~ s/(@.*)//;
-               $src .= " $key";
+               $src = "userlist $dir$pname";
+               __out_userlist($pname, $key);
            } elsif ($type eq 'group') {
                my ($name,$passwd,$gid,$members) = getgrnam($key);
                next if (!$members);
-               $src = "user $members";
-               # expand user also without domain part
-               foreach (split(/\s/, $members)) {
-                   $_ =~ s/(@.*)//g;
-                   $src .= " $_";
-               }
+               $src = "userlist $dir$pname";
+               __out_userlist($pname, $members);
            } elsif ($type eq 'zone') {
                $src = "ip ".$fw->getZoneCIDR($key);
            } elsif ($type eq 'role') {
@@ -42,7 +58,7 @@
            }
         }
     
-        $OUT .= "src src_".$_->key." {\n    $src\n}\n";
+        $OUT .= "src $pname {\n    $src\n}\n";
     }
 
 }
