@@ -16,7 +16,7 @@
     my $blockfile = $filter->prop('BlockFileTypes') || 'disabled';
     my $blockbuiltin = $filter->prop('BlockBuiltinRules') || 'disabled';
 
-    $OUT .= "    default {\n        pass";
+    $OUT .= "    default {\n        pass !security";
 
     if ($whitelist eq 'enabled') {
         $OUT .= " nh_whitelist ";
