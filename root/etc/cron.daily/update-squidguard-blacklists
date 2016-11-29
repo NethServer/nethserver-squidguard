@@ -110,11 +110,11 @@ fi
 /etc/e-smith/events/actions/nethserver-squidguard-update-custom-list cron
 
 if [ $DEBUG -eq 1 ]; then
-    verbose="-bd"
+    verbose="-d"
 else
     verbose=""
 fi
-/usr/bin/squidGuard $verbose -c /etc/squid/squidGuard.conf -C all -P
+/usr/sbin/ufdbConvertDB $verbose $BLPATH/ &>/dev/null
 chown -R squid:squid $BLPATH/
 if [ -f $BLPATH/global_usage ]; then
     chmod a+r $BLPATH/global_usage
@@ -129,3 +129,4 @@ if [ $DEBUG -eq 1 ]; then
     echo "Total elapsed seconds: $delta"
 fi 
 
+/usr/sbin/ufdbsignal -C "sighup ufdbguardd" &>/dev/null

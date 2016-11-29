@@ -8,13 +8,13 @@ Source0: %{name}-%{version}.tar.gz
 BuildArch: noarch
 
 Requires: nethserver-httpd, nethserver-squid >= 1.3.0
-Requires: squidGuard
+Requires: ufdbGuard
 
 BuildRequires: perl
 BuildRequires: nethserver-devtools 
 
 %description
-NethServer squidGuard configuration
+NethServer ufdbGuard (squidGuard) configuration
 
 %prep
 %setup

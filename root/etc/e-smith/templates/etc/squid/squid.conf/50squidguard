@@ -5,7 +5,8 @@
     my $mchildren = $squidguard{'MaxChildren'} || '20';
     if ($status eq 'enabled') {
         $OUT.="\n# Enable squidGuard \n";
-        $OUT.="url_rewrite_program /usr/bin/squidGuard\n";
-        $OUT.="url_rewrite_children $mchildren startup=$schildren idle=$ichildren\n";
+        $OUT.="url_rewrite_program /usr/sbin/ufdbgclient -l /var/log/squid\n";
+        $OUT.="url_rewrite_children $mchildren startup=$schildren idle=$ichildren concurrency=0\n";
+        $OUT.='url_rewrite_extras "%>a/%>A %un %>rm bump_mode=%ssl::bump_mode sni=\"%ssl::>sni\" referer=\"%{Referer}>h\""'
     }
 }
