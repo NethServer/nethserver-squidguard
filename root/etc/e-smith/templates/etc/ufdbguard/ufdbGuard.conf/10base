@@ -1,9 +1,17 @@
+# ufdbGuard.conf - default configuration file for use with URLfilterDB
+# #
+# # The Reference Manual has detailed information about the configuration
+# # of ufdbGuard.  It is highly recommended to read it before using ufdbGuard.
+# #
+# # Make sure that you edit the 4 lines that are marked with
+# # 'EDIT THE NEXT LINE...' to adapt this file to your environment.
 #
-# CONFIG FILE FOR SQUIDGUARD
-#
-# See http://www.squidguard.org/config/ for more examples
-#
+logdir "/var/ufdbguard/logs"
+dbhome "/var/squidGuard/blacklists"
+squid-version "3.5"
+analyse-uncategorised-urls off
+upload-crash-reports off
+# slow replies when reloading db to decrease the number of passed urls
+url-lookup-delay-during-database-reload on
 
-dbhome /var/squidGuard/blacklists
-logdir /var/log/squidGuard
-
+logblock on

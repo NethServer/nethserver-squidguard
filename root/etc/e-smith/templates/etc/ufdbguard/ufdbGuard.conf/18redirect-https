@@ -1,0 +1,7 @@
+{
+    use esmith::NetworksDB;
+    my $ndb = esmith::NetworksDB->open_ro();
+    my $green = $ndb->green();
+    my $redirect_s = "".$green->prop('ipaddr').":443";
+    $OUT .= "redirect-https     \"$redirect_s\"\n";
+}
