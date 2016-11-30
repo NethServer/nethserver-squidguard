@@ -130,3 +130,4 @@ if [ $DEBUG -eq 1 ]; then
 fi 
 
 /usr/sbin/ufdbsignal -C "sighup ufdbguardd" &>/dev/null
+exit 0
