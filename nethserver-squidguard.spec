@@ -10,6 +10,8 @@ BuildArch: noarch
 Requires: nethserver-httpd, nethserver-squid >= 1.3.0
 Requires: ufdbGuard
 
+Obsoletes: squidGuard <= 1.4
+
 BuildRequires: perl
 BuildRequires: nethserver-devtools 
 
