@@ -44,7 +44,6 @@ event_services($event, 'ufdb' => 'restart');
 $event = "nethserver-squidguard-save";
 
 event_actions($event, 'nethserver-squidguard-update-custom-list' => 02);
-event_actions($event, 'nethserver-squidguard-ufdb-status' => 50);
 templates2events("/etc/squid/squid.conf",  $event);
 templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
 event_services($event, 'squid' => 'reload');

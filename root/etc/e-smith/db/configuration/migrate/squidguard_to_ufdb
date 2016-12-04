@@ -1,0 +1,11 @@
+{
+    #
+    # migrate squidguard status to ufdb
+    #
+
+    my $status = $DB->get_prop_and_delete('squidguard', 'status') || return '';
+    my $new = $DB->get('ufdb') || $DB->new_record('ufdb', { 'type' => 'service' });
+    $DB->set_prop('ufdb', 'status', $status);
+
+    '';
+}

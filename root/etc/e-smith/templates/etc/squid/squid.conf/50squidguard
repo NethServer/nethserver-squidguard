@@ -1,5 +1,5 @@
 {
-    my $status = $squidguard{'status'} || 'disabled';
+    my $status = $ufdb{'status'} || 'disabled';
     my $schildren = $squidguard{'StartupChildren'} || '5';
     my $ichildren = $squidguard{'IdleChildren'} || '5';
     my $mchildren = $squidguard{'MaxChildren'} || '20';
