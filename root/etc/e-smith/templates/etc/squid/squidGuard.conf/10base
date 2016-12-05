@@ -1,9 +1,0 @@
-#
-# CONFIG FILE FOR SQUIDGUARD
-#
-# See http://www.squidguard.org/config/ for more examples
-#
-
-dbhome /var/squidGuard/blacklists
-logdir /var/log/squidGuard
-

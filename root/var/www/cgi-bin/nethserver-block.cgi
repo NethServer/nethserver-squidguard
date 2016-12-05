@@ -323,7 +323,7 @@ if($virus eq '' || $source eq '') {
 
   print "$Babel{Origin}: <b>$clientaddr</b>";
 
-  print '<hr><div style="float:right;">Powered by <a href="http://www.squidguard.org">SquidGuard</a></div></body></html>';
+  print '<hr><div style="float:right;">Powered by <a href="https://www.urlfilterdb.com/">ufdbGuard</a></div></body></html>';
 
 }
 

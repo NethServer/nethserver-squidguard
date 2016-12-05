@@ -24,7 +24,7 @@
 
         $OUT .= "    # Profile: ".$_->key."\n";
         $OUT .= "    src_".$_->key." $time {\n";
-        $OUT .= "        pass";
+        $OUT .= "        pass !security";
 
         if ($whitelist eq 'enabled') {
             $OUT .= " nh_whitelist ";

@@ -1,8 +1,0 @@
-#!/bin/bash
-#
-# Fix squidGuard log owner
-#
-touch /var/log/squidGuard/squidGuard.log
-touch /var/log/squidGuard/urlfilter.log
-chown squid:squid /var/log/squidGuard/squidGuard.log
-chown squid:squid /var/log/squidGuard/urlfilter.log

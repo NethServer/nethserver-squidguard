@@ -1,5 +1,6 @@
-/var/log/squidGuard/urlfilter.log
-/var/log/squidGuard/squidGuard.log
+/var/ufdbguard/logs/ufdbgclient.log
+/var/ufdbguard/logs/ufdbguardd.log
+/var/ufdbguard/logs/ufdbsignal.log
 \{
     compress
     notifempty

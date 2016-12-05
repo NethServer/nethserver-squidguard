@@ -1,0 +1,17 @@
+category "security" \{
+   cacerts        "/var/ufdbguard/blacklists/security/cacerts"
+   option         enforce-https-with-hostname off
+   option         enforce-https-official-certificate off
+   option         allow-skype-over-https on
+   option         allow-gtalk-over-https on
+   option         allow-yahoomsg-over-https on
+   option         allow-aim-over-https on
+   option         allow-fb-chat-over-https on
+   option         allow-citrixonline-over-https on
+   option         allow-anydesk-over-https on
+   option         allow-teamviewer-over-https on
+   option         allow-unknown-protocol-over-https on
+   option         https-prohibit-insecure-sslv2 off
+   option         https-prohibit-insecure-sslv3 off
+\}
+

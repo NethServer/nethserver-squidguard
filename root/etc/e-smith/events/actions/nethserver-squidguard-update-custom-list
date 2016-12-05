@@ -59,25 +59,13 @@ system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/builtin/
 
 
 system("chown -R squid:squid /var/squidGuard/blacklists/custom/");
-system("/sbin/e-smith/expand-template /etc/squid/squidGuard.conf");
+system("/sbin/e-smith/expand-template /etc/ufdbguard/ufdbGuard.conf");
 
 # If executed from cron, do not apply configuration
 exit 0 if ($event eq 'cron');
 
-opendir(my $dh, $dir) || die;
-while ($d = readdir $dh) {
-    next if ( $d eq '.' || $d eq '..'); 
-    if (-d "$dir$d") {
-        foreach my $f (qw(domains urls expressions)) {
-            if (-f "$dir/$d/$f") {
-                system("/usr/bin/squidGuard -P -d -C $dir$d/$f 2>/dev/null");
-                system("/bin/chown squid:squid $dir/$d$f.db 2>/dev/null");
-            }
-        }
-    }
-}
-closedir($dh);
-
+system("/usr/sbin/ufdbConvertDB /var/squidGuard/blacklists/custom/ >/dev/null 2>&1");
 system("chown -R squid:squid /var/squidGuard/blacklists/custom/");
+system('/usr/sbin/ufdbsignal -C "sighup ufdbguardd" >/dev/null 2>&1');
 
 exit 0

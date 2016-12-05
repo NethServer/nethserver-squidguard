@@ -29,60 +29,60 @@ use esmith::Build::CreateLinks  qw(:all);
 
 my $event = "nethserver-squidguard-update";
 
-event_actions($event, 'initialize-default-databases' => '00',
-                      'nethserver-squidguard-conf' => '20'
-);
+event_actions($event, 'initialize-default-databases' => '00');
 templates2events("/etc/squid/squid.conf",  $event);
-templates2events("/etc/squid/squidGuard.conf",  $event);
+templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
 templates2events("/etc/squid/blacklists",  $event);
 templates2events("/etc/logrotate.d/squidGuard",  $event);
 event_services($event, 'squid' => 'reload');
+event_services($event, 'ufdb' => 'restart');
 
 #--------------------------------------------------
-# actions for nethserver-squid-save event
+# actions for nethserver-squidguard-save event
 #--------------------------------------------------
 
 $event = "nethserver-squidguard-save";
 
 event_actions($event, 'nethserver-squidguard-update-custom-list' => 02);
 templates2events("/etc/squid/squid.conf",  $event);
-templates2events("/etc/squid/squidGuard.conf",  $event);
+templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
 event_services($event, 'squid' => 'reload');
+event_services($event, 'ufdb' => 'restart');
 
 
 #--------------------------------------------------
-# actions for nethserver-squid-downloadlists event
+# actions for nethserver-squidguard-downloadlists event
 #--------------------------------------------------
 
 $event = "nethserver-squidguard-downloadlists";
 event_actions($event, 'nethserver-squidguard-update-custom-list' => 02);
 event_actions($event, 'nethserver-squidguard-download' => 30);
 templates2events("/etc/squid/blacklists",  $event);
-templates2events("/etc/squid/squidGuard.conf",  $event);
-event_services($event, 'squid' => 'reload');
+templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
+event_services($event, 'ufdb' => 'reload');
 
 #--------------------------------------------------
 # actions for group-modify event
 #--------------------------------------------------
 
 $event = "group-modify";
-templates2events("/etc/squid/squidGuard.conf",  $event);
-event_services($event, 'squid' => 'reload');
+templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
+event_services($event, 'ufdb' => 'reload');
 
 #--------------------------------------------------
 # actions for firewall-adjust event
 #--------------------------------------------------
 
 $event = "firewall-objects-modify";
-templates2events("/etc/squid/squidGuard.conf",  $event);
-event_services($event, 'squid' => 'reload');
+templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
+event_services($event, 'ufdb' => 'reload');
 
 #--------------------------------------------------
 # actions for interface-update event
 #--------------------------------------------------
 
 $event = "interface-update";
-templates2events("/etc/squid/squidGuard.conf",  $event);
+templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
 
 #--------------------------------------------------
 # actions for squidguard-obj-delete validator
