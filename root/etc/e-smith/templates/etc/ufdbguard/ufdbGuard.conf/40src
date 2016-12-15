@@ -6,16 +6,6 @@
     my $db = esmith::ConfigDB->open_ro('contentfilter');
     my $ndb = esmith::NetworksDB->open_ro();
 
-    # this directory is used to store user acls
-    my $dir = '/etc/squid/squidGuard/';
-    # create the directory if not exists
-    if ( ! -d $dir) {
-        mkdir($dir);
-    }
-    # cleanup old files
-    unlink glob "$dir*";
-
-
     foreach ($db->get_all_by_prop(type => 'profile')) {
         my $src = $_->prop('Src') || next;
         my $pname = "src_".$_->key;
@@ -26,7 +16,7 @@
            my ($type, $key) = split(/;/,$src);
            if ($type eq 'user') {
                $key = substr($key, 0, index($key, '@')); # strip domain
-               $src = "user $key";
+               $src = "user \"$key\"";
            } elsif ($type eq 'group') {
                $src = "unix group \"$key\"";
            } elsif ($type eq 'zone') {
