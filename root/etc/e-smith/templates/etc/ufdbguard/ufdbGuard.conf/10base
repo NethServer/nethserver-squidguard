@@ -15,3 +15,6 @@ upload-crash-reports off
 url-lookup-delay-during-database-reload on
 
 logblock on
+
+# Always strip domain from squid username
+strip-domain-from-username on

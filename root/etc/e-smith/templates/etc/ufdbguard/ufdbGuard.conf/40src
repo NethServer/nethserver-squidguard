@@ -16,17 +16,6 @@
     unlink glob "$dir*";
 
 
-    sub __out_userlist {
-        my $profile = shift;
-        my $users = shift;
-
-        open(my $fh, '>', $dir.$profile) or die("Can't write file $dir$profile");
-        foreach (split(/\s+/, $users)) {
-            print $fh "$_\n";
-        }
-        close $fh;
-    }
-
     foreach ($db->get_all_by_prop(type => 'profile')) {
         my $src = $_->prop('Src') || next;
         my $pname = "src_".$_->key;
@@ -36,13 +25,10 @@
         } else {
            my ($type, $key) = split(/;/,$src);
            if ($type eq 'user') {
-               $src = "userlist $dir$pname";
-               __out_userlist($pname, $key);
+               $key = substr($key, 0, index($key, '@')); # strip domain
+               $src = "user $key";
            } elsif ($type eq 'group') {
-               my ($name,$passwd,$gid,$members) = getgrnam($key);
-               next if (!$members);
-               $src = "userlist $dir$pname";
-               __out_userlist($pname, $members);
+               $src = "unix group \"$key\"";
            } elsif ($type eq 'zone') {
                $src = "ip ".$fw->getZoneCIDR($key);
            } elsif ($type eq 'role') {
