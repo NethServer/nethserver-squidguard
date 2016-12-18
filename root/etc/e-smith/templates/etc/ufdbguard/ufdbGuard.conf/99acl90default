@@ -36,7 +36,7 @@
 
     foreach my $c (split(/,/,$filter->prop('Categories') || '')) {
         if (exists($categories{$c})) { #do not add non-existing categories
-            $OUT .= " $op$c ";
+            $OUT .= " $op\"$c\" ";
         }
     }
         
