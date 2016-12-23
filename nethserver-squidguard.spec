@@ -1,6 +1,6 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
-Version: 1.6.0
+Version: 1.6.1
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -46,6 +46,9 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Fri Dec 23 2016 Filippo Carletti <filippo.carletti@gmail.com> - 1.6.1-1
+- Replace squidGuard with ufdbGuard - NethServer/dev#5171
+
 * Fri Dec 16 2016 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.6.0-1
 - Replace squidGuard with ufdbGuard - NethServer/dev#5171
 
