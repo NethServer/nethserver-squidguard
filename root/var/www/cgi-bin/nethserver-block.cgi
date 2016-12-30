@@ -189,37 +189,37 @@ sub parseQuery ($)
 
       if ($key =~ /^(admin|clientaddr|clientname|clientuser|clientident|clientgroup|category|targetgroup|color|size|source|srcclass|targetclass|mode|httpcode|ufdbhost|ufdbscripturi|ufdbredirscripturi|ufdbsni|ufdbservername|ufdbrequesturi|ufdbrefurl|url)$/)
       {
-	$escaped_ufdbrequesturi = $value  if ($key eq 'ufdbrequesturi');
-	$escaped_url = $value             if ($key eq 'url');
+        $escaped_ufdbrequesturi = $value  if ($key eq 'ufdbrequesturi');
+        $escaped_url = $value             if ($key eq 'url');
 
-	$value =~ s/%20/ /g;
-	$value =~ s/%22/"/g;
-	$value =~ s/%23/#/g;
-	$value =~ s/%24/\$/g;
-	$value =~ s/%26/\&/g;
-	$value =~ s/%27/\?/g;
-	$value =~ s/%2B/\+/ig;
+        $value =~ s/%20/ /g;
+        $value =~ s/%22/"/g;
+        $value =~ s/%23/#/g;
+        $value =~ s/%24/\$/g;
+        $value =~ s/%26/\&/g;
+        $value =~ s/%27/\?/g;
+        $value =~ s/%2B/\+/ig;
         $value =~ s/%2C/,/ig;
-	$value =~ s/%2F/\//ig;
-	$value =~ s/%3A/:/ig;
-	$value =~ s/%3B/;/ig;
-	$value =~ s/%3C/</ig;
-	$value =~ s/%3D/=/ig;
-	$value =~ s/%3E/>/ig;
-	$value =~ s/%3F/?/ig;
-	$value =~ s/%40/\@/ig;
-	$value =~ s/%5C/\\/ig;
-	$value =~ s/%25/%/g;            # must be last
-	$key = 'clientgroup' if ($key eq 'source'  ||  $key eq 'srcclass');
-	$key = 'clientuser'  if ($key eq 'clientident');
-	$key = 'category'    if ($key eq 'targetgroup'  ||  $key eq 'targetclass');
-	eval "\$$key = \$value";
+        $value =~ s/%2F/\//ig;
+        $value =~ s/%3A/:/ig;
+        $value =~ s/%3B/;/ig;
+        $value =~ s/%3C/</ig;
+        $value =~ s/%3D/=/ig;
+        $value =~ s/%3E/>/ig;
+        $value =~ s/%3F/?/ig;
+        $value =~ s/%40/\@/ig;
+        $value =~ s/%5C/\\/ig;
+        $value =~ s/%25/%/g;            # must be last
+        $key = 'clientgroup' if ($key eq 'source'  ||  $key eq 'srcclass');
+        $key = 'clientuser'  if ($key eq 'clientident');
+        $key = 'category'    if ($key eq 'targetgroup'  ||  $key eq 'targetclass');
+        eval "\$$key = \$value";
       }
 
       if ($query =~ /^url=(.*)/)
       {
-	$url = $1;
-	last;
+        $url = $1;
+        last;
       }
     }
   }
@@ -324,7 +324,6 @@ sub getContentType( $ )
    return CT_STREAM if ($suffix =~ /\.(bin|bz2|cab|class|dat|doc|gz|h264|mp3|mpg|mpeg|msi|mst|ppt|pdf|rar|tar|ttf|xls|zip|ogv|divx|xvid|qt|ra|ram|rv|wmv|avi|mov|swf|mp4|mv4|flv)$/i);
 
    # no suffix found, now we start with the guesswork
-
 
    return CT_HTML   if ($path eq '/' || $path eq '');
    return CT_IMAGE  if ($url =~ /^googleadservices\.com\/pagead\/conversion\// );
@@ -461,18 +460,18 @@ while (new CGI::Fast)
       }
       else
       {
-	 if ($mode eq 'cross') {
-	    $imgfile = "smallcross.png"  if ($mode eq 'cross');
-	 }
-	 elsif ($mode eq 'square') {
-	    $imgfile = "square.png"      if ($mode eq 'square');
-	 }
-	 elsif ($mode eq 'simple-red'  ||  $mode eq 'transparent'  ||  $mode eq 'transparant') {
-	    $imgfile = "transparent.png";
-	 }
-	 else  {
-	    $imgfile = "forbidden-normal-" . $lang . ".png";
-	 }
+        if ($mode eq 'cross') {
+            $imgfile = "smallcross.png"  if ($mode eq 'cross');
+        }
+        elsif ($mode eq 'square') {
+            $imgfile = "square.png"      if ($mode eq 'square');
+        }
+        elsif ($mode eq 'simple-red'  ||  $mode eq 'transparent'  ||  $mode eq 'transparant') {
+            $imgfile = "transparent.png";
+        }
+        else  {
+            $imgfile = "forbidden-normal-" . $lang . ".png";
+        }
       }
       $root = $ENV{'DOCUMENT_ROOT'};
       open( BLOCKEDPNG, "$root/images/$imgfile" )  ||  print "failed to open $root/images/$imgfile\n";
@@ -494,20 +493,20 @@ while (new CGI::Fast)
    {
       if (1)
       {
-	 print "Status: 204 no content\n";
-         print "Content-Type: text/plain\n";
-	 ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime( $time + 180 );
-	 printf "Expires: %s, %02d %s %04d %02d:%02d:%02d GMT\n",
-		$day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
-	 printf "X-blocked-category: %s\n", $category;
-	 printf "X-blocked-URL: %s\n", $url;
+        print "Status: 204 no content\n";
+        print "Content-Type: text/plain\n";
+        ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime( $time + 180 );
+        printf "Expires: %s, %02d %s %04d %02d:%02d:%02d GMT\n",
+        $day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
+        printf "X-blocked-category: %s\n", $category;
+        printf "X-blocked-URL: %s\n", $url;
       }
       else
       {
-	 print "Content-Type: application/octet-stream\n";
-	 ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime( $time + 180 );
-	 printf "Expires: %s, %02d %s %04d %02d:%02d:%02d GMT\n",
-		$day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
+        print "Content-Type: application/octet-stream\n";
+        ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime( $time + 180 );
+        printf "Expires: %s, %02d %s %04d %02d:%02d:%02d GMT\n",
+        $day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
       }
       print "\n";
    }
@@ -516,7 +515,7 @@ while (new CGI::Fast)
       print "Content-Type: application/x-javascript\n";
       ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime( $time + 180 );
       printf "Expires: %s, %02d %s %04d %02d:%02d:%02d GMT\n",
-	     $day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
+      $day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
       print "\n";
 
       print "\n";
@@ -526,7 +525,7 @@ while (new CGI::Fast)
       print "Content-Type: application/json\n";
       ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime( $time + 180 );
       printf "Expires: %s, %02d %s %04d %02d:%02d:%02d GMT\n",
-	     $day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
+      $day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
       print "\n";
 
       print "\n";
@@ -536,7 +535,7 @@ while (new CGI::Fast)
       print "Content-Type: text/css\n";
       ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime( $time + 180 );
       printf "Expires: %s, %02d %s %04d %02d:%02d:%02d GMT\n",
-	     $day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
+      $day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
       print "\n";
 
       print "\n";
@@ -546,7 +545,7 @@ while (new CGI::Fast)
       print "Content-Type: text/plain\n";
       ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime( $time + 180 );
       printf "Expires: %s, %02d %s %04d %02d:%02d:%02d GMT\n",
-	     $day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
+      $day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
       print "\n";
 
       print "\n";
@@ -556,7 +555,7 @@ while (new CGI::Fast)
       print "Content-Type: text/xml\n";
       ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime( $time + 180 );
       printf "Expires: %s, %02d %s %04d %02d:%02d:%02d GMT\n",
-	     $day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
+      $day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
       print "\n";
 
       print "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
@@ -568,314 +567,314 @@ while (new CGI::Fast)
    {
       if ($category eq 'fatal-error')
       {
-	 print "Content-Type: text/html\n";
-	 ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime( $time + 180 );
-	 printf "Expires: %s, %02d %s %04d %02d:%02d:%02d GMT\n",
-		$day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
-	 print "Content-Language: $lang\n";
-	 print "\n";
+        print "Content-Type: text/html\n";
+        ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime( $time + 180 );
+        printf "Expires: %s, %02d %s %04d %02d:%02d:%02d GMT\n",
+          $day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
+        print "Content-Language: $lang\n";
+        print "\n";
 
-	 print "<html lang=\"$lang\">\n";
-	 print "<head>\n";
-	 print "   <title>The URL filter has a fatal error</title>\n";
-	 print "   <meta name=\"description\" content=\"All URLs are blocked because the URL filter has a fatal error\" />\n";
-	 print "</head>\n";
-	 print "<body bgcolor=\"#e0e0e0\">\n";
-	 print "<center>\n";
-	 print "<font color=red><b>\n" .
-	       "Access to the internet is blocked because<br>\n" .
-	       "the URL filter has a fatal error. <br>\n" .
-	       "Ask your helpdesk or web proxy administrator for assistance." .
-	       "</b></font>\n";
-	 print "</center>\n";
-	 print "$html_comment";
-	 print "</body>\n";
-	 print "</html>\n";
+        print "<html lang=\"$lang\">\n";
+        print "<head>\n";
+        print "   <title>The URL filter has a fatal error</title>\n";
+        print "   <meta name=\"description\" content=\"All URLs are blocked because the URL filter has a fatal error\" />\n";
+        print "</head>\n";
+        print "<body bgcolor=\"#e0e0e0\">\n";
+        print "<center>\n";
+        print "<font color=red><b>\n" .
+              "Access to the internet is blocked because<br>\n" .
+              "the URL filter has a fatal error. <br>\n" .
+              "Ask your helpdesk or web proxy administrator for assistance." .
+              "</b></font>\n";
+        print "</center>\n";
+        print "$html_comment";
+        print "</body>\n";
+        print "</html>\n";
       }
       elsif ($category eq 'loading-database')
       {
-	 print "Content-Type: text/html\n";
-	 ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime( $time + 180 );
-	 printf "Expires: %s, %02d %s %04d %02d:%02d:%02d GMT\n",
-		$day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
-	 print "Content-Language: $lang\n";
-	 print "\n";
+        print "Content-Type: text/html\n";
+        ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime( $time + 180 );
+        printf "Expires: %s, %02d %s %04d %02d:%02d:%02d GMT\n",
+          $day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
+        print "Content-Language: $lang\n";
+        print "\n";
 
-	 print "<html lang=\"$lang\">\n";
-	 print "<head>\n";
-	 print "   <title>a new URL database is being loaded</title>\n";
-	 print "   <meta name=\"description\" content=\"All URLs are blocked because the URL filter is loading a fresh database\" />\n";
-	 print "</head>\n";
-	 print "<body bgcolor=\"#e0e0e0\">\n";
-	 print "<center>\n";
-	 print "<font color=red><b>\n" .
-	       "Access to the internet is temporarily blocked because<br>\n" .
-	       "a new URL database is being loaded by the URL filter. <br>\n" .
-	       "Wait one minute and try again." .
-	       "</b></font>\n";
-	 print "</center>\n";
-	 print "$html_comment";
-	 print "</body>\n";
-	 print "</html>\n";
+        print "<html lang=\"$lang\">\n";
+        print "<head>\n";
+        print "   <title>a new URL database is being loaded</title>\n";
+        print "   <meta name=\"description\" content=\"All URLs are blocked because the URL filter is loading a fresh database\" />\n";
+        print "</head>\n";
+        print "<body bgcolor=\"#e0e0e0\">\n";
+        print "<center>\n";
+        print "<font color=red><b>\n" .
+              "Access to the internet is temporarily blocked because<br>\n" .
+              "a new URL database is being loaded by the URL filter. <br>\n" .
+              "Wait one minute and try again." .
+              "</b></font>\n";
+        print "</center>\n";
+        print "$html_comment";
+        print "</body>\n";
+        print "</html>\n";
       }
       else
       {
-	 if ($lang eq 'de') {
-	    $forbidden = 'Verboten';
-	    $title = "zugriff verweigert ($category)";
-	    $explanation_prefix = 'Zugriff verweigert weil die URL die Klassifizierung';
-	    $explanation_suffix = 'hat.';
-	    $more_info = 'Mehr Informationen &uuml;ber ufdbGuard ist <a href="https://www.urlfilterdb.com/blocking/">hier</a>.';
-	    $go_back = 'Klicken Sie hier um zur&uuml;ck zu gehen.';
-	 }
-	 elsif ($lang eq 'pl') {
-	    $forbidden = 'Pobranie tej strony jest zabronione!';
-	    $title = "Cenzura, zakaz pobrania ($category)";
-	    $explanation_prefix = 'Nie otworzysz tej strony bo jest ona sklasyfikowana jako';
-	    $explanation_suffix = 'przez program kontroli ufdbGuard';
-	    $more_info = 'Informacja (po angielsku) o tym programie kontroli jest na <a href="https://www.urlfilterdb.com/blocking/">stronie</a>.';
-	    $go_back = 'Wycofaj do poprzedniej strony';
-	 }
-	 elsif ($lang eq 'sv') {
-	    $forbidden = 'Sidan stoppad enligt landstingets riktlinjer';
-	    $title = "F&ouml;rbjuden ($category)";
-	    $explanation_prefix = 'Access till denna sida &auml;r stoppad:';
-	    $explanation_suffix = '';
-	    $more_info = 'Mer information om ufdbGuard &auml;r <a href="https://www.urlfilterdb.com/blocking/">h&auml;r</a>.';
-	    $go_back = 'Klicka h&auml;r f&ouml;r att komma tillbaks';
-	 }
-	 elsif ($lang eq 'nl') {
-	    $forbidden = 'Geen Toegang';
-	    $title = "geen toegang ($category)";
-	    $explanation_prefix = 'De toegang is geblokkeerd omdat de URL in de categorie';
-	    $explanation_suffix = 'valt.';
-	    $more_info = 'Meer informatie over ufdbGuard is <a href="https://www.urlfilterdb.com/blocking/">hier</a>.';
-	    $go_back = 'Klik hier om terug te gaan';
-	 }
-	 elsif ($lang eq 'es') {
-	    $forbidden = 'Ning&uacute;n acceso';
-	    $title = "ning&uacute;n acceso ($category)";
-	    $explanation_prefix = 'Se bloquea el acceso puesto que el URL se considera ser';
-	    $explanation_suffix = '';
-	    $more_info = 'M&aacute;s informaci&oacute;n sobre ufdbGuard est&aacute; <a href="https://www.urlfilterdb.com/blocking/">aqu&iacute;</a>.';
-	    $go_back = 'ir detr&aacute;s';
-	 }
-	 elsif ($lang eq 'it') {
-	    $forbidden = 'Accesso non permesso';
-	    $title = "accesso non permesso ($category)";
-	    $explanation_prefix = "L'accesso &egrave; ostruito poich&eacute; il URL &egrave; considerato come";
-	    $explanation_suffix = '';
-	    $more_info = 'Le pi&ugrave; informazioni su ufdbGuard sono <a href="https://www.urlfilterdb.com/blocking">qui</a>.';
-	    $go_back = 'andare indietro';
-	 }
-	 elsif ($lang eq 'pt') {
-	    $forbidden = 'Proibido';
-	    $title = "Proibido ($category)";
-	    $explanation_prefix = "O acesso a este site foi bloqueado porque o conte&uacute;do est&aacute;";
-	    $explanation_suffix = '';
-	    $more_info = 'Mais informa&ccedil;&atilde;o sobre ufdbGuard est&aacute; <a href="https://www.urlfilterdb.com/blocking">aqui</a>.';
-	    $go_back = 'volte';
-	 }
-	 elsif ($lang eq 'fr') {
-	    $forbidden = 'Interdit';
-	    $title = "Interdit ($category)";
-	    $explanation_prefix = "L'access est inderdit parce que le site est";
-	    $explanation_suffix = '';
-	    $more_info = "Plus d'information de ufdbGuard est <a href=\"https://www.urlfilterdb.com/blocking\">ici</a>.";
-	    $go_back = 'rentrer';
-	 }
-	 elsif ($lang eq 'tr') {
-	    $forbidden = 'Eri&#351;im engellendi';
-	    $title = "Eri&#351;im engellendi ($category)";
-	    $explanation_prefix = "Ula&#351;mak istedi&#287;iniz sayfaya eri&#351;im kapal&#305;d&#305;r. S&#305;n&#305;f&#305;:";
-	    $explanation_suffix = '';
-	    $more_info = "ufdbGuard hakk&#305;nda bilgi i&ccedil;in <a href=\"https://www.urlfilterdb.com/blocking\">t&#305;klay&#305;n&#305;z</a>.";
-	    $go_back = '&Ouml;nceki sayfa';
-	 }
-	 elsif ($lang eq 'NEWLANGUAGE') {
-	    $forbidden = 'Forbidden';
-	    $title = "Forbidden ($category)";
-	    $explanation_prefix = 'Access is blocked since the URL is considered to be';
-	    $explanation_suffix = '';
-	    $more_info = 'More information about ufdbGuard is <a href="https://www.urlfilterdb.com/blocking">here</a>.';
-	    $go_back = 'Click here to go back';
-	 }
-	 else {   # default (matches 'en')
-	    $forbidden = 'Forbidden';
-	    $title = "Forbidden ($category)";
-	    $explanation_prefix = 'Access is blocked since the URL is considered to be';
-	    $explanation_suffix = '';
-	    $more_info = 'More information about ufdbGuard is <a href="https://www.urlfilterdb.com/blocking">here</a>.';
-	    $go_back = 'Click here to go back';
-	    $lang = 'en';
-	 }
+        if ($lang eq 'de') {
+            $forbidden = 'Verboten';
+            $title = "zugriff verweigert ($category)";
+            $explanation_prefix = 'Zugriff verweigert weil die URL die Klassifizierung';
+            $explanation_suffix = 'hat.';
+            $more_info = 'Mehr Informationen &uuml;ber ufdbGuard ist <a href="https://www.urlfilterdb.com/blocking/">hier</a>.';
+            $go_back = 'Klicken Sie hier um zur&uuml;ck zu gehen.';
+        }
+        elsif ($lang eq 'pl') {
+            $forbidden = 'Pobranie tej strony jest zabronione!';
+            $title = "Cenzura, zakaz pobrania ($category)";
+            $explanation_prefix = 'Nie otworzysz tej strony bo jest ona sklasyfikowana jako';
+            $explanation_suffix = 'przez program kontroli ufdbGuard';
+            $more_info = 'Informacja (po angielsku) o tym programie kontroli jest na <a href="https://www.urlfilterdb.com/blocking/">stronie</a>.';
+            $go_back = 'Wycofaj do poprzedniej strony';
+        }
+        elsif ($lang eq 'sv') {
+            $forbidden = 'Sidan stoppad enligt landstingets riktlinjer';
+            $title = "F&ouml;rbjuden ($category)";
+            $explanation_prefix = 'Access till denna sida &auml;r stoppad:';
+            $explanation_suffix = '';
+            $more_info = 'Mer information om ufdbGuard &auml;r <a href="https://www.urlfilterdb.com/blocking/">h&auml;r</a>.';
+            $go_back = 'Klicka h&auml;r f&ouml;r att komma tillbaks';
+        }
+        elsif ($lang eq 'nl') {
+            $forbidden = 'Geen Toegang';
+            $title = "geen toegang ($category)";
+            $explanation_prefix = 'De toegang is geblokkeerd omdat de URL in de categorie';
+            $explanation_suffix = 'valt.';
+            $more_info = 'Meer informatie over ufdbGuard is <a href="https://www.urlfilterdb.com/blocking/">hier</a>.';
+            $go_back = 'Klik hier om terug te gaan';
+        }
+        elsif ($lang eq 'es') {
+            $forbidden = 'Ning&uacute;n acceso';
+            $title = "ning&uacute;n acceso ($category)";
+            $explanation_prefix = 'Se bloquea el acceso puesto que el URL se considera ser';
+            $explanation_suffix = '';
+            $more_info = 'M&aacute;s informaci&oacute;n sobre ufdbGuard est&aacute; <a href="https://www.urlfilterdb.com/blocking/">aqu&iacute;</a>.';
+            $go_back = 'ir detr&aacute;s';
+        }
+        elsif ($lang eq 'it') {
+            $forbidden = 'Accesso non permesso';
+            $title = "accesso non permesso ($category)";
+            $explanation_prefix = "L'accesso &egrave; ostruito poich&eacute; il URL &egrave; considerato come";
+            $explanation_suffix = '';
+            $more_info = 'Le pi&ugrave; informazioni su ufdbGuard sono <a href="https://www.urlfilterdb.com/blocking">qui</a>.';
+            $go_back = 'andare indietro';
+        }
+        elsif ($lang eq 'pt') {
+            $forbidden = 'Proibido';
+            $title = "Proibido ($category)";
+            $explanation_prefix = "O acesso a este site foi bloqueado porque o conte&uacute;do est&aacute;";
+            $explanation_suffix = '';
+            $more_info = 'Mais informa&ccedil;&atilde;o sobre ufdbGuard est&aacute; <a href="https://www.urlfilterdb.com/blocking">aqui</a>.';
+            $go_back = 'volte';
+        }
+        elsif ($lang eq 'fr') {
+            $forbidden = 'Interdit';
+            $title = "Interdit ($category)";
+            $explanation_prefix = "L'access est inderdit parce que le site est";
+            $explanation_suffix = '';
+            $more_info = "Plus d'information de ufdbGuard est <a href=\"https://www.urlfilterdb.com/blocking\">ici</a>.";
+            $go_back = 'rentrer';
+        }
+        elsif ($lang eq 'tr') {
+            $forbidden = 'Eri&#351;im engellendi';
+            $title = "Eri&#351;im engellendi ($category)";
+            $explanation_prefix = "Ula&#351;mak istedi&#287;iniz sayfaya eri&#351;im kapal&#305;d&#305;r. S&#305;n&#305;f&#305;:";
+            $explanation_suffix = '';
+            $more_info = "ufdbGuard hakk&#305;nda bilgi i&ccedil;in <a href=\"https://www.urlfilterdb.com/blocking\">t&#305;klay&#305;n&#305;z</a>.";
+            $go_back = '&Ouml;nceki sayfa';
+        }
+        elsif ($lang eq 'NEWLANGUAGE') {
+            $forbidden = 'Forbidden';
+            $title = "Forbidden ($category)";
+            $explanation_prefix = 'Access is blocked since the URL is considered to be';
+            $explanation_suffix = '';
+            $more_info = 'More information about ufdbGuard is <a href="https://www.urlfilterdb.com/blocking">here</a>.';
+            $go_back = 'Click here to go back';
+        }
+        else {   # default (matches 'en')
+            $forbidden = 'Forbidden';
+            $title = "Forbidden ($category)";
+            $explanation_prefix = 'Access is blocked since the URL is considered to be';
+            $explanation_suffix = '';
+            $more_info = 'More information about ufdbGuard is <a href="https://www.urlfilterdb.com/blocking">here</a>.';
+            $go_back = 'Click here to go back';
+            $lang = 'en';
+        }
 
-	 if ($color eq 'orange')
-	 {
-	    $textcolor = 'white';
-	    $bgcolor = '#ee8811';
-	 }
-	 elsif ($color eq 'white')
-	 {
-	    $textcolor = '#3f003f';
-	    $bgcolor = 'white';
-	 }
-	 elsif ($color eq 'black')
-	 {
-	    $textcolor = '#f0f0f0';
-	    $bgcolor = 'black';
-	 }
-	 elsif ($color eq 'red')
-	 {
-	    $textcolor = '#f0f0f0';
-	    $bgcolor = 'red';
-	 }
-	 elsif ($color eq 'grey'  ||  $color eq 'gray')
-	 {
-	    $textcolor = '#111111';
-	    $bgcolor = '#c2c2c2';
-	 }
-	 else	# default color: orange
-	 {
-	    $textcolor = 'white';
-	    $bgcolor = '#ee8811';
-	 }
+        if ($color eq 'orange')
+        {
+            $textcolor = 'white';
+            $bgcolor = '#ee8811';
+        }
+        elsif ($color eq 'white')
+        {
+            $textcolor = '#3f003f';
+            $bgcolor = 'white';
+        }
+        elsif ($color eq 'black')
+        {
+            $textcolor = '#f0f0f0';
+            $bgcolor = 'black';
+        }
+        elsif ($color eq 'red')
+        {
+            $textcolor = '#f0f0f0';
+            $bgcolor = 'red';
+        }
+        elsif ($color eq 'grey'  ||  $color eq 'gray')
+        {
+            $textcolor = '#111111';
+            $bgcolor = '#c2c2c2';
+        }
+        else	# default color: orange
+        {
+            $textcolor = 'white';
+            $bgcolor = '#ee8811';
+        }
 
-	 if ($size eq 'normal')
-	 {
-	    $titlesize = '+2';
-	    $textsize = '+0';
-	 }
-	 elsif ($size eq 'small')
-	 {
-	    $titlesize = '+1';
-	    $textsize = '-1';
-	 }
-	 elsif ($size eq 'large')
-	 {
-	    $titlesize = '+3';
-	    $textsize = '+1';
-	 }
-	 else    # default size: normal
-	 {
-	    $titlesize = '+2';
-	    $textsize = '+0';
-	    $size = 'normal';
-	 }
+        if ($size eq 'normal')
+        {
+            $titlesize = '+2';
+            $textsize = '+0';
+        }
+        elsif ($size eq 'small')
+        {
+            $titlesize = '+1';
+            $textsize = '-1';
+        }
+        elsif ($size eq 'large')
+        {
+            $titlesize = '+3';
+            $textsize = '+1';
+        }
+        else    # default size: normal
+        {
+            $titlesize = '+2';
+            $textsize = '+0';
+            $size = 'normal';
+        }
 
-	 $url =~ s/[?;&].*//;
+        $url =~ s/[?;&].*//;
 
-	 print "Content-Type: text/html\n";
-	 ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime( $time + 180 );
-	 printf "Expires: %s, %02d %s %04d %02d:%02d:%02d GMT\n",
-		$day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
-	 print "Content-Language: $lang\n";
-	 print "\n";
+        print "Content-Type: text/html\n";
+        ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime( $time + 180 );
+        printf "Expires: %s, %02d %s %04d %02d:%02d:%02d GMT\n",
+          $day[$wday], $mday, $month[$mon], $year+1900, $hour, $min, $sec;
+        print "Content-Language: $lang\n";
+        print "\n";
 
-	 if ($url eq 'https://blockedhttps.urlfilterdb.com')
-	 {
-	    print "<html lang=\"$lang\">\n";
-	    print "<head>\n";
-	    print "   <title>$title</title>\n";
-	    print "   <meta name=\"description\" content=\"$title\" />\n";
-	    print "</head>\n";
-	    print "<body bgcolor=\"ffcccc\" link=\"red\" alink=\"red\" vlink=\"red\" text=\"red\">\n";
-	    print "<p align=center>\n";
-	    print "https://blockedhttps.urlfilterdb.com is used by ufdbGuard<br>\n";
-	    print "to display messages about blocked URLs.<br>\n";
-	    print "</p>\n";
-	    print "$html_comment";
-	    print "</body>\n";
-	    print "</html>\n";
-	 }
-	 elsif ($category eq 'ads')
-	 {
-	    my $text;
-	    $text = " ";	 # transparent
-	    $text = " no ads " if $mode eq 'noads';
-	    $text = " [] "     if $mode eq 'square';
-	    $text = " x "      if $mode eq 'cross';
-	    $text = "<font color=red><i>ads</i></font>"  if $mode eq 'simple-red';
+        if ($url eq 'https://blockedhttps.urlfilterdb.com')
+        {
+            print "<html lang=\"$lang\">\n";
+            print "<head>\n";
+            print "   <title>$title</title>\n";
+            print "   <meta name=\"description\" content=\"$title\" />\n";
+            print "</head>\n";
+            print "<body bgcolor=\"ffcccc\" link=\"red\" alink=\"red\" vlink=\"red\" text=\"red\">\n";
+            print "<p align=center>\n";
+            print "https://blockedhttps.urlfilterdb.com is used by ufdbGuard<br>\n";
+            print "to display messages about blocked URLs.<br>\n";
+            print "</p>\n";
+            print "$html_comment";
+            print "</body>\n";
+            print "</html>\n";
+        }
+        elsif ($category eq 'ads')
+        {
+            my $text;
+            $text = " ";	 # transparent
+            $text = " no ads " if $mode eq 'noads';
+            $text = " [] "     if $mode eq 'square';
+            $text = " x "      if $mode eq 'cross';
+            $text = "<font color=red><i>ads</i></font>"  if $mode eq 'simple-red';
 
-	    print "<html lang=\"$lang\">\n";
-	    print "<head>\n";
-	    print "   <title>$title</title>\n";
-	    print "   <meta name=\"description\" content=\"The ad is blocked by the URL filter.\nURL: $ufdbhost$ufdbrequesturi\" />\n";
-	    print "</head>\n";
-	    print "<body>\n";
-	    print "<font size=\"$textsize\">$text</font>\n";
-	    print "$html_comment";
-	    print "</body>\n";
-	    print "</html>\n";
-	 }
-	 else      	# no ads
-	 {
-	    if ($mode eq 'simple-red')
-	    {
-	       my $whyblocked = "$explanation_prefix $category $explanation_suffix.  URL = $url";
-	       print "<html lang=\"$lang\">\n";
-	       print "<head>\n";
-	       print "   <title>$title</title>\n";
-	       print "   <meta name=\"description\" content=\"The URL is blocked by the URL filter ($ufdbhost$escaped_ufdbrequesturi)\" />\n";
-	       print "</head>\n";
-	       print "<body bgcolor=\"ffe6e6\" link=\"blue\" alink=\"red\" vlink=\"black\" text=\"red\">\n";
-	       print "<p align=center>\n";
-	       print "<a title=\"$whyblocked\">$forbidden<br><i>$category</i></a>\n";
-	       print "<a href=\"/cgi-bin/show_url_details.cgi?mode=$mode&url=$ufdbhost$escaped_ufdbrequesturi\">why is this URL blocked?</a>\n";
-	       print "</p>\n";
-	       print "$html_comment";
-	       print "</body>\n";
-	       print "</html>\n";
-	    }
-	    elsif ($category eq 'social-bdg'  ||  $category eq 'socbadges'  ||  $category eq 'social-badges'  ||  $category eq 'social_badges')
-	    {
-	       print "<html lang=\"$lang\">\n";
-	       print "<head>\n";
-	       print "   <title>block social networking badge</title>\n";
-	       print "   <meta name=\"description\" content=\"social networking badge is blocked by the URL filter\" />\n";
-	       print "</head>\n";
-	       # print "<body width=30 height=30 bgcolor=\"transparent\">\n";
-	       print "<body bgcolor=#fafafa>\n";
-	       print "<center>\n";
-	       print "<font size=\"-1\" color=\"#1f1f1f\">\n" .
-		     "<a title=\"The social networking badge is blocked.\"> B </a>\n" .
-		     "</font>\n";
-	       print "</center>\n";
-	       print "$html_comment";
-	       print "</body>\n";
-	       print "</html>\n";
-	    }
-	    else
-	    {
-	       print "<html lang=\"$lang\">\n";
-	       print "<head>\n";
-	       print "   <title>$title</title>\n";
-	       print "   <meta name=\"description\" content=\"The URL is blocked by the URL filter\" />\n";
-	       print "</head>\n";
-	       print "<body bgcolor=\"$bgcolor\" text=\"$textcolor\">\n";
-	       print "<font size=\"$titlesize\">$forbidden</font> <br>\n";
-	       print "<font size=\"$textsize\">\n";
-	       print "$explanation_prefix <i>$category</i> $explanation_suffix <br>\n";
-	       print "URL: $url <br>\n";
-	       print "<p>\n";
-	       print "<a href=\"javascript:history.go(-1);\">$go_back</a>. <br>\n";
-	       print "$admin\n";
-	       print "<p>\n";
-	       print "$more_info\n";
-	       print "<br>\n&nbsp;<p />\n";
-	       print "</font>\n";
-	       print "<font size=\"-3\">";
-	       print "user=$clientuser &nbsp; "      if (defined($clientuser)  &&  length($clientuser)>0);
-	       print "client=$clientaddr &nbsp; "    if (defined($clientaddr)  &&  length($clientaddr)>0);
-	       print "group=$clientgroup &nbsp; "    if (defined($clientgroup)  &&  length($clientgroup)>0);
-	       print "source=$clientname &nbsp; "    if (defined($clientname)  &&  length($clientname)>0);
-	       print "</font>\n";
-	       print "$html_comment";
-	       print "<!-- color:$color size:$size mode:$mode lang:$lang category:$category -->\n";
-	       print "</body>\n";
-	       print "</html>\n";
-	    }
-	 }
+            print "<html lang=\"$lang\">\n";
+            print "<head>\n";
+            print "   <title>$title</title>\n";
+            print "   <meta name=\"description\" content=\"The ad is blocked by the URL filter.\nURL: $ufdbhost$ufdbrequesturi\" />\n";
+            print "</head>\n";
+            print "<body>\n";
+            print "<font size=\"$textsize\">$text</font>\n";
+            print "$html_comment";
+            print "</body>\n";
+            print "</html>\n";
+        }
+        else      	# no ads
+        {
+            if ($mode eq 'simple-red')
+            {
+              my $whyblocked = "$explanation_prefix $category $explanation_suffix.  URL = $url";
+              print "<html lang=\"$lang\">\n";
+              print "<head>\n";
+              print "   <title>$title</title>\n";
+              print "   <meta name=\"description\" content=\"The URL is blocked by the URL filter ($ufdbhost$escaped_ufdbrequesturi)\" />\n";
+              print "</head>\n";
+              print "<body bgcolor=\"ffe6e6\" link=\"blue\" alink=\"red\" vlink=\"black\" text=\"red\">\n";
+              print "<p align=center>\n";
+              print "<a title=\"$whyblocked\">$forbidden<br><i>$category</i></a>\n";
+              print "<a href=\"/cgi-bin/show_url_details.cgi?mode=$mode&url=$ufdbhost$escaped_ufdbrequesturi\">why is this URL blocked?</a>\n";
+              print "</p>\n";
+              print "$html_comment";
+              print "</body>\n";
+              print "</html>\n";
+            }
+            elsif ($category eq 'social-bdg'  ||  $category eq 'socbadges'  ||  $category eq 'social-badges'  ||  $category eq 'social_badges')
+            {
+              print "<html lang=\"$lang\">\n";
+              print "<head>\n";
+              print "   <title>block social networking badge</title>\n";
+              print "   <meta name=\"description\" content=\"social networking badge is blocked by the URL filter\" />\n";
+              print "</head>\n";
+              # print "<body width=30 height=30 bgcolor=\"transparent\">\n";
+              print "<body bgcolor=#fafafa>\n";
+              print "<center>\n";
+              print "<font size=\"-1\" color=\"#1f1f1f\">\n" .
+              "<a title=\"The social networking badge is blocked.\"> B </a>\n" .
+              "</font>\n";
+              print "</center>\n";
+              print "$html_comment";
+              print "</body>\n";
+              print "</html>\n";
+            }
+            else
+            {
+              print "<html lang=\"$lang\">\n";
+              print "<head>\n";
+              print "   <title>$title</title>\n";
+              print "   <meta name=\"description\" content=\"The URL is blocked by the URL filter\" />\n";
+              print "</head>\n";
+              print "<body bgcolor=\"$bgcolor\" text=\"$textcolor\">\n";
+              print "<font size=\"$titlesize\">$forbidden</font> <br>\n";
+              print "<font size=\"$textsize\">\n";
+              print "$explanation_prefix <i>$category</i> $explanation_suffix <br>\n";
+              print "URL: $url <br>\n";
+              print "<p>\n";
+              print "<a href=\"javascript:history.go(-1);\">$go_back</a>. <br>\n";
+              print "$admin\n";
+              print "<p>\n";
+              print "$more_info\n";
+              print "<br>\n&nbsp;<p />\n";
+              print "</font>\n";
+              print "<font size=\"-3\">";
+              print "user=$clientuser &nbsp; "      if (defined($clientuser)  &&  length($clientuser)>0);
+              print "client=$clientaddr &nbsp; "    if (defined($clientaddr)  &&  length($clientaddr)>0);
+              print "group=$clientgroup &nbsp; "    if (defined($clientgroup)  &&  length($clientgroup)>0);
+              print "source=$clientname &nbsp; "    if (defined($clientname)  &&  length($clientname)>0);
+              print "</font>\n";
+              print "$html_comment";
+              print "<!-- color:$color size:$size mode:$mode lang:$lang category:$category -->\n";
+              print "</body>\n";
+              print "</html>\n";
+            }
+        }
       }
    }
 }
