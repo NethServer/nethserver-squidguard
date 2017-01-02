@@ -1,0 +1,6 @@
+Unknown=
+Title=Interdit
+Prefix=L'access est inderdit parce que le site est
+Suffix=
+Info=Plus d'information de ufdbGuard est
+Here=ici
