@@ -514,7 +514,7 @@ while (new CGI::Fast)
             $imgfile = "forbidden-normal-" . $lang . ".png";
         }
       }
-      $root = $ENV{'DOCUMENT_ROOT'};
+      $root = '/var/ufdbguard';
       open( BLOCKEDPNG, "$root/images/$imgfile" )  ||  print "failed to open $root/images/$imgfile\n";
       print $buffer while (read (BLOCKEDPNG,$buffer,8192));
       close( BLOCKEDPNG );
