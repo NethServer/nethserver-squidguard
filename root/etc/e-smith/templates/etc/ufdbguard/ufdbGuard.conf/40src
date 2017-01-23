@@ -18,6 +18,7 @@
                $key = substr($key, 0, index($key, '@')); # strip domain
                $src = "user \"$key\"";
            } elsif ($type eq 'group') {
+               $key = substr($key, 0, index($key, '@')); # strip domain
                $src = "unix group \"$key\"";
            } elsif ($type eq 'zone') {
                $src = "ip ".$fw->getZoneCIDR($key);
