@@ -24,6 +24,7 @@ NethServer ufdbGuard (squidGuard) configuration
 %build
 %{makedocs}
 perl createlinks
+mkdir -p root/var/log/ufdbguard
 
 %install
 rm -rf %{buildroot}
@@ -32,6 +33,7 @@ rm -rf %{buildroot}
 --dir /var/squidGuard/blacklists/custom/blacklist 'attr(0755,squid,squid)' \
 --dir /var/squidGuard/blacklists/custom/whitelist 'attr(0755,squid,squid)' \
 --dir /var/squidGuard/blacklists/custom/files 'attr(0755,squid,squid)' \
+--dir /var/log/ufdbguard 'attr(0700,ufdb,ufdb)' \
 --dir /var/squidGuard/blacklists/custom 'attr(0755,squid,squid)'
 
 echo "%doc COPYING" >> %{name}-%{version}-filelist
@@ -44,6 +46,7 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %files -f %{name}-%{version}-filelist
 %defattr(-,root,root)
 %dir %{_nseventsdir}/%{name}-update
+%dir /var/log/ufdbguard
 
 %changelog
 * Tue Jan 24 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.6.2-1
