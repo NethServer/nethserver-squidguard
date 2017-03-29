@@ -24,3 +24,21 @@ echo $view->selector('BlockAll','disabled');
 echo $view->selector('Categories', $view::SELECTOR_MULTIPLE);
 
 echo $view->buttonList($view::BUTTON_SUBMIT | $view::BUTTON_CANCEL | $view::BUTTON_HELP);
+
+$checkboxJson = json_encode((string) $view->checkBox('CheckAll','disabled'));  
+$checkboxId = $view->getUniqueId('CheckAll');
+$categoriesTarget = $view->getClientEventTarget('Categories');
+
+$view->includeJavascript(" 
+(function ( $ ) {
+    $(document).ready(function() {        
+        if ($('.$categoriesTarget ul li').length > 1){
+            $('.$categoriesTarget').before($checkboxJson);
+        }
+        $('.$categoriesTarget').css( 'padding-left', '.8em' );
+        $('#$checkboxId').click(function() {
+            $('.$categoriesTarget :checkbox').not(this).prop('checked', this.checked);
+        });
+    });
+})( jQuery );
+");
