@@ -1,6 +1,6 @@
-/var/ufdbguard/logs/ufdbgclient.log
-/var/ufdbguard/logs/ufdbguardd.log
-/var/ufdbguard/logs/ufdbsignal.log
+/var/log/ufdbguard/ufdbgclient.log
+/var/log/ufdbguard/ufdbguardd.log
+/var/log/ufdbguard/ufdbsignal.log
 \{
     compress
     notifempty
