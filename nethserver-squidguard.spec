@@ -1,6 +1,6 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
-Version: 1.6.2
+Version: 1.7.0
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -49,6 +49,11 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %dir /var/log/ufdbguard
 
 %changelog
+* Tue Apr 04 2017 Davide Principi <davide.principi@nethesis.it> - 1.7.0-1
+- Ufdbguard: Add checkbox to select all categories in the Filters tab - NethServer/dev#5257
+- Make ufdbguard logs readable by the Server Manager - NethServer/dev#5255
+- Web filter https default block page - NethServer/dev#5236
+
 * Tue Jan 24 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.6.2-1
 - Web filter not working with profiles configured for a group - Bug NethServer/dev#5205
 
