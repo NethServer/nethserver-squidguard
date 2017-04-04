@@ -31,13 +31,18 @@ $categoriesTarget = $view->getClientEventTarget('Categories');
 
 $view->includeJavascript(" 
 (function ( $ ) {
-    $(document).ready(function() {        
-        if ($('.$categoriesTarget ul li').length > 1){
-            $('.$categoriesTarget').before($checkboxJson);
-        }
+    $(document).ready(function() {
+        $('.$categoriesTarget').before($checkboxJson);
         $('.$categoriesTarget').css( 'padding-left', '.8em' );
         $('#$checkboxId').click(function() {
             $('.$categoriesTarget :checkbox').not(this).prop('checked', this.checked);
+        });
+        $('.$categoriesTarget').on('nethguiupdateview', function (e, value) {
+            if ($.isArray(value) && value.length < 2){
+                $('#$checkboxId').parent().hide();
+            } else {
+                $('#$checkboxId').parent().show();
+            }
         });
     });
 })( jQuery );
