@@ -29,12 +29,14 @@ mkdir -p root/var/log/ufdbguard
 %install
 rm -rf %{buildroot}
 (cd root; find . -depth -print | cpio -dump %{buildroot})
+mkdir %{buildroot}/var/squidGuard/blacklists/cache.execlists
 %{genfilelist} %{buildroot} > %{name}-%{version}-filelist  \
 --dir /var/squidGuard/blacklists/custom/blacklist 'attr(0755,squid,squid)' \
 --dir /var/squidGuard/blacklists/custom/whitelist 'attr(0755,squid,squid)' \
 --dir /var/squidGuard/blacklists/custom/files 'attr(0755,squid,squid)' \
 --dir /var/log/ufdbguard 'attr(0700,ufdb,ufdb)' \
---dir /var/squidGuard/blacklists/custom 'attr(0755,squid,squid)'
+--dir /var/squidGuard/blacklists/custom 'attr(0755,squid,squid)' \
+--dir /var/squidGuard/blacklists/cache.execlists 'attr(0755,ufdb,squid)'
 
 echo "%doc COPYING" >> %{name}-%{version}-filelist
 echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist

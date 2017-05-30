@@ -48,6 +48,7 @@ Troubleshooting
 Some commands: ::
 
   echo "http://bit.ly 10.10.0.1/ - - GET" | /usr/sbin/ufdbgclient -d
+  echo "http://bit.ly 10.10.0.1/ user@mydomain.com - GET" | /usr/sbin/ufdbgclient -d
   /etc/init.d/ufdb testconfig 2>&1 | grep FATAL
 
 Logfiles: ::

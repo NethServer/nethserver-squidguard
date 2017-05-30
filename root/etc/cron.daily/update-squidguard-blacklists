@@ -129,5 +129,13 @@ if [ $DEBUG -eq 1 ]; then
     echo "Total elapsed seconds: $delta"
 fi 
 
+
+ufdbcachedir="/var/squidGuard/blacklists/cache.execlists"
+if [ ! -d $ufdbcachedir ]; then
+    mkdir -p $ufdbcachedir
+    chown ufdb:squid $ufdbcachedir
+    chmod 755 $ufdbcachedir
+fi
+
 /usr/sbin/ufdbsignal -C "sighup ufdbguardd" &>/dev/null
 exit 0
