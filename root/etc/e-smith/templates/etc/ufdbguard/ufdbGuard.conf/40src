@@ -19,7 +19,7 @@
                $src = "user \"$key\"";
            } elsif ($type eq 'group') {
                $key = substr($key, 0, index($key, '@')); # strip domain
-               $src = "unix group \"$key\"";
+               $src = "execuserlist \"/usr/libexec/nethserver/ufdbguard-list-group-members $key\"";
            } elsif ($type eq 'zone') {
                $src = "ip ".$fw->getZoneCIDR($key);
            } elsif ($type eq 'role') {
