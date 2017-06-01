@@ -22,6 +22,22 @@ namespace NethServer\Module\ContentFilter\Filters;
 
 use Nethgui\System\PlatformInterface as Validate;
 
+class BlacklistsRecursiveFilterIterator extends \RecursiveFilterIterator {
+
+    public function accept() {
+        $file = (string) $this->current();
+        if ( !is_readable($file) ||
+             !is_dir($file) ||
+             strpos($file, '/var/squidGuard/blacklists/custom') === 0 ||
+             strpos($file, '/var/squidGuard/blacklists/cache.execlists') === 0) {
+
+            return false;
+        }
+        return true;
+    }
+
+}
+
 /**
  * Configure squidGuard behaviour
  *
@@ -69,13 +85,11 @@ class Modify extends \Nethgui\Controller\Table\Modify
     private function readCategories()
     {
         $this->parseIndex();
-        $dir_iterator = new \RecursiveDirectoryIterator("/var/squidGuard/blacklists");
-        $iterator = new \RecursiveIteratorIterator($dir_iterator, \RecursiveIteratorIterator::SELF_FIRST);
+        $dir_iterator = new \RecursiveDirectoryIterator("/var/squidGuard/blacklists", \FilesystemIterator::SKIP_DOTS );
+        $filter_iterator = new BlacklistsRecursiveFilterIterator($dir_iterator);
+        $iterator = new \RecursiveIteratorIterator($filter_iterator, \RecursiveIteratorIterator::SELF_FIRST);
 
         foreach ( $iterator as $key => $entry ) {
-            if (!is_dir($entry) || basename($entry) == '..' || basename($entry) == '.' || strpos($entry, '/var/squidGuard/blacklists/custom') !== false) {
-                continue;
-            }
             $this->categories[] = basename($entry);
         }
         $custom_categories = $this->getPlatform()->getDatabase('contentfilter')->getAll('category');
