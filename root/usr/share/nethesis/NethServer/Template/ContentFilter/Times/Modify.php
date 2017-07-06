@@ -2,7 +2,7 @@
 $view->includeFile('NethServer/Js/jquery.timepicker.min.js');
 $view->includeFile('NethServer/Css/jquery.timepicker.css');
 
-echo $view->textInput('name');
+echo $view->textInput('name', ($view->getModule()->getIdentifier() == 'update' ? $view::STATE_READONLY : 0));
 echo $view->textInput('Description');
 echo $view->selector('Days', $view::SELECTOR_MULTIPLE);
 echo $view->columns()

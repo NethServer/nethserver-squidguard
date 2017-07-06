@@ -1,6 +1,6 @@
 <?php
 
-echo $view->textInput('name');
+echo $view->textInput('name', ($view->getModule()->getIdentifier() == 'update' ? $view::STATE_READONLY : 0));
 echo $view->textInput('Description');
 echo $view->selector('Src', $view::SELECTOR_DROPDOWN);
 echo $view->selector('Filter');
