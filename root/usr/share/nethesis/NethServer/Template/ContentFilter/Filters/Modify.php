@@ -2,7 +2,7 @@
 
 /* @var $view Nethgui\Renderer\Xhtml */
 
-echo $view->textInput('name');
+echo $view->textInput('name', ($view->getModule()->getIdentifier() == 'update' ? $view::STATE_READONLY : 0));
 echo $view->textInput('Description');
 
 echo $view->checkBox('BlockIpAccess', 'enabled')
