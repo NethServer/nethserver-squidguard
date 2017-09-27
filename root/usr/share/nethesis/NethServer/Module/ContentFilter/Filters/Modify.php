@@ -119,7 +119,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
 
         $this->setSchema($parameterSchema);
         $this->setDefaultValue('BlockAll', 'disabled');
-        $this->setDefaultValue('BlockIpAccess', 'enabled');
+        $this->setDefaultValue('BlockIpAccess', 'disabled');
 
         parent::initialize();
     }
