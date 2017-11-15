@@ -111,6 +111,9 @@ class Modify extends \Nethgui\Controller\Table\Modify
     private function keyExists($key)
     {
         $db = '';
+        if (strpos($key, ';') === false) { //this is a creation of a new profile
+            return $this->getPlatform()->getDatabase('contentfilter')->getType($key) != '';
+        }
         $tmp = explode(';', $key);
         if ($tmp[0] == 'user') {
             return in_array($tmp[1], array_keys($this->users));
