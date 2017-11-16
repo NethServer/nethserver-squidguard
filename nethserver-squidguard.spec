@@ -1,6 +1,6 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
-Version: 1.7.3
+Version: 1.7.4
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -51,6 +51,9 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %dir /var/log/ufdbguard
 
 %changelog
+* Thu Nov 16 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.7.4-1
+- Web filter: bad profile and filter validation - Bug NethServer/dev#5384
+
 * Fri Oct 06 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.7.3-1
 - UI improvements: disable BlockIpAccess and BlockBuiltinRules by default
 
