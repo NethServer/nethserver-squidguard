@@ -1,4 +1,4 @@
-Unknown=
+Unknown=Desconocido
 Title=403 Prohibido
 Msg=El acceso a este sitio está bloqueado.
 Tabclientname=Nombre del cliente
