@@ -89,7 +89,8 @@ sub printHTML($$$$);
 # (Currently: "en", "fr", "de", "es", "nl", "no")
 @supported   = (
                 "en (English), ",
-                "it (Italiano)."
+                "it (Italiano), ",
+                "es (Español)."
                );
 ########################################################################################
 #
