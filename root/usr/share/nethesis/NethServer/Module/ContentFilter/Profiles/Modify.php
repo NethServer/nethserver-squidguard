@@ -91,8 +91,6 @@ class Modify extends \Nethgui\Controller\Table\Modify
             'Actions',
         );
 
-        $this->prepareVars();
-
         $parameterSchema = array(
             array('name', Validate::USERNAME, \Nethgui\Controller\Table\Modify::KEY),
             array('Src', Validate::ANYTHING,  \Nethgui\Controller\Table\Modify::FIELD),
@@ -112,6 +110,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
 
     public function bind(\Nethgui\Controller\RequestInterface $request)
     {
+        $this->prepareVars();
         parent::bind($request);
         if($request->isMutation() && $this->parameters['When'] === 'always') {
             $this->parameters['Time'] = '';
