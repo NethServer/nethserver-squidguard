@@ -13,6 +13,7 @@ $L['HostGroups_label'] = 'Host groups';
 $L['Zones_label'] = 'Zones';
 $L['Time_label'] = 'When';
 $L['always_label'] = 'Always';
+$L['When_rules_label'] = 'At specific times';
 $L['any_label'] = 'Any host';
 $L['host_label'] = 'Host';
 $L['host-group_label'] = 'Host group';

@@ -97,7 +97,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
             array('name', Validate::USERNAME, \Nethgui\Controller\Table\Modify::KEY),
             array('Src', Validate::ANYTHING,  \Nethgui\Controller\Table\Modify::FIELD),
             array('Filter', Validate::ANYTHING,  \Nethgui\Controller\Table\Modify::FIELD),
-            array('Time', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
+            array('Time', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD, 'Time', ','),
             array('Description', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
         );
 
@@ -106,6 +106,18 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $this->setDefaultValue('Filter','filter;default');
 
         parent::initialize();
+
+        $this->declareParameter('When', $this->createValidator()->memberOf('rules', 'always'));
+    }
+
+    public function bind(\Nethgui\Controller\RequestInterface $request)
+    {
+        parent::bind($request);
+        if($request->isMutation() && $this->parameters['When'] === 'always') {
+            $this->parameters['Time'] = '';
+        } else {
+            $this->parameters['When'] = count($this->parameters['Time']) ? 'rules' : 'always';
+        }
     }
 
     private function keyExists($key)
@@ -151,8 +163,14 @@ class Modify extends \Nethgui\Controller\Table\Modify
         if ($this->getIdentifier() && $this->parameters['Filter'] && !$this->keyExists($this->parameters['Filter'])) {
             $report->addValidationErrorMessage($this, 'Filter', 'key_doesnt_exists_message');
         }
-        if ($this->parameters['Time'] && !$this->keyExists($this->parameters['Time'])) {
-            $report->addValidationErrorMessage($this, 'Time', 'key_doesnt_exists_message');
+        if (isset($this->parameters['Time'])) {
+            foreach($this->parameters['Time'] as $timeKey) {
+                $timeKey = substr($timeKey, 5); // trim leading "time;" string
+                if( ! isset($this->times[$timeKey]) ) {
+                    $report->addValidationErrorMessage($this, 'Time', 'key_doesnt_exists_message');
+                    break;
+                }
+            }
         }
         parent::validate($report);
     }
@@ -176,10 +194,8 @@ class Modify extends \Nethgui\Controller\Table\Modify
         }
 
         $view['FilterDatasource'] = $this->arrayToDatasource($this->filters,'filter');
-        $tmp = $this->arrayToDatasource($this->times,'time');
-        array_unshift($tmp,array('',$view->translate('always_label')));
-        $view['TimeDatasource'] = $tmp;
 
+        $view['TimeDatasource'] = $this->arrayToDatasource($this->times,'time');
 
         $tmp = array();
         $u = $view->translate('Users_label');

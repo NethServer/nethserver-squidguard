@@ -85,10 +85,10 @@ class Profiles extends \Nethgui\Controller\TableController
 
     public function prepareViewForColumnTime(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
     {
-        if (!isset($values['Time'])) {
+        if (!isset($values['Time']) || $values['Time'] == '') {
             return $view->translate('always_label');
         }
-        return $this->formatObject($view, $values['Time'],'always_label');
+        return str_replace('time;', ' ', $values['Time']);
     }
 
     public function prepareViewForColumnActions(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
