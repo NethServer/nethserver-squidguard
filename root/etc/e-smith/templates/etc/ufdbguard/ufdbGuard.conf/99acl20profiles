@@ -8,7 +8,7 @@
         my $time = $_->prop('Time') || '';
         if ($time ne '') {
             $time =~ s/time;//g;
-            $time = "within $time";
+            $time = 'within "t_' . $_->key . '"';
         }
         my $filter = $db->get($filter_key);
         my $blockall = $filter->prop('BlockAll') || 'disabled';

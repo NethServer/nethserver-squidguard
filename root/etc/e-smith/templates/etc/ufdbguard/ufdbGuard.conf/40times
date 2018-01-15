@@ -1,14 +1,25 @@
 {
     use esmith::ConfigDB;
     my $db = esmith::ConfigDB->open_ro('contentfilter');
-    foreach ($db->get_all_by_prop(type => 'time')) {
-        my $days = $_->prop('Days') || '';
-        my $start = $_->prop('StartTime') || '*';
-        my $end = $_->prop('EndTime') || '*';
-        $days =~ s/,//g;
-        $OUT .= "time ".$_->key." {\n";
-        $OUT .= "    weekly $days $start-$end\n";
+    foreach my $profile ($db->get_all_by_prop(type => 'profile')) {
+        if( ! $profile->prop('Time') ) {
+            next;
+        }
+        $OUT .= "time \"t_" . $profile->key . "\" {\n";
+
+        # Parse the Time prop and extract the time record key list:
+        my @timeKeys = map { s/time;//g; $db->get($_) } split(/,/, $profile->prop('Time'));
+
+        foreach my $time ( @timeKeys ) {
+            if( ! $time ) {
+                next;
+            }
+            my $days = $time->prop('Days') || '';
+            my $start = $time->prop('StartTime') || '*';
+            my $end = $time->prop('EndTime') || '*';
+            $days =~ s/,//g;
+            $OUT .= "    weekly $days $start-$end\n";
+        }
         $OUT .= "}\n";
-        
     }
 }
