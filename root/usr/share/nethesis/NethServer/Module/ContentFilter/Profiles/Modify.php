@@ -243,5 +243,6 @@ class Modify extends \Nethgui\Controller\Table\Modify
     protected function onParametersSaved($changes)
     {
         $this->getPlatform()->signalEvent('nethserver-squidguard-save &');
+        $this->getParent()->getAdapter()->flush();
     }
 }

@@ -33,6 +33,7 @@ class Profiles extends \Nethgui\Controller\TableController
     {
         $columns = array(
             'Key',
+            'index',
             'Src',
             'Filter',
             'Time',
@@ -45,8 +46,8 @@ class Profiles extends \Nethgui\Controller\TableController
         );
 
         $this
-            ->setTableAdapter($this->getPlatform()->getTableAdapter('contentfilter', 'profile'))
-            ->setColumns($columns)            
+            ->setTableAdapter(new Profiles\ProfileAdapter($this->getPlatform()))
+            ->setColumns($columns)
             ->addRowAction(new \NethServer\Module\ContentFilter\Profiles\Modify('update')) 
             ->addRowAction(new \NethServer\Module\ContentFilter\Profiles\Modify('delete'))
             ->addTableAction(new \NethServer\Module\ContentFilter\Profiles\Modify('create')) 

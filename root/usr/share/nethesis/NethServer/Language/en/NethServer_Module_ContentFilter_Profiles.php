@@ -34,3 +34,4 @@ $L['IpRanges_label'] = 'IP ranges';
 $L['update_header'] = 'Synchronize users and groups';
 $L['update_confirmation_label'] = 'Proceed with proxy restart?';
 $L['Update_label'] = 'Synchronize users and groups';
+$L['index_label'] = 'Priority';
