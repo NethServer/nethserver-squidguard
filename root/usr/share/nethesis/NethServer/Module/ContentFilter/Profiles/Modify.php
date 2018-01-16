@@ -95,6 +95,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
             array('name', Validate::USERNAME, \Nethgui\Controller\Table\Modify::KEY),
             array('Src', Validate::ANYTHING,  \Nethgui\Controller\Table\Modify::FIELD),
             array('Filter', Validate::ANYTHING,  \Nethgui\Controller\Table\Modify::FIELD),
+            array('FilterElse', Validate::ANYTHING,  \Nethgui\Controller\Table\Modify::FIELD),
             array('Time', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD, 'Time', ','),
             array('Description', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
         );
@@ -102,6 +103,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $this->setSchema($parameterSchema);
         $this->setDefaultValue('Time','');
         $this->setDefaultValue('Filter','filter;default');
+        $this->setDefaultValue('FilterElse','');
 
         parent::initialize();
 
@@ -162,6 +164,9 @@ class Modify extends \Nethgui\Controller\Table\Modify
         if ($this->getIdentifier() && $this->parameters['Filter'] && !$this->keyExists($this->parameters['Filter'])) {
             $report->addValidationErrorMessage($this, 'Filter', 'key_doesnt_exists_message');
         }
+        if ($this->getIdentifier() && $this->parameters['FilterElse'] && !$this->keyExists($this->parameters['FilterElse'])) {
+            $report->addValidationErrorMessage($this, 'FilterElse', 'key_doesnt_exists_message');
+        }
         if (isset($this->parameters['Time'])) {
             foreach($this->parameters['Time'] as $timeKey) {
                 $timeKey = substr($timeKey, 5); // trim leading "time;" string
@@ -193,6 +198,8 @@ class Modify extends \Nethgui\Controller\Table\Modify
         }
 
         $view['FilterDatasource'] = $this->arrayToDatasource($this->filters,'filter');
+
+        $view['FilterElseDatasource'] = array_merge(array(array('', $view->translate('filter_none_label'))), $this->arrayToDatasource($this->filters,'filter'));
 
         $view['TimeDatasource'] = $this->arrayToDatasource($this->times,'time');
 

@@ -8,6 +8,7 @@ echo $view->fieldset()->setAttribute('template', $T('Time_label'))
     ->insert($view->radioButton('When', 'always')->setAttribute('label', $T('always_label')))
     ->insert($view->fieldsetSwitch('When', 'rules', $view::FIELDSETSWITCH_EXPANDABLE)
         ->insert($view->selector('Time', $view::SELECTOR_MULTIPLE | $view::LABEL_NONE))
+        ->insert($view->selector('FilterElse', $view::SELECTOR_DROPDOWN))
     )
 ;
 
