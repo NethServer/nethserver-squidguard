@@ -78,10 +78,13 @@ class Profiles extends \Nethgui\Controller\TableController
     
     public function prepareViewForColumnFilter(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
     {
+        $pl = strlen('filter;'); // strip pl chars to obtain the filter key value
         if (!isset($values['Filter'])) {
             return $view->translate('any_label');
+        } elseif($values['FilterElse'] && $values['Time']) {
+            return $view->translate('FilterColumnWithElse_label', array(substr($values['Filter'], $pl), substr($values['FilterElse'], $pl)));
         }
-        return $this->formatObject($view, $values['Filter']);
+        return $view->translate('FilterColumn_label', array(substr($values['Filter'], $pl)));
     }
 
     public function prepareViewForColumnTime(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
