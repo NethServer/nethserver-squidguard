@@ -5,6 +5,7 @@ $L['Key_label'] = 'Name';
 $L['name_label'] = 'Name';
 $L['Src_label'] = 'Who';
 $L['Filter_label'] = 'What';
+$L['Filter_label'] = 'What (filter)';
 $L['Description_label'] = 'Description';
 $L['Users_label'] = 'Users';
 $L['UserGroups_label'] = 'User groups';
