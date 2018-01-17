@@ -91,21 +91,34 @@ class Modify extends \Nethgui\Controller\Table\Modify
             'Actions',
         );
 
-        $this->prepareVars();
-
         $parameterSchema = array(
             array('name', Validate::USERNAME, \Nethgui\Controller\Table\Modify::KEY),
             array('Src', Validate::ANYTHING,  \Nethgui\Controller\Table\Modify::FIELD),
             array('Filter', Validate::ANYTHING,  \Nethgui\Controller\Table\Modify::FIELD),
-            array('Time', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
+            array('FilterElse', Validate::ANYTHING,  \Nethgui\Controller\Table\Modify::FIELD),
+            array('Time', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD, 'Time', ','),
             array('Description', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
         );
 
         $this->setSchema($parameterSchema);
         $this->setDefaultValue('Time','');
         $this->setDefaultValue('Filter','filter;default');
+        $this->setDefaultValue('FilterElse','');
 
         parent::initialize();
+
+        $this->declareParameter('When', $this->createValidator()->memberOf('rules', 'always'));
+    }
+
+    public function bind(\Nethgui\Controller\RequestInterface $request)
+    {
+        $this->prepareVars();
+        parent::bind($request);
+        if($request->isMutation() && $this->parameters['When'] === 'always') {
+            $this->parameters['Time'] = '';
+        } else {
+            $this->parameters['When'] = count($this->parameters['Time']) ? 'rules' : 'always';
+        }
     }
 
     private function keyExists($key)
@@ -151,8 +164,17 @@ class Modify extends \Nethgui\Controller\Table\Modify
         if ($this->getIdentifier() && $this->parameters['Filter'] && !$this->keyExists($this->parameters['Filter'])) {
             $report->addValidationErrorMessage($this, 'Filter', 'key_doesnt_exists_message');
         }
-        if ($this->parameters['Time'] && !$this->keyExists($this->parameters['Time'])) {
-            $report->addValidationErrorMessage($this, 'Time', 'key_doesnt_exists_message');
+        if ($this->getIdentifier() && $this->parameters['FilterElse'] && !$this->keyExists($this->parameters['FilterElse'])) {
+            $report->addValidationErrorMessage($this, 'FilterElse', 'key_doesnt_exists_message');
+        }
+        if (isset($this->parameters['Time'])) {
+            foreach($this->parameters['Time'] as $timeKey) {
+                $timeKey = substr($timeKey, 5); // trim leading "time;" string
+                if( ! isset($this->times[$timeKey]) ) {
+                    $report->addValidationErrorMessage($this, 'Time', 'key_doesnt_exists_message');
+                    break;
+                }
+            }
         }
         parent::validate($report);
     }
@@ -176,10 +198,12 @@ class Modify extends \Nethgui\Controller\Table\Modify
         }
 
         $view['FilterDatasource'] = $this->arrayToDatasource($this->filters,'filter');
-        $tmp = $this->arrayToDatasource($this->times,'time');
-        array_unshift($tmp,array('',$view->translate('always_label')));
-        $view['TimeDatasource'] = $tmp;
 
+        $tmpFilters = $this->filters;
+        unset($tmpFilters['default']);
+        $view['FilterElseDatasource'] = array_merge(array(array('', 'default')), $this->arrayToDatasource($tmpFilters,'filter'));
+
+        $view['TimeDatasource'] = $this->arrayToDatasource($this->times,'time');
 
         $tmp = array();
         $u = $view->translate('Users_label');
@@ -228,5 +252,6 @@ class Modify extends \Nethgui\Controller\Table\Modify
     protected function onParametersSaved($changes)
     {
         $this->getPlatform()->signalEvent('nethserver-squidguard-save &');
+        $this->getParent()->getAdapter()->flush();
     }
 }

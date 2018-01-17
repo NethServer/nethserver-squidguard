@@ -1,18 +1,14 @@
 {
     use esmith::ConfigDB;
     my $db = esmith::ConfigDB->open_ro('contentfilter');
-    foreach ($db->get_all_by_prop(type => 'profile')) {
-        my $src = $_->prop('Src') || next;
-        my $filter_key = $_->prop('Filter') || next;
-        $filter_key =~ s/filter;//g;
-        my $time = $_->prop('Time') || '';
-        if ($time ne '') {
-            $time =~ s/time;//g;
-            $time = "within $time";
-        }
+    
+    sub render_acl_body
+    {
+        my $filter_key = shift;
         my $filter = $db->get($filter_key);
         my $blockall = $filter->prop('BlockAll') || 'disabled';
         my $op = '!';
+        my $out = '';
         if ($blockall eq 'enabled') {
             $op = '';
         }
@@ -22,37 +18,60 @@
         my $blockfile = $filter->prop('BlockFileTypes') || 'disabled';
         my $blockbuiltin = $filter->prop('BlockBuiltinRules') || 'disabled';
 
-        $OUT .= "    # Profile: ".$_->key."\n";
-        $OUT .= "    src_".$_->key." $time {\n";
-        $OUT .= "        pass !security";
-
         if ($whitelist eq 'enabled') {
-            $OUT .= " nh_whitelist ";
+            $out .= " nh_whitelist ";
         }
         if ($blacklist eq 'enabled') {
-            $OUT .= " !nh_blacklist ";
+            $out .= " !nh_blacklist ";
         }
         if ($blockipaccess eq 'enabled') { 
-            $OUT .= " !in-addr ";
+            $out .= " !in-addr ";
         }
         if ($blockfile eq 'enabled') {
-            $OUT .= " !files ";
+            $out .= " !files ";
         }
         if ($blockbuiltin eq 'enabled') {
-            $OUT .= " !builtin ";
+            $out .= " !builtin ";
         }
 
         foreach my $c (split(/,/,$filter->prop('Categories') || '')) {
             if (exists($categories{$c})) { #do not add non-existing categories
-                $OUT .= " $op\"$c\" ";
+                $out .= " $op\"$c\" ";
             }
         }
         if ($blockall eq 'enabled') {
-           $OUT .= " none\n";
+           $out .= " none\n";
         } else {
-           $OUT .= " all\n";
+           $out .= " all\n";
         }
-        $OUT .= "    }\n";
+        return $out;
+    }
+    
+    foreach ($db->get_all_by_prop(type => 'profile')) {
+        my $src = $_->prop('Src') || next;
+        my $filter_key = $_->prop('Filter') || next;
+        $filter_key =~ s/filter;//g;
+        my $time = $_->prop('Time') || '';
+        if ($time ne '') {
+            $time =~ s/time;//g;
+            $time = 'within "t_' . $_->key . '"';
+        }
+        $OUT .= "    # Profile: ".$_->key."\n";
+        $OUT .= "    src_".$_->key." $time {\n";
+        $OUT .= "        pass !security";
+        $OUT .= render_acl_body($filter_key);
+        $OUT .= "    }";
+        
+        my $filterElse_key = $_->prop('FilterElse') || '';
+        $filterElse_key =~ s/filter;//g;
+        if($time && $filterElse_key) {
+            $OUT .= " else {\n";
+            $OUT .= "        pass !security";
+            $OUT .= render_acl_body($filterElse_key);
+            $OUT .= "    }\n";
+        } else {
+            $OUT .= "\n";
+        }
     }
  
 }

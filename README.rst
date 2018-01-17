@@ -184,6 +184,7 @@ Profiles
 Properties:
 
 * *Filter*: a filter object
+* *FilterElse: an optional filter object, applied when none of the referenced Time rules apply
 * *Src*: it can be an object of type user, user group, host, host group, zone or role. Otherwise, if it is a string, the system will
   assume the profile is associated with an user from Active Directory; the system must be joined to a domain
 * *Time*: a CSV list time object references (optional)
@@ -195,6 +196,7 @@ Profile example: ::
  myprofile=profile
     Description=My profile
     Filter=filter;badboys
+    FilterElse=filter;enjoy
     Src=host;demo
     Time=time;worktime-am,time;worktime-pm
 

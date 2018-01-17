@@ -46,7 +46,7 @@ class Profiles extends \Nethgui\Controller\TableController
 
         $this
             ->setTableAdapter($this->getPlatform()->getTableAdapter('contentfilter', 'profile'))
-            ->setColumns($columns)            
+            ->setColumns($columns)
             ->addRowAction(new \NethServer\Module\ContentFilter\Profiles\Modify('update')) 
             ->addRowAction(new \NethServer\Module\ContentFilter\Profiles\Modify('delete'))
             ->addTableAction(new \NethServer\Module\ContentFilter\Profiles\Modify('create')) 
@@ -77,18 +77,21 @@ class Profiles extends \Nethgui\Controller\TableController
     
     public function prepareViewForColumnFilter(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
     {
+        $pl = strlen('filter;'); // strip pl chars to obtain the filter key value
         if (!isset($values['Filter'])) {
             return $view->translate('any_label');
+        } elseif($values['FilterElse'] && $values['Time']) {
+            return $view->translate('FilterColumnWithElse_label', array(substr($values['Filter'], $pl), substr($values['FilterElse'], $pl)));
         }
-        return $this->formatObject($view, $values['Filter']);
+        return $view->translate('FilterColumn_label', array(substr($values['Filter'], $pl)));
     }
 
     public function prepareViewForColumnTime(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
     {
-        if (!isset($values['Time'])) {
+        if (!isset($values['Time']) || $values['Time'] == '') {
             return $view->translate('always_label');
         }
-        return $this->formatObject($view, $values['Time'],'always_label');
+        return str_replace('time;', ' ', $values['Time']);
     }
 
     public function prepareViewForColumnActions(\Nethgui\Controller\Table\Read $action, \Nethgui\View\ViewInterface $view, $key, $values, &$rowMetadata)
