@@ -199,7 +199,9 @@ class Modify extends \Nethgui\Controller\Table\Modify
 
         $view['FilterDatasource'] = $this->arrayToDatasource($this->filters,'filter');
 
-        $view['FilterElseDatasource'] = array_merge(array(array('', $view->translate('filter_none_label'))), $this->arrayToDatasource($this->filters,'filter'));
+        $tmpFilters = $this->filters;
+        unset($tmpFilters['default']);
+        $view['FilterElseDatasource'] = array_merge(array(array('', 'default')), $this->arrayToDatasource($tmpFilters,'filter'));
 
         $view['TimeDatasource'] = $this->arrayToDatasource($this->times,'time');
 
