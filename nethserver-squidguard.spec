@@ -1,6 +1,6 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
-Version: 1.7.4
+Version: 1.8.0
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -51,6 +51,10 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %dir /var/log/ufdbguard
 
 %changelog
+* Wed Jan 24 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.8.0-1
+- Content filter does not honor multiple timeframes - Bug NethServer/dev#5408
+- UI: display a warning if proxy is disabled
+
 * Thu Nov 16 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.7.4-1
 - Web filter: bad profile and filter validation - Bug NethServer/dev#5384
 
