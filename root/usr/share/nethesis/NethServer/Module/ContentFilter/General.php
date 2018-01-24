@@ -27,7 +27,7 @@ use Nethgui\System\PlatformInterface as Validate;
  *
  * @author Giacomo Sanchietti
  */
-class General extends \Nethgui\Controller\AbstractController
+class General extends \Nethgui\Controller\AbstractController implements \Nethgui\Component\DependencyConsumer
 {
 
     public $sortId = 10;
@@ -132,6 +132,10 @@ class General extends \Nethgui\Controller\AbstractController
     {
         parent::prepareView($view);
 
+        $squidStatus = $this->getPlatform()->getDatabase('configuration')->getProp('squid', 'status');
+        if ($squidStatus == 'disabled') {
+            $this->notifications->warning($view->translate('squid_disabled_label'));
+        }
         $view['statusDatasource'] = array_map(function($fmt) use ($view) {
                                 return array($fmt, $view->translate($fmt . '_label'));
         }, array('enabled','disabled'));
@@ -144,5 +148,17 @@ class General extends \Nethgui\Controller\AbstractController
     protected function onParametersSaved($changes)
     {
         $this->getPlatform()->signalEvent('nethserver-squidguard-save &');
+    }
+
+    public function setUserNotifications(\Nethgui\Model\UserNotifications $n)
+    {
+        $this->notifications = $n;
+        return $this;
+    }
+    public function getDependencySetters()
+    {
+        return array(
+            'UserNotifications' => array($this, 'setUserNotifications'),
+        );
     }
 }
