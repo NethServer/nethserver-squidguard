@@ -65,7 +65,7 @@ The key ``squidguard`` contains all settings. Properties are:
 * *DomainWhitelist*: comma separated domain list, this domains are always allowed
 * *Expressions*: if enabled, allow regular expression on blacklists categories. Can be ``enabled`` or ``disabled``, default is ``disabled``
 * *IdleChildren*: minimum number of idle processes. Default is 5
-* *Lists*: comma separated list of blacklist names. Possible values are: ``shalla``, ``toulouse``, ``urlblacklist`` and ``custom``.
+* *Lists*: comma separated list of blacklist names. Possible values are: ``shalla``, ``toulouse`` and ``custom``.
   If set to ``custom``, make sure ``CustomListURL`` is set.
 * *MaxChildren*: maximum number of processes. Default is 20
 * *RedirectUrl*: custom URL for block page. See :ref:`squidguard-blockpage-section`

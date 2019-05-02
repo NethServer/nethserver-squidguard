@@ -2,7 +2,6 @@
 
 echo $view->fieldset()->setAttribute('template', $T('Lists_selector'))
     ->insert($view->radioButton('Lists', 'shalla'))
-    ->insert($view->radioButton('Lists', 'urlblacklist'))
     ->insert($view->radioButton('Lists', 'toulouse'))
     ->insert($view->fieldsetSwitch('Lists', 'custom')
         ->setAttribute('uncheckedValue', '')
