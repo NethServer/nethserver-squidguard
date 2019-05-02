@@ -96,11 +96,6 @@ Enable global whitelist
 Block file extensions
     Block all file extensions defined in the General tab.
 
-Block porn sites by regular expressions on URL
-    Enable the set of regular expression rules provided by the
-    ``custom/builtin`` database.  Each rule is matched against the
-    requested URL.
-
 Mode
     The web filter can work into two different ways:
 
