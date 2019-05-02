@@ -16,7 +16,6 @@
         my $whitelist = $filter->prop('WhiteList') || 'disabled';
         my $blacklist = $filter->prop('BlackList') || 'disabled';
         my $blockfile = $filter->prop('BlockFileTypes') || 'disabled';
-        my $blockbuiltin = $filter->prop('BlockBuiltinRules') || 'disabled';
 
         if ($whitelist eq 'enabled') {
             $out .= " nh_whitelist ";
@@ -29,9 +28,6 @@
         }
         if ($blockfile eq 'enabled') {
             $out .= " !files ";
-        }
-        if ($blockbuiltin eq 'enabled') {
-            $out .= " !builtin ";
         }
 
         foreach my $c (split(/,/,$filter->prop('Categories') || '')) {
