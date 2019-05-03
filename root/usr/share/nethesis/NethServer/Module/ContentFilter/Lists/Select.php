@@ -29,7 +29,7 @@ use Nethgui\System\PlatformInterface as Validate;
  */
 class Select extends \Nethgui\Controller\AbstractController
 {
-    private $lists = array('toulouse','shalla','urlblacklist','custom');
+    private $lists = array('toulouse','shalla','custom');
 
     // Declare all parameters
     public function initialize()

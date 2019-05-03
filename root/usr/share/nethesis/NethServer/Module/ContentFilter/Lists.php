@@ -32,7 +32,7 @@ class Lists extends \Nethgui\Controller\AbstractController
 
     public $sortId = 70;
 
-    private $lists = array('toulouse','shalla','urlblacklist','custom');
+    private $lists = array('toulouse','shalla','custom');
 
     // Declare all parameters
     public function initialize()
