@@ -37,7 +37,7 @@
         if (defined($value->{'domains'})) {
             $OUT .= "      domainlist ".$value->{'domains'}."\n";
         }
-        if (defined($value->{'expressions'}) && ( $exprstatus eq 'enabled' || $key eq 'files' || $key eq 'builtin')) {
+        if (defined($value->{'expressions'}) && ( $exprstatus eq 'enabled' || $key eq 'files')) {
             $OUT .= "      expressionlist ".$value->{'expressions'}."\n";
         }
         $OUT.="}\n";
