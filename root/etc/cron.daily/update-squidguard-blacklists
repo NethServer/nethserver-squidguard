@@ -22,28 +22,13 @@ if [ -d $BLPATH ] ;then
 fi
 mkdir $BLPATH
 
-
-function merge {
-    src=$1
-    dst=$BLPATH
-    cd $src
-    # create all categories dir
-    for d in `find . -type d`
-    do
-        if [ $DEBUG -eq 1 ]; then echo "Creeating dir $BLPATH/$d"; fi
-        mkdir -p "$BLPATH/$d"
-    done
-    for f in `find . -type f`
-    do
-        if [ -f "$BLPATH/$f" ]; then # merge
-            if [ $DEBUG -eq 1 ]; then echo "merge $f -> $BLPATH/$f"; fi
-            cat $f >> "$BLPATH/$f"
-        else # copy
-            if [ $DEBUG -eq 1 ]; then echo "copy $f -> $BLPATH/$f"; fi
-            cp $f "$BLPATH/$f"
-        fi
-    done
-    rm -rf $src
+function restore {
+    if [ $DEBUG -eq 1 ]; then
+        echo "Restoring backup: $BLPATH.old -> $BLPATH"
+    fi
+    rm -rf $BLPATH
+    mv $BLPATH.old $BLPATH
+    exit
 }
 
 function download_extract {
@@ -53,20 +38,10 @@ function download_extract {
         verbose="--quiet"
     fi
     wget $verbose -O $BLFILE $1
-    if [ -f $BLFILE ]; then
-        if [ $DEBUG -eq 1 ]; then
-            /bin/tar xvzf $BLFILE -C $BLPATH --exclude=*.diff --exclude=README
-        else
-            /bin/tar xzf $BLFILE -C $BLPATH --exclude=*.diff --exclude=README
-        fi
-        if [ -d "$BLPATH/blacklists" ]; then
-            merge "$BLPATH/blacklists"
-        elif [ -d "$BLPATH/BL" ]; then
-            merge "$BLPATH/BL"
-        else
-            echo "ERROR: unknown directory format for $1"
-        fi
-
+    if [ $? -gt 0 ] && [ ! -s $BLFILE ] ; then
+        restore
+    else
+        /bin/tar xzf $BLFILE -C $BLPATH --exclude=*.diff --exclude=README --strip-components=1
         rm -f $BLFILE 2> /dev/null
     fi
 }
@@ -75,10 +50,8 @@ if [ $DEBUG -eq 1 ]; then
     echo "Downloading..."
     t1=`date +%s`
 fi
-for url in `/bin/grep -v -e '^#' -e "^$" /etc/squid/blacklists`;
-do
-    download_extract $url
-done
+url=$(/bin/grep -v -e '^#' -e "^$" /etc/squid/blacklists)
+download_extract $url
 if [ $DEBUG -eq 1 ]; then 
     delta=$((`date +%s` - $t1))
     echo "End downloading. Elapsed seconds: $delta"
@@ -87,21 +60,10 @@ fi
 cd $curdir
 
 if [ $DEBUG -eq 1 ]; then 
-    echo -n "Removing duplicates..."
-    t1=`date +%s`
-fi
-# remove duplicates
-for f in `find $BLPATH -type f -not -iname global_usage`
-do
-    /bin/sort $f | /usr/bin/uniq > $f.1
-    mv $f.1 $f
-done
-if [ $DEBUG -eq 1 ]; then 
     delta=$((`date +%s` - $t1))
     echo "done. Elapsed seconds: $delta"
 fi
 
- 
 if [ $DEBUG -eq 1 ]; then 
     echo -n "Rebuild db..."
     t1=`date +%s`
