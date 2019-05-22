@@ -42,6 +42,7 @@ function download_extract {
         restore
     else
         /bin/tar xzf $BLFILE -C $BLPATH --exclude=*.diff --exclude=README --strip-components=1
+        find $BLPATH -type d -exec chmod a+r '{}' \;
         rm -f $BLFILE 2> /dev/null
     fi
 }
