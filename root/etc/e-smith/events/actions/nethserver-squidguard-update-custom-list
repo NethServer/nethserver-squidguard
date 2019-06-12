@@ -62,6 +62,5 @@ exit 0 if ($event eq 'cron');
 
 system("/usr/sbin/ufdbConvertDB /var/squidGuard/blacklists/custom/ >/dev/null 2>&1");
 system("chown -R squid:squid /var/squidGuard/blacklists/custom/");
-system('/usr/sbin/ufdbsignal -C "sighup ufdbguardd" >/dev/null 2>&1');
 
 exit 0
