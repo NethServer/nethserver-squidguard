@@ -52,13 +52,7 @@ system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/whitelis
 system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/files/expressions");
 system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/blacklist/domains");
 system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/blacklist/urls");
-
-
-system("chown -R squid:squid /var/squidGuard/blacklists/custom/");
 system("/sbin/e-smith/expand-template /etc/ufdbguard/ufdbGuard.conf");
-
-# If executed from cron, do not apply configuration
-exit 0 if ($event eq 'cron');
 
 system("/usr/sbin/ufdbConvertDB /var/squidGuard/blacklists/custom/ >/dev/null 2>&1");
 system("chown -R squid:squid /var/squidGuard/blacklists/custom/");
