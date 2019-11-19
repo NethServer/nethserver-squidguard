@@ -1,6 +1,6 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
-Version: 1.9.1
+Version: 1.9.2
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -51,6 +51,9 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %dir /var/log/ufdbguard
 
 %changelog
+* Tue Nov 19 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.9.2-1
+- Web filter: invalid selected category - Bug NethServer/dev#5926
+
 * Fri Jun 14 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.9.1-1
 - ufdbguard stops after configuration save - Bug NethServer/dev#5777
 
