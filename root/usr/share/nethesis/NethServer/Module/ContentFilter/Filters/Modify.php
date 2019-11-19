@@ -22,22 +22,6 @@ namespace NethServer\Module\ContentFilter\Filters;
 
 use Nethgui\System\PlatformInterface as Validate;
 
-class BlacklistsRecursiveFilterIterator extends \RecursiveFilterIterator {
-
-    public function accept() {
-        $file = (string) $this->current();
-        if ( !is_readable($file) ||
-             !is_dir($file) ||
-             strpos($file, '/var/squidGuard/blacklists/custom') === 0 ||
-             strpos($file, '/var/squidGuard/blacklists/cache.execlists') === 0) {
-
-            return false;
-        }
-        return true;
-    }
-
-}
-
 /**
  * Configure squidGuard behaviour
  *
@@ -67,12 +51,10 @@ class Modify extends \Nethgui\Controller\Table\Modify
                     if ($fields) {
                         if ($fields[0] == "NAME") {
                             $last = trim($fields[1]);
-                            $this->index[$last] = array();
-                        } else {
-                            if (trim($fields[1])) {
-                                $this->index[$last][trim($fields[0])] = trim($fields[1]);
-                            } else {
-                                $this->index[$last][trim($fields[0])] = $last;
+                            # Add to the list only existing categories
+                            if (file_exists("/var/squidGuard/blacklists/$last")) {
+                                $name = basename($last); # make sure to correctly catch subcategories
+                                $this->index[$name] = ucfirst(str_replace('/', ' ', $last));
                             }
                         }
                     }
@@ -84,14 +66,10 @@ class Modify extends \Nethgui\Controller\Table\Modify
 
     private function readCategories()
     {
-        $this->parseIndex();
-        $dir_iterator = new \RecursiveDirectoryIterator("/var/squidGuard/blacklists", \FilesystemIterator::SKIP_DOTS );
-        $filter_iterator = new BlacklistsRecursiveFilterIterator($dir_iterator);
-        $iterator = new \RecursiveIteratorIterator($filter_iterator, \RecursiveIteratorIterator::SELF_FIRST);
-
-        foreach ( $iterator as $key => $entry ) {
-            $this->categories[] = basename($entry);
+        if (!$this->index) {
+            $this->parseIndex();
         }
+        $this->categories = array_keys($this->index);
         $custom_categories = $this->getPlatform()->getDatabase('contentfilter')->getAll('category');
         foreach ( $custom_categories as $k => $c ) {
             $this->categories[] = $k;
@@ -166,13 +144,11 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $tmp = array();
         $lang = strtoupper($view->getTranslator()->getLanguageCode());
         foreach ($this->categories as $cat) {
-            $t = $cat;
-            if (isset($this->index[$cat]["NAME $lang"])) {
-                $t = $this->index[$cat]["NAME $lang"];
-            } else if (isset($this->index[$cat]["NAME"])) {
-                $t = $this->index[$cat]["NAME"];
+            $t = ucfirst($cat);
+            if (isset($this->index[$cat])) {
+                $t = $this->index[$cat];
             }
-            $tmp[] = array($cat, ucfirst($t));
+            $tmp[] = array($cat, $t);
         }
         usort($tmp,array($this,'cmpcat'));
         $view['CategoriesDatasource'] = $tmp;
