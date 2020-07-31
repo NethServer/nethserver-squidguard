@@ -100,5 +100,5 @@ if [ ! -d $ufdbcachedir ]; then
     chmod 755 $ufdbcachedir
 fi
 
-/usr/sbin/ufdbsignal -C "sighup ufdbguardd" &>/dev/null
+/usr/bin/pkill -SIGHUP ufdbguardd
 exit 0
