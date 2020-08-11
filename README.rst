@@ -5,9 +5,9 @@ nethserver-squidguard
 The package configures ufdbGuard, a URL filter for squid. The configuration is
 based on *profiles*. Each profile is composed by:
 
-* a user, group of users, host or group of hosts accessing the web page
+* a user, group of users, host or group of hosts accessing a web page
 * a filter which includes allowed and denied sites
-* a time frame within the filter is active
+* a time frame in which the filter is active
 
 The system comes with a default profile which is applied to any host/user who
 doesn't fit on a specific profile.
@@ -103,10 +103,10 @@ contentfilter
 
 The ``contentfilter`` database can contain three kind of records:
 
-* category: a custom categorized list of domain blocked or allowed. Custom categories can be added to a filter
+* category: a custom categorized list of domains blocked or allowed. Custom categories can be added to a filter
 * filter: an object describing which categories must be blocked or allowed
 * time: when the filter must be applied, it contains week days and time
-* profile: a relation between above objects describing WHO (host or user), WHAT (filter) and WHEN (time)
+* profile: a link between the above objects describing WHO (host or user), WHAT (filter) and WHEN (time)
 
 Categories
 ^^^^^^^^^^
@@ -128,11 +128,11 @@ Filters
 Properties:
 
 * *BlackList*: enable or disable the global blacklist (``DomainBlacklist`` and ``UrlBlacklist``). Can be ``enabled`` or ``disabled``
-* *BlockAll*: can be ``enabled`` or ``disabled``. If disabled, all listed categories in ``Categories`` are blocked and all other sites are allowed.
+* *BlockAll*: can be ``enabled`` or ``disabled``. If disabled, all categories listed in ``Categories`` are blocked and all other sites are allowed.
   If enabled, all listed categories in ``Categories`` are allowed and all other sites are blocked
 * *BlockFileTypes*: enable or disable the global file extension list (``BlockedFileTypes``). Can be ``enabled`` or ``disabled`` 
 * *BlockIpAccess*: if enabled, sites can be accessed only using a domain name (not an IP address). Can be ``enabled`` or ``disabled``
-* *Categories*: comma separated list of categories blocked or allowed. If a category is not present inside the SquidGuard db (:file:`/var/squidGuard/Blacklists`), the category will be excluded from configuration file to avoid SquidGuard panic-mode
+* *Categories*: comma separated list of categories blocked or allowed. If a category is not present inside the SquidGuard db (:file:`/var/squidGuard/Blacklists`), the category will be excluded from configuration file to avoid ufdbGuard panic-mode (no filter)
 * *Description*: optional description
 * *WhiteList*: enable or disable the global whitelist (``DomainWhitelist`` and ``UrlWhitelist``). Can be ``enabled`` or ``disabled``
 * *Removable*: can be ``yes`` or ``no``. If set to ``no`` the record can't be removed from web interface 
@@ -215,13 +215,13 @@ This configuration can be overwritten using ``RedirectUrl`` property.
 Troubleshooting
 ===============
 
-Some commands: ::
+Useful test commands: ::
 
   echo "http://bit.ly 10.10.0.1/ - - GET" | /usr/sbin/ufdbgclient -d
   echo "http://bit.ly 10.10.0.1/ user@mydomain.com - GET" | /usr/sbin/ufdbgclient -d
-  /etc/init.d/ufdb testconfig 2>&1 | grep FATAL
 
 Logfiles: ::
 
-  /var/ufdbguard/logs/ufdbguardd.log
+  /var/log/ufdbguard/ufdbguardd.log
+  /var/log/ufdbguard/ufdbgclient.log
   

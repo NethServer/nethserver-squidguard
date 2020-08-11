@@ -1,5 +1,5 @@
 category "security" \{
-   cacerts        "/var/ufdbguard/blacklists/security/cacerts"
+   cacerts        "/var/lib/ufdbguard/blacklists/security/cacerts"
    option         enforce-https-with-hostname off
    option         enforce-https-official-certificate off
    option         allow-skype-over-https on
