@@ -35,7 +35,7 @@ templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
 templates2events("/etc/squid/blacklists",  $event);
 templates2events("/etc/logrotate.d/squidGuard",  $event);
 event_services($event, 'squid' => 'reload');
-event_services($event, 'ufdb' => 'restart');
+event_services($event, 'ufdbGuard' => 'restart');
 
 #--------------------------------------------------
 # actions for nethserver-squidguard-save event
@@ -47,7 +47,7 @@ event_actions($event, 'nethserver-squidguard-update-custom-list' => 02);
 templates2events("/etc/squid/squid.conf",  $event);
 templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
 event_services($event, 'squid' => 'reload');
-event_services($event, 'ufdb' => 'restart');
+event_services($event, 'ufdbGuard' => 'restart');
 
 
 #--------------------------------------------------
@@ -59,7 +59,7 @@ event_actions($event, 'nethserver-squidguard-update-custom-list' => 02);
 event_actions($event, 'nethserver-squidguard-download' => 30);
 templates2events("/etc/squid/blacklists",  $event);
 templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
-event_services($event, 'ufdb' => 'reload');
+event_services($event, 'ufdbGuard' => 'reload');
 
 #--------------------------------------------------
 # actions for group-modify event
@@ -67,7 +67,7 @@ event_services($event, 'ufdb' => 'reload');
 
 $event = "group-modify";
 templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
-event_services($event, 'ufdb' => 'reload');
+event_services($event, 'ufdbGuard' => 'reload');
 
 #--------------------------------------------------
 # actions for firewall-adjust event
@@ -75,7 +75,7 @@ event_services($event, 'ufdb' => 'reload');
 
 $event = "firewall-objects-modify";
 templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
-event_services($event, 'ufdb' => 'reload');
+event_services($event, 'ufdbGuard' => 'reload');
 
 #--------------------------------------------------
 # actions for interface-update event
@@ -91,8 +91,3 @@ templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
 validator_actions('squidguard-obj-delete', qw(
                   squidguard-referenced 20
                   ));
-
-# -----------------------------------------------------
-# Create ufdb service alias for backward compatibility
-# -----------------------------------------------------
-safe_symlink("/usr/lib/systemd/system/ufdbGuard.service", "root/usr/lib/systemd/system/ufdb.service");
