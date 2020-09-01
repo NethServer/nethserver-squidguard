@@ -95,4 +95,4 @@ validator_actions('squidguard-obj-delete', qw(
 # -----------------------------------------------------
 # Create ufdb service alias for backward compatibility
 # -----------------------------------------------------
-safe_symlink("/usr/lib/systemd/system/ufdbGuard.service", "root/usr/lib/systemd/system/ufdb.service");
+safe_symlink("/usr/lib/systemd/system/ufdbGuard.service", "root/etc/systemd/system/ufdb.service");
