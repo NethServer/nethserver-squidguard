@@ -33,7 +33,7 @@ event_actions($event, 'initialize-default-databases' => '00');
 templates2events("/etc/squid/squid.conf",  $event);
 templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
 templates2events("/etc/squid/blacklists",  $event);
-templates2events("/etc/logrotate.d/squidGuard",  $event);
+templates2events("/etc/logrotate.d/ufdbGuard",  $event);
 event_services($event, 'squid' => 'reload');
 event_services($event, 'ufdb' => 'restart');
 
