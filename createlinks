@@ -34,6 +34,7 @@ templates2events("/etc/squid/squid.conf",  $event);
 templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
 templates2events("/etc/squid/blacklists",  $event);
 templates2events("/etc/logrotate.d/ufdbGuard",  $event);
+templates2events("/etc/logrotate.d/squidGuard",  $event);
 event_services($event, 'squid' => 'reload');
 event_services($event, 'ufdb' => 'restart');
 
