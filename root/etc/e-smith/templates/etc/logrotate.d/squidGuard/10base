@@ -1,9 +1,7 @@
-/var/log/ufdbguard/ufdbgclient.log
 /var/log/ufdbguard/ufdbguardd.log
-/var/log/ufdbguard/ufdbsignal.log
 \{
-    compress
     notifempty
     missingok
     copytruncate
+    su ufdb ufdb
 \}
