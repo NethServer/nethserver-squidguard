@@ -1,6 +1,6 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
-Version: 2.0.1
+Version: 2.0.2
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -48,6 +48,9 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Thu Sep 03 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.0.2-1
+- Web filter configuration not applied - Bug NethServer/dev#6258
+
 * Wed Sep 02 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.0.1-1
 - Ufdbguard duplicates logs after rotation - Bug NethServer/dev#6261
 
