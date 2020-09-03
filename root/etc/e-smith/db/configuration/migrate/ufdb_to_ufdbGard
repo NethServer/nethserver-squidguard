@@ -3,9 +3,11 @@
     # migrate ufdb status to ufdbGuard
     #
 
-    my $status = $DB->get_prop_and_delete('ufdb', 'status') || return '';
+    my $ufdb = $DB->get('ufdb') || return '';
+    my $status = $ufdb->prop('status') || return '';
     my $new = $DB->get('ufdbGuard') || $DB->new_record('ufdbGuard', { 'type' => 'service' });
     $DB->set_prop('ufdbGuard', 'status', $status);
+    $ufdb->delete();
 
     '';
 }
