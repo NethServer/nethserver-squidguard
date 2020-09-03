@@ -94,7 +94,7 @@ Example: ::
     UrlWhitelist=
     status=enabled
 
-The service key ``ufdb`` has enabled/disabled ``state`` according to the status prop of the squidguard
+The service key ``ufdbGuard`` has enabled/disabled ``state`` according to the status prop of the squidguard
 (see nethserver-squidguard-ufdb-status action).
 
 

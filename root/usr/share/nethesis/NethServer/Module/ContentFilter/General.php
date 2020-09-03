@@ -38,7 +38,7 @@ class General extends \Nethgui\Controller\AbstractController implements \Nethgui
         parent::initialize();
   
         $ftvalidator = $this->createValidator()->orValidator($this->createValidator()->regexp('/(\w+)(,\s*\w+)*/'),$this->createValidator()->isEmpty());
-        $this->declareParameter('status', Validate::SERVICESTATUS, array('configuration', 'ufdb', 'status'));
+        $this->declareParameter('status', Validate::SERVICESTATUS, array('configuration', 'ufdbGuard', 'status'));
         $this->declareParameter('BlockAll', Validate::SERVICESTATUS, array('configuration', 'squidguard', 'BlockAll'));
         $this->declareParameter('Expressions', Validate::SERVICESTATUS, array('configuration', 'squidguard', 'Expressions'));
         $this->declareParameter('BlockedFileTypes', $ftvalidator, array('configuration', 'squidguard', 'BlockedFileTypes'));
