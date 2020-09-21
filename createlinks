@@ -71,12 +71,21 @@ templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
 event_services($event, 'ufdbGuard' => 'reload');
 
 #--------------------------------------------------
-# actions for firewall-adjust event
+# actions for firewall-objects-modify event
 #--------------------------------------------------
 
 $event = "firewall-objects-modify";
 templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
 event_services($event, 'ufdbGuard' => 'reload');
+
+#--------------------------------------------------
+# actions for firewall-adjust event
+#--------------------------------------------------
+
+$event = "firewall-adjust";
+templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
+event_services($event, 'ufdbGuard' => 'reload');
+
 
 #--------------------------------------------------
 # actions for interface-update event
