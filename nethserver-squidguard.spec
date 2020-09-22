@@ -1,6 +1,6 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
-Version: 2.0.3
+Version: 2.0.4
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -48,6 +48,9 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Tue Sep 22 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.0.4-1
+- Host group won't get propagated to ufdbGuard.conf - NethServer/dev#6276
+
 * Tue Sep 08 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.0.3-1
 - ufdbGuard ignores group based profiles - Bug NethServer/dev#6262
 
