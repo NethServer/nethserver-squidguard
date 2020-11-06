@@ -8,7 +8,7 @@ EnvironmentFile=-/etc/sysconfig/ufdbguard
 ExecStartPre=-/usr/bin/sh -c '/usr/bin/rm -f /tmp/ufdbguardd-*'
 ExecStart=/usr/sbin/ufdbguardd -U ufdb
 ExecReload=/bin/kill -HUP ${MAINPID}
-Restart=on-failure
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
