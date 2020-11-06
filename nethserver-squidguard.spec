@@ -1,6 +1,6 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
-Version: 2.0.5
+Version: 2.0.6
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -48,6 +48,9 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Fri Nov 06 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.0.6-1
+- ufdbGuard fails after reload - Bug NethServer/dev#6324
+
 * Wed Nov 04 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.0.5-1
 - ufdbGuard fails after upgrade - NethServer/dev#6323
 
