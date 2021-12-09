@@ -1,5 +1,0 @@
-{
-    my $list = $squidguard{'UrlWhitelist'} || "";
-    $list =~ s/,/\n/g;
-    $OUT.=$list;
-}

@@ -47,11 +47,9 @@ foreach ($db->get_all_by_prop(type => 'category')) {
 mkdir "/var/squidGuard/blacklists/custom/whitelist";
 mkdir "/var/squidGuard/blacklists/custom/files";
 mkdir "/var/squidGuard/blacklists/custom/blacklist";
-system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/whitelist/urls");
 system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/whitelist/domains");
 system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/files/expressions");
 system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/blacklist/domains");
-system("/sbin/e-smith/expand-template /var/squidGuard/blacklists/custom/blacklist/urls");
 system("/sbin/e-smith/expand-template /etc/ufdbguard/ufdbGuard.conf");
 
 system("/usr/sbin/ufdbConvertDB /var/squidGuard/blacklists/custom/ >/dev/null 2>&1");
