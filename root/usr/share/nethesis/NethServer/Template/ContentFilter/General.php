@@ -4,12 +4,10 @@ $view->includeTranslations(array(
     'Block domain',
     'Block URL',
     'Add blocked domain',
-    'Add blocked URL',
     'Allow domain',
     'Allow URL',
     'Delete',
-    'Add allowed domain',
-    'Add allowed URL'
+    'Add allowed domain'
 ));
 
 $view->includeFile('NethServer/Js/nethserver.collectioneditor.squidguard-allow.js');
