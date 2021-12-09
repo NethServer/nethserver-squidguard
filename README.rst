@@ -70,9 +70,6 @@ The key ``squidguard`` contains all settings. Properties are:
 * *MaxChildren*: maximum number of processes. Default is 20
 * *RedirectUrl*: custom URL for block page. See :ref:`squidguard-blockpage-section`
 * *StartupChildren*: minimum number of process children on startup. Default is 5
-* *UrlBlacklist*: comma separated URL list, this URLs are always blocked 
-* *UrlWhitelist*: comma separated URL list, this URLs are always allowed
-
 
 .. note:: Modifying following parameters can greatly affect memory usage:
           IdleChildren, MaxChildren, StartupChildren
@@ -127,14 +124,14 @@ Filters
 
 Properties:
 
-* *BlackList*: enable or disable the global blacklist (``DomainBlacklist`` and ``UrlBlacklist``). Can be ``enabled`` or ``disabled``
+* *BlackList*: enable or disable the global blacklist (``DomainBlacklist``). Can be ``enabled`` or ``disabled``
 * *BlockAll*: can be ``enabled`` or ``disabled``. If disabled, all categories listed in ``Categories`` are blocked and all other sites are allowed.
   If enabled, all listed categories in ``Categories`` are allowed and all other sites are blocked
 * *BlockFileTypes*: enable or disable the global file extension list (``BlockedFileTypes``). Can be ``enabled`` or ``disabled`` 
 * *BlockIpAccess*: if enabled, sites can be accessed only using a domain name (not an IP address). Can be ``enabled`` or ``disabled``
 * *Categories*: comma separated list of categories blocked or allowed. If a category is not present inside the SquidGuard db (:file:`/var/squidGuard/Blacklists`), the category will be excluded from configuration file to avoid ufdbGuard panic-mode (no filter)
 * *Description*: optional description
-* *WhiteList*: enable or disable the global whitelist (``DomainWhitelist`` and ``UrlWhitelist``). Can be ``enabled`` or ``disabled``
+* *WhiteList*: enable or disable the global whitelist (``DomainWhitelist``. Can be ``enabled`` or ``disabled``
 * *Removable*: can be ``yes`` or ``no``. If set to ``no`` the record can't be removed from web interface 
 
 Filter example: ::
