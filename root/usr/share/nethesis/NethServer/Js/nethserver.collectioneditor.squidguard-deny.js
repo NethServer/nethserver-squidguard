@@ -81,13 +81,6 @@
                 click: function(e) {
                     editor.CollectionEditor('addElement', ':DB', true, 'update');
                 }
-            },
-            {
-                name: 'create.UB',
-                label: T('Add blocked URL'),
-                click: function(e) {
-                    editor.CollectionEditor('addElement', ':UB', true, 'update');
-                }
             }
             ],
             serialize: function(e, ctx) {

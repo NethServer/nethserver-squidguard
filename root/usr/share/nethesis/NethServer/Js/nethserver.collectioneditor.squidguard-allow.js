@@ -81,13 +81,6 @@
                 click: function(e) {
                     editor.CollectionEditor('addElement', ':DW', true, 'update');
                 }
-            },
-            {
-                name: 'create.UW',
-                label: T('Add allowed URL'),
-                click: function(e) {
-                    editor.CollectionEditor('addElement', ':UW', true, 'update');
-                }
             }
             ],
             serialize: function(e, ctx) {

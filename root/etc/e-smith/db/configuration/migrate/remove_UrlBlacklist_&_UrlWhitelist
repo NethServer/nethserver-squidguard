@@ -1,0 +1,10 @@
+{
+    #
+    # remove unused properties for ufdb
+    #
+
+    my $UrlBlacklist = $DB->get_prop_and_delete('squidguard', 'UrlBlacklist') || '';
+    my $UrlWhitelist = $DB->get_prop_and_delete('squidguard', 'UrlWhitelist') || '';
+
+    '';
+}

@@ -44,23 +44,21 @@ class General extends \Nethgui\Controller\AbstractController implements \Nethgui
         $this->declareParameter('BlockedFileTypes', $ftvalidator, array('configuration', 'squidguard', 'BlockedFileTypes'));
     
         $this->declareParameter('BlockAcl', Validate::ANYTHING, array(
-            array('configuration', 'squidguard', 'DomainBlacklist'),
-            array('configuration', 'squidguard', 'UrlBlacklist'),
+            array('configuration', 'squidguard', 'DomainBlacklist')
         ));
         $this->declareParameter('AllowAcl', Validate::ANYTHING, array(
-            array('configuration', 'squidguard', 'DomainWhitelist'),
-            array('configuration', 'squidguard', 'UrlWhitelist'),
+            array('configuration', 'squidguard', 'DomainWhitelist')
         ));
 
     }
 
 
-    public function readBlockAcl($DomainBlacklist, $UrlBlacklist)
+    public function readBlockAcl($DomainBlacklist)
     {
         $BlockAcl = '';
         
         // Append ACL suffix to each list:
-        foreach (array('DB' => $DomainBlacklist, 'UB' => $UrlBlacklist) as $acl => $list) {
+        foreach (array('DB' => $DomainBlacklist) as $acl => $list) {
             foreach (explode(',', $list) as $item) {
                 $BlockAcl .= $item ? ($item . ":" . $acl . "\r\n") : '';
             }
@@ -70,12 +68,12 @@ class General extends \Nethgui\Controller\AbstractController implements \Nethgui
     }
 
 
-    public function readAllowAcl($DomainWhitelist, $UrlWhitelist)
+    public function readAllowAcl($DomainWhitelist)
     {
         $AllowAcl = '';
 
         // Append ACL suffix to each list:
-        foreach (array('DW' => $DomainWhitelist, 'UW' => $UrlWhitelist) as $acl => $list) {
+        foreach (array('DW' => $DomainWhitelist) as $acl => $list) {
             foreach (explode(',', $list) as $item) {
                 $AllowAcl .= $item ? ($item . ":" . $acl . "\r\n") : '';
             }
@@ -98,9 +96,7 @@ class General extends \Nethgui\Controller\AbstractController implements \Nethgui
         return array(
             // $Ban:
             // $DomainBlacklist:
-            isset($acls['DB']) ? implode(',', array_unique($acls['DB'])) : '',
-            // $UrlBlacklist:
-            isset($acls['UB']) ? implode(',', array_unique($acls['UB'])) : ''
+            isset($acls['DB']) ? implode(',', array_unique($acls['DB'])) : ''
         );
     }
 
@@ -117,9 +113,7 @@ class General extends \Nethgui\Controller\AbstractController implements \Nethgui
 
         return array(
             // $DomainWhitelist:
-            isset($acls['DW']) ? implode(',', array_unique($acls['DW'])) : '',
-            // $UrlWhitelist:
-            isset($acls['UW']) ? implode(',', array_unique($acls['UW'])) : ''
+            isset($acls['DW']) ? implode(',', array_unique($acls['DW'])) : ''
         );
     }
 
