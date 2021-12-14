@@ -24,7 +24,7 @@ Features of ufdbGuard:
 -  enforce the SafeSearch feature on Google and other search engines
 -  a test mode (-T option) allows you to test a URL filter database without actually blocking sites
 
-
+For the block page on th server, see https://github.com/NethServer/blocked.nethserver.org/.
 
 Inner workings
 ==============
