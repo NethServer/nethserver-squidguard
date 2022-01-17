@@ -37,7 +37,7 @@ function download_extract {
     else
         verbose="--quiet"
     fi
-    wget $verbose -O $BLFILE $1
+    wget $verbose -O $BLFILE $1 2>/dev/null
     if [ $? -gt 0 ] && [ ! -s $BLFILE ] ; then
         restore
     else
