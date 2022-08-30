@@ -101,3 +101,12 @@ templates2events("/etc/ufdbguard/ufdbGuard.conf",  $event);
 validator_actions('squidguard-obj-delete', qw(
                   squidguard-referenced 20
                   ));
+
+#--------------------------------------------------
+# actions for post-restore-data event
+#--------------------------------------------------
+
+$event = "post-restore-data";
+event_actions($event, 
+   'nethserver-squidguard-fix-rsync-perms' => '10',
+);
