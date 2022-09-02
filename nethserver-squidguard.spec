@@ -1,6 +1,6 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
-Version: 2.2.0
+Version: 2.2.1
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -48,6 +48,9 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Fri Sep 02 2022 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.2.1-1
+- rsync disaster recovery introduces permissions issue - Bug NethServer/dev#6691
+
 * Mon Jan 17 2022 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.2.0-1
 - Web filter: remove Shalla list - NethServer/dev#6624
 
