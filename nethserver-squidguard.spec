@@ -1,6 +1,6 @@
 Summary: NethServer squidGuard configuration
 Name: nethserver-squidguard
-Version: 2.2.2
+Version: 2.2.3
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -48,6 +48,9 @@ echo "%config /etc/squid/blacklists" >> %{name}-%{version}-filelist
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Mon Dec 19 2022 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.2.3-1
+- Release bump for CI
+
 * Mon Dec 19 2022 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.2.2-1
 - toulouse: change mirror URL (#46)
 
